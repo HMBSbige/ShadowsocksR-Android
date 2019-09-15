@@ -24,7 +24,7 @@ android {
             // 增加java堆内存大小
             javaMaxHeapSize "4g"
         }
-        versionName "3.5.4"
+        versionName "3.5.4.1"
         externalNativeBuild {
             cmake {
                 cppFlags "-frtti -fexceptions"
