@@ -202,4 +202,5 @@
   <!-- status -->
   <string name="sent">Отправлено:</string>
   <string name="received">Получено:</string>
+    <string name="app_name">ShadowsocksR</string>
 </resources>

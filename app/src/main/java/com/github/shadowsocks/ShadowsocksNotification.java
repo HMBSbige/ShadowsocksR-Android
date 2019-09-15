@@ -51,6 +51,9 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.RemoteException;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
 import com.github.shadowsocks.aidl.IShadowsocksService;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
@@ -60,9 +63,6 @@ import com.github.shadowsocks.utils.Utils;
 
 import java.util.List;
 import java.util.Locale;
-
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
 import static com.github.shadowsocks.ShadowsocksApplication.app;
 
@@ -232,7 +232,7 @@ public class ShadowsocksNotification {
     private void initNotificationBuilder() {
         String channelId = "net_speed";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, "NetSpeed", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(channelId, "NetSpeed", NotificationManager.IMPORTANCE_MIN);
             nm.createNotificationChannel(channel);
         }
         builder = new NotificationCompat.Builder(service, channelId)
