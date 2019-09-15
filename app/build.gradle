@@ -12,7 +12,7 @@ buildscript {
 android {
     compileSdkVersion compile_Version
     defaultConfig {
-        applicationId "com.github.shadowsocks"
+        applicationId "com.github.shadowsocksr_hmbsbige"
         minSdkVersion min_version
         targetSdkVersion target_version
         versionCode 325    // multiDex的一些相关配置，这样配置可以让你的编译速度更快
