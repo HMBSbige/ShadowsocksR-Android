@@ -42,14 +42,13 @@ import android.text.TextUtils;
 import android.util.Base64;
 
 import com.github.shadowsocks.database.Profile;
+import com.github.shadowsocks.ShadowsocksApplication;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class Parser {
 
@@ -104,7 +103,7 @@ public class Parser {
         } catch (Exception e) {
             // Ignore
             VayLog.e(TAG, "findAll", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
@@ -171,7 +170,7 @@ public class Parser {
         } catch (Exception e) {
             // Ignore
             VayLog.e(TAG, "findAll", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }

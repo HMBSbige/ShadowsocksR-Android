@@ -55,7 +55,7 @@ import java.util.concurrent.ThreadFactory;
 
 import androidx.annotation.NonNull;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
+import com.github.shadowsocks.ShadowsocksApplication;
 
 public class TrafficMonitorThread extends Thread {
 
@@ -110,7 +110,7 @@ public class TrafficMonitorThread extends Thread {
                 handleLocalSocket(socket);
             } catch (Exception e) {
                 VayLog.e(TAG, "Error when accept socket", e);
-                app.track(e);
+                ShadowsocksApplication.app.track(e);
 
                 initServerSocket();
             }
@@ -146,7 +146,7 @@ public class TrafficMonitorThread extends Thread {
                     IOUtils.close(output);
                 } catch (Exception e) {
                     VayLog.e(TAG, "handleLocalSocket() Error when recv traffic stat", e);
-                    app.track(e);
+                    ShadowsocksApplication.app.track(e);
                 } finally {
                     // close socket
                     try {

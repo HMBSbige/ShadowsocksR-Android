@@ -52,10 +52,10 @@ public class Profile {
     public int id = 0;
 
     @DatabaseField
-    public String name = "Untitled";
+    public String name = "ShadowsocksR";
 
     @DatabaseField
-    public String host = "";
+    public String host = "1.1.1.1";
 
     @DatabaseField
     public int localPort = 1080;
@@ -82,7 +82,7 @@ public class Profile {
     public String method = "aes-256-cfb";
 
     @DatabaseField
-    public String route = "all";
+    public String route = "HMBSbige-whitelist";
 
     @DatabaseField
     public boolean proxyApps = false;
@@ -94,10 +94,10 @@ public class Profile {
     public boolean udpdns = false;
 
     @DatabaseField
-    public String url_group = "";
+    public String url_group = "ShadowsocksR";
 
     @DatabaseField
-    public String dns = "208.67.222.222:53";
+    public String dns = "8.8.8.8:53";
 
     @DatabaseField
     public String china_dns = "114.114.114.114:53,223.5.5.5:53";
@@ -116,6 +116,9 @@ public class Profile {
 
     @DatabaseField
     public long elapsed = 0;
+
+    @DatabaseField
+    public long tcpdelay = 0;
 
     @DatabaseField
     public final Date date = new java.util.Date();

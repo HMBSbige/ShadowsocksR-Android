@@ -40,11 +40,11 @@ package com.github.shadowsocks;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.VpnService;
 import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 
+import com.github.shadowsocks.R;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.job.AclSyncJob;
 import com.github.shadowsocks.utils.Constants;
@@ -60,8 +60,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class ShadowsocksVpnService extends BaseVpnService {
 
@@ -88,7 +86,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
     @Override
     public IBinder onBind(Intent intent) {
         String action = intent.getAction();
-        if (VpnService.SERVICE_INTERFACE.equals(action)) {
+        if (SERVICE_INTERFACE.equals(action)) {
             return super.onBind(intent);
         } else if (Constants.Action.SERVICE.equals(action)) {
             return binder;
@@ -120,7 +118,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
         // channge the state
         changeState(Constants.State.STOPPING);
 
-        app.track(TAG, "stop");
+        ShadowsocksApplication.app.track(TAG, "stop");
 
         // reset VPN
         killProcesses();
@@ -160,7 +158,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
     @Override
     public void startRunner(Profile profile) {
         // ensure the VPNService is prepared
-        if (VpnService.prepare(this) != null) {
+        if (prepare(this) != null) {
             Intent i = new Intent(this, ShadowsocksRunnerActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
@@ -210,7 +208,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
         // Resolve the server address
         host_arg = profile.host;
         if (!Utils.isNumeric(profile.host)) {
-            String addr = Utils.resolve(profile.host, true);
+            String addr = Utils.resolve(profile.host, profile.ipv6);
             if (TextUtils.isEmpty(addr)) {
                 throw new NameNotResolvedException();
             } else {
@@ -268,19 +266,19 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 Constants.ConfigUtils.EscapedJson(profile.obfs_param),
                 Constants.ConfigUtils.EscapedJson(profile.protocol_param));
 
-        Utils.printToFile(new File(getApplicationInfo().dataDir + "/ss-local-udp-vpn.conf"), conf);
+        Utils.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-udp-vpn.conf"), conf);
 
         //val old_ld = Os.getenv("LD_PRELOAD")
 
         //Os.setenv("LD_PRELOAD", getApplicationInfo().dataDir + "/lib/libproxychains4.so", true)
         //Os.setenv("PROXYCHAINS_CONF_FILE", getApplicationInfo().dataDir + "/proxychains.conf", true)
 
-        String[] cmd = {getApplicationInfo().dataDir + "/ss-local", "-V", "-U",
+        String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libssr-local.so", "-V", "-U",
                 "-b", "127.0.0.1",
                 "-t", "600",
                 "--host", host_arg,
                 "-P", getApplicationInfo().dataDir,
-                "-c", getApplicationInfo().dataDir + "/ss-local-udp-vpn.conf"};
+                "-c", getApplicationInfo().dataDir + "/libssr-local.so-udp-vpn.conf"};
         LinkedList<String> cmds = new LinkedList<>(Arrays.asList(cmd));
         if (proxychains_enable) {
             cmds.addFirst("LD_PRELOAD=" + getApplicationInfo().dataDir + "/lib/libproxychains4.so");
@@ -312,19 +310,19 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 Constants.ConfigUtils.EscapedJson(profile.obfs_param),
                 Constants.ConfigUtils.EscapedJson(profile.protocol_param));
 
-        Utils.printToFile(new File(getApplicationInfo().dataDir + "/ss-local-vpn.conf"), conf);
+        Utils.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-vpn.conf"), conf);
 
         //val old_ld = Os.getenv("LD_PRELOAD")
 
         //Os.setenv("LD_PRELOAD", getApplicationInfo().dataDir + "/lib/libproxychains4.so", true)
         //Os.setenv("PROXYCHAINS_CONF_FILE", getApplicationInfo().dataDir + "/proxychains.conf", true)
 
-        String[] cmd = {getApplicationInfo().dataDir + "/ss-local", "-V", "-x",
+        String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libssr-local.so", "-V", "-x",
                 "-b", "127.0.0.1",
                 "-t", "600",
                 "--host", host_arg,
                 "-P", getApplicationInfo().dataDir,
-                "-c", getApplicationInfo().dataDir + "/ss-local-vpn.conf"};
+                "-c", getApplicationInfo().dataDir + "/libssr-local.so-vpn.conf"};
 
         LinkedList<String> cmds = new LinkedList<>(Arrays.asList(cmd));
 
@@ -379,7 +377,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
         //Os.setenv("LD_PRELOAD", getApplicationInfo().dataDir + "/lib/libproxychains4.so", true)
         //Os.setenv("PROXYCHAINS_CONF_FILE", getApplicationInfo().dataDir + "/proxychains.conf", true)
 
-        String[] cmd = {getApplicationInfo().dataDir + "/ss-local",
+        String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libssr-local.so",
                 "-V",
                 "-u",
                 "-t", "60",
@@ -505,8 +503,8 @@ public class ShadowsocksVpnService extends BaseVpnService {
                     reject);
         }
 
-        Utils.printToFile(new File(getApplicationInfo().dataDir + "/pdnsd-vpn.conf"), conf);
-        String[] cmd = {getApplicationInfo().dataDir + "/pdnsd", "-c", getApplicationInfo().dataDir + "/pdnsd-vpn.conf"};
+        Utils.printToFile(new File(getApplicationInfo().dataDir + "/libpdnsd.so-vpn.conf"), conf);
+        String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libpdnsd.so", "-c", getApplicationInfo().dataDir + "/libpdnsd.so-vpn.conf"};
         List<String> cmds = new ArrayList<>(Arrays.asList(cmd));
 
         VayLog.d(TAG, Utils.makeString(cmds, " "));
@@ -574,7 +572,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         final int fd = conn.getFd();
 
-        String[] cmd = {getApplicationInfo().dataDir + "/tun2socks",
+        String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libtun2socks.so",
                 "--netif-ipaddr", String.format(Locale.ENGLISH, PRIVATE_VLAN, "2"),
                 "--netif-netmask", "255.255.255.0",
                 "--socks-server-addr", "127.0.0.1:" + profile.localPort,
@@ -600,12 +598,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
         VayLog.d(TAG, Utils.makeString(cmds, " "));
 
         try {
-            tun2socksProcess = new GuardedProcess(cmds).start(new GuardedProcess.RestartCallback() {
-                @Override
-                public void onRestart() {
-                    sendFd(fd);
-                }
-            });
+            tun2socksProcess = new GuardedProcess(cmds).start(() -> sendFd(fd));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

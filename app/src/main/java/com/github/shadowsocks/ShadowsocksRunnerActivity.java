@@ -53,8 +53,6 @@ import com.github.shadowsocks.utils.VayLog;
 
 import androidx.annotation.Nullable;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
-
 public class ShadowsocksRunnerActivity extends Activity {
     private static final String TAG = ShadowsocksRunnerActivity.class.getSimpleName();
     private static final int REQUEST_CONNECT = 1;
@@ -84,9 +82,9 @@ public class ShadowsocksRunnerActivity extends Activity {
     }
 
     private void startBackgroundService() {
-        if (app.isNatEnabled()) {
+        if (ShadowsocksApplication.app.isNatEnabled()) {
             try {
-                mServiceBoundContext.bgService.use(app.profileId());
+                mServiceBoundContext.bgService.use(ShadowsocksApplication.app.profileId());
                 finish();
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -139,7 +137,7 @@ public class ShadowsocksRunnerActivity extends Activity {
         if (resultCode == RESULT_OK) {
             if (mServiceBoundContext.bgService != null) {
                 try {
-                    mServiceBoundContext.bgService.use(app.profileId());
+                    mServiceBoundContext.bgService.use(ShadowsocksApplication.app.profileId());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

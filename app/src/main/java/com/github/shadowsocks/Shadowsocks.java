@@ -62,6 +62,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.jorgecastilloprz.FABProgressCircle;
+import com.github.shadowsocks.R;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.database.SSRSub;
@@ -84,8 +85,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class Shadowsocks extends AppCompatActivity {
 
@@ -116,17 +115,6 @@ public class Shadowsocks extends AppCompatActivity {
                 }
 
                 updateState();
-
-                if (Build.VERSION.SDK_INT >= 21 && app.isNatEnabled()) {
-                    Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), R.string.nat_deprecated, Snackbar.LENGTH_LONG);
-                    snackbar.setAction(R.string.switch_to_vpn, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            preferences.natSwitch.setChecked(false);
-                        }
-                    });
-                    snackbar.show();
-                }
             }
 
             @Override
@@ -139,7 +127,7 @@ public class Shadowsocks extends AppCompatActivity {
             @Override
             public void binderDied() {
                 detachService();
-                app.crashRecovery();
+                ShadowsocksApplication.app.crashRecovery();
                 attachService();
             }
         };
@@ -179,7 +167,7 @@ public class Shadowsocks extends AppCompatActivity {
                             changeSwitch(true);
                             preferences.setEnabled(false);
                             stat.setVisibility(View.VISIBLE);
-                            if (app.isNatEnabled()) {
+                            if (ShadowsocksApplication.app.isNatEnabled()) {
                                 connectionTestText.setVisibility(View.GONE);
                             } else {
                                 connectionTestText.setVisibility(View.VISIBLE);
@@ -199,14 +187,6 @@ public class Shadowsocks extends AppCompatActivity {
                             if (!TextUtils.isEmpty(m)) {
                                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
                                         String.format(Locale.ENGLISH, getString(R.string.vpn_error), m), Snackbar.LENGTH_LONG);
-                                if (getString(R.string.nat_no_root).equals(m)) {
-                                    snackbar.setAction(R.string.switch_to_vpn, new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            preferences.natSwitch.setChecked(false);
-                                        }
-                                    });
-                                }
                                 snackbar.show();
                                 VayLog.e(TAG, "Error to start VPN service: " + m);
                             }
@@ -303,7 +283,7 @@ public class Shadowsocks extends AppCompatActivity {
     }
 
     private void prepareStartService() {
-        if (app.isNatEnabled()) {
+        if (ShadowsocksApplication.app.isNatEnabled()) {
             serviceLoad();
         } else {
             Intent intent = VpnService.prepare(mServiceBoundContext);
@@ -323,8 +303,6 @@ public class Shadowsocks extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.layout_main);
         // Initialize Toolbar
         initToolbar();
@@ -378,11 +356,12 @@ public class Shadowsocks extends AppCompatActivity {
         updateTraffic(0, 0, 0, 0);
 
         // ssr sub handler
-        SSRSub first = app.ssrsubManager.getFirstSSRSub();
-        if (first == null) {
-            app.ssrsubManager.createDefault();
-        }
+        SSRSub first = ShadowsocksApplication.app.ssrsubManager.getFirstSSRSub();
+//        if (first == null) {
+//            ShadowsocksApplication.app.ssrsubManager.createDefault();
+//        }
         SSRSubUpdateJob.schedule();
+
 
         // attach service
         attachService();
@@ -438,19 +417,20 @@ public class Shadowsocks extends AppCompatActivity {
         connectionTestText.setText(R.string.connection_test_testing);
 
         // start test connect
-        final long start = System.currentTimeMillis();
-        RequestHelper.instance().get("https://www.google.com/generate_204", new RequestCallback() {
+        RequestHelper instance =  RequestHelper.Companion.instance();
+        RequestCallback requestCallback = new RequestCallback() {
+
             @Override
             public boolean isRequestOk(int code) {
-                return code == 200 || code == 204;
+                return code == 204 || code == 200 || code==404;
             }
 
             @Override
             public void onSuccess(int code, String response) {
-                long elapsed = System.currentTimeMillis() - start;
+                long elapsed = System.currentTimeMillis() - this.getStart();
                 String result = getString(R.string.connection_test_available, elapsed);
 
-                if (app.isVpnEnabled()) {
+                if (ShadowsocksApplication.app.isVpnEnabled()) {
                     connectionTestText.setText(result);
                 }
             }
@@ -460,7 +440,7 @@ public class Shadowsocks extends AppCompatActivity {
                 String exceptionMsg = getString(R.string.connection_test_error_status_code, code);
                 String result = getString(R.string.connection_test_error, exceptionMsg);
 
-                if (app.isVpnEnabled()) {
+                if (ShadowsocksApplication.app.isVpnEnabled()) {
                     connectionTestText.setText(R.string.connection_test_fail);
                     Snackbar.make(findViewById(android.R.id.content), result, Snackbar.LENGTH_LONG).show();
                 }
@@ -470,7 +450,9 @@ public class Shadowsocks extends AppCompatActivity {
             public void onFinished() {
                 isTestConnect = false;
             }
-        });
+        };
+        requestCallback.setStart(System.currentTimeMillis());
+        instance.get("https://www.google.com/generate_204", requestCallback);
     }
 
     private void hideCircle() {
@@ -511,7 +493,7 @@ public class Shadowsocks extends AppCompatActivity {
                         }, 100);
                         stat.setVisibility(View.VISIBLE);
                         if (resetConnectionTest) {
-                            if (app.isNatEnabled()) {
+                            if (ShadowsocksApplication.app.isNatEnabled()) {
                                 connectionTestText.setVisibility(View.GONE);
                             } else {
                                 connectionTestText.setVisibility(View.VISIBLE);
@@ -549,20 +531,20 @@ public class Shadowsocks extends AppCompatActivity {
 
     private boolean updateCurrentProfile() {
         // Check if current profile changed
-        if (preferences.profile == null || app.profileId() != preferences.profile.id) {
+        if (preferences.profile == null || ShadowsocksApplication.app.profileId() != preferences.profile.id) {
             // updated
-            Profile profile = app.currentProfile();
+            Profile profile = ShadowsocksApplication.app.currentProfile();
             if (profile == null) {
                 // removed
-                Profile first = app.profileManager.getFirstProfile();
+                Profile first = ShadowsocksApplication.app.profileManager.getFirstProfile();
                 int id;
                 if (first != null) {
                     id = first.id;
                 } else {
-                    id = app.profileManager.createDefault().id;
+                    id = ShadowsocksApplication.app.profileManager.createDefault().id;
                 }
 
-                profile = app.switchProfile(id);
+                profile = ShadowsocksApplication.app.switchProfile(id);
             }
 
             updatePreferenceScreen(profile);
@@ -580,7 +562,7 @@ public class Shadowsocks extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        app.refreshContainerHolder();
+        ShadowsocksApplication.app.refreshContainerHolder();
         updateState(updateCurrentProfile());
     }
 
@@ -625,7 +607,7 @@ public class Shadowsocks extends AppCompatActivity {
             serviceStop();
         }
         Handler h = showProgress(R.string.recovering);
-        app.copyAssets();
+        ShadowsocksApplication.app.copyAssets();
         h.sendEmptyMessage(0);
     }
 
@@ -700,12 +682,12 @@ public class Shadowsocks extends AppCompatActivity {
      */
     private void serviceLoad() {
         try {
-            mServiceBoundContext.bgService.use(app.profileId());
+            mServiceBoundContext.bgService.use(ShadowsocksApplication.app.profileId());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
 
-        if (app.isVpnEnabled()) {
+        if (ShadowsocksApplication.app.isVpnEnabled()) {
             changeSwitch(false);
         }
     }

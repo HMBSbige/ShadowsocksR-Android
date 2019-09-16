@@ -39,10 +39,9 @@ package com.github.shadowsocks.utils;
  */
 
 import com.github.shadowsocks.R;
+import com.github.shadowsocks.ShadowsocksApplication;
 
 import java.text.DecimalFormat;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class TrafficMonitor {
     // Bytes per second
@@ -70,7 +69,7 @@ public class TrafficMonitor {
             i = i + 1;
         }
         if (i < 0) {
-            return size + " " + app.getResources().getQuantityString(R.plurals.bytes, (int) size);
+            return size + " " + ShadowsocksApplication.app.getResources().getQuantityString(R.plurals.bytes, (int) size);
         } else {
             return numberFormat.format(n) + ' ' + units[i];
         }

@@ -15,8 +15,8 @@
         <include layout="@layout/toolbar_light_dark"/>
 
         <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/profilesList"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            android:id="@+id/profilesList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

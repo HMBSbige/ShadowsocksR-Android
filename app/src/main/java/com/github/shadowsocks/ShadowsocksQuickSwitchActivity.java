@@ -48,6 +48,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
+import com.github.shadowsocks.R;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.utils.Utils;
 
@@ -60,8 +61,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 /**
  * Created by Lucas on 3/10/16.
@@ -84,12 +83,12 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
         profilesList.setLayoutManager(lm);
         profilesList.setItemAnimator(new DefaultItemAnimator());
         profilesList.setAdapter(profilesAdapter);
-        if (app.profileId() >= 0) {
+        if (ShadowsocksApplication.app.profileId() >= 0) {
             int position = 0;
             List<Profile> profiles = profilesAdapter.profiles;
             for (int i = 0; i < profiles.size(); i++) {
                 Profile profile = profiles.get(i);
-                if (profile.id == app.profileId()) {
+                if (profile.id == ShadowsocksApplication.app.profileId()) {
                     position = i + 1;
                     break;
                 }
@@ -122,12 +121,12 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
         public void bind(Profile item) {
             this.item = item;
             text.setText(item.name);
-            text.setChecked(item.id == app.profileId());
+            text.setChecked(item.id == ShadowsocksApplication.app.profileId());
         }
 
         @Override
         public void onClick(View v) {
-            app.switchProfile(item.id);
+            ShadowsocksApplication.app.switchProfile(item.id);
             Utils.startSsService(ShadowsocksQuickSwitchActivity.this);
             finish();
         }
@@ -139,7 +138,7 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
         private final String name;
 
         public ProfilesAdapter() {
-            List<Profile> profiles = app.profileManager.getAllProfiles();
+            List<Profile> profiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
             if (profiles == null || profiles.isEmpty()) {
                 this.profiles = new ArrayList<>();
             } else {

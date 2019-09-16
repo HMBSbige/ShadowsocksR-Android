@@ -41,9 +41,9 @@ package com.github.shadowsocks.utils;
 import android.content.Context;
 import android.graphics.Typeface;
 
-import java.util.Hashtable;
+import com.github.shadowsocks.ShadowsocksApplication;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
+import java.util.Hashtable;
 
 public class Typefaces {
 
@@ -57,7 +57,7 @@ public class Typefaces {
                     cache.put(assetPath, Typeface.createFromAsset(c.getAssets(), assetPath));
                 } catch (Exception e) {
                     VayLog.e(TAG, "Could not get typeface '" + assetPath + "' because " + e.getMessage());
-                    app.track(e);
+                    ShadowsocksApplication.app.track(e);
                     return null;
                 }
             }

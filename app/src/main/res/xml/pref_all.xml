@@ -117,16 +117,11 @@
             android:title="@string/auto_connect"/>
 
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="tcp_fastopen"
             android:summary="@string/tcp_fastopen_summary"
             android:title="TCP Fast Open"/>
 
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="isNAT"
-            android:summary="@string/nat_summary"
-            android:title="@string/nat"/>
         <Preference
             android:key="recovery"
             android:summary="@string/recovery_summary"

@@ -1,42 +1,5 @@
 package com.github.shadowsocks;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2014 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
+
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -50,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.evernote.android.job.JobManager;
+import com.github.shadowsocks.R;
 import com.github.shadowsocks.database.DBHelper;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.database.ProfileManager;
@@ -130,8 +94,9 @@ public class ShadowsocksApplication extends Application {
     public Resources resources;
 
     public boolean isNatEnabled() {
-        return settings.getBoolean(Constants.Key.isNAT, false);
+        return false;
     }
+
 
     public boolean isVpnEnabled() {
         return !isNatEnabled();
@@ -155,7 +120,7 @@ public class ShadowsocksApplication extends Application {
             @Override
             public Thread newThread(@NonNull Runnable r) {
                 Thread thread = new Thread(r);
-                thread.setName("shadowsocks-thread");
+                thread.setName("shadowsocksr-thread");
                 return thread;
             }
         });
@@ -408,7 +373,7 @@ public class ShadowsocksApplication extends Application {
     public void crashRecovery() {
         ArrayList<String> cmd = new ArrayList<>();
 
-        String[] paramsArray = {"ss-local", "ss-tunnel", "pdnsd", "redsocks", "tun2socks", "proxychains"};
+        String[] paramsArray = {"libssr-local.so", "ss-tunnel", "libpdnsd.so", "libredsocks.so", "libtun2socks.so", "proxychains"};
         for (String task : paramsArray) {
             cmd.add(String.format(Locale.ENGLISH, "killall %s", task));
             cmd.add(String.format(Locale.ENGLISH, "rm -f %1$s/%2$s-nat.conf %1$s/%2$s-vpn.conf", getApplicationInfo().dataDir, task));
@@ -460,7 +425,7 @@ public class ShadowsocksApplication extends Application {
         // exec cmds
         String[] cmds = new String[EXECUTABLES.length];
         for (int i = 0; i < cmds.length; i++) {
-            cmds[i] = "chmod 755 " + getApplicationInfo().dataDir + File.separator + EXECUTABLES[i];
+            cmds[i] = "chmod 755 " + getApplicationInfo().nativeLibraryDir + File.separator + EXECUTABLES[i];
         }
         Shell.SH.run(cmds);
 

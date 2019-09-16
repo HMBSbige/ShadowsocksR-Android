@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ShadowsocksR</string>
-    <string name="quick_toggle">Toggle</string>
+    <plurals name="bytes" translatable="false">
+        <item quantity="one">Byte</item>
+        <item quantity="other">Bytes</item>
+    </plurals>
+    <plurals name="removed">
+        <item quantity="one">Removed</item>
+        <item quantity="other">%d items removed</item>
+    </plurals>
 
     <!-- global/misc category -->
+    <string name="app_name">ShadowsocksR</string>
+    <string name="quick_toggle">Toggle</string>
     <string name="misc_cat">Misc</string>
     <string name="profile">Profile</string>
     <string name="profile_summary">Switch to another profile or add new profiles</string>
@@ -14,20 +22,16 @@
     <string name="remote_dns_summary">用于远程分析的DNS（默认名称服务器8.8.8.8）</string>
     <string name="stat">Network Traffic</string>
     <string name="stat_summary">Sent: \t\t\t\t\t%3$s\t↑\t%1$s/s\nReceived: \t%4$s\t↓\t%2$s/s</string>
-    <string name="stat_profiles">\n%1$s↑\t%2$s↓\t%3$sms\t%4$s</string>
+    <string name="stat_profiles">\n%1$s↑\t%2$s↓\t%3$sms-%4$sms</string>
     <string name="traffic_summary">%1$s/s↑\t%2$s/s↓</string>
-    <plurals name="bytes" translatable="false">
-        <item quantity="one">Byte</item>
-        <item quantity="other">Bytes</item>
-    </plurals>
     <string name="connection_test_pending">Check Connectivity</string>
     <string name="connection_test_testing">Testing…</string>
     <string name="connection_test_available">Success: %dms latency</string>
     <string name="connection_test_error">Fail to detect internet connection: %s</string>
     <string name="connection_test_fail">Internet Unavailable</string>
-    <string name="connection_test_error_status_code">Error code: #%d</string>
 
     <!-- proxy category -->
+    <string name="connection_test_error_status_code">Error code: #%d</string>
     <string name="proxy_cat">Server Settings</string>
     <string name="profile_name">Profile Name</string>
     <string name="proxy">Server</string>
@@ -46,9 +50,9 @@
     <string name="obfs_summary">Obfs you selected in your server</string>
     <string name="obfs_param">Obfs Param</string>
     <string name="obfs_param_summary">Obfs param you put in your server</string>
-    <string name="enc_method">Encrypt Method</string>
 
     <!-- feature category -->
+    <string name="enc_method">Encrypt Method</string>
     <string name="feature_cat">Feature Settings</string>
     <string name="ipv6">IPv6 Route</string>
     <string name="ipv6_summary">Redirect IPv6 traffic to remote</string>
@@ -62,15 +66,6 @@
     <string name="auto_set_gfwlist_summary">Bypass all sites located in China
   </string>
     <string name="route_list">Route</string>
-    <string-array name="route_entry">
-        <item>All</item>
-        <item>Bypass LAN</item>
-        <item>Bypass China</item>
-        <item>Bypass LAN &amp; China</item>
-        <item>GFW List</item>
-        <item>China List</item>
-        <item>Customize ACL File</item>
-    </string-array>
     <string name="acl_file">ACL File URL</string>
     <string name="aclupdate">ACL Update</string>
     <string name="aclupdate_summary">Update Your ACL file</string>
@@ -159,28 +154,26 @@
     <string name="add_profile_nfc_hint">Keep both devices\' screen on. On the other device, click on the \'share\' button. Place both devices\' backs against each other.\nYou may also scan a nfc tag.</string>
     <string name="add_profile_scanner_permission_required">Camera permission is required for scanning QR code.</string>
     <string name="copy_url">Copy URL</string>
-    <plurals name="removed">
-        <item quantity="one">Removed</item>
-        <item quantity="other">%d items removed</item>
-    </plurals>
     <string name="undo">Undo</string>
-
     <string name="tips_testing">Testing...</string>
+
     <string name="tips_sorting">Sorting...</string>
-    <string name="action_full_test">Full latency test</string>
+    <string name="action_full_test">Full HTTP latency test</string>
+    <string name="action_tcp_ping_full_test">Full TCP ping test</string>
     <string name="action_sort">Auto sort by latency</string>
     <string name="ping">Ping</string>
-
+    <string name="tcp_ping">TCP Ping</string>
     <string name="frontproxy_enable">Enable</string>
+
     <string name="frontproxy_addr">Address</string>
     <string name="frontproxy_port">Port</string>
     <string name="frontproxy_username">Username</string>
     <string name="frontproxy_password">Password</string>
     <string name="frontproxy_type">Type</string>
     <string name="frontproxy_set">FrontProxy</string>
-
-
     <string name="add_profile_methods_ssr_sub">Add/Update SSR Subscription</string>
+
+
     <string name="ssrsub_autoupdate_enable">Auto Update</string>
     <string name="ssrsub_add">Add URL</string>
     <string name="ssrsub_ok">Save and Update</string>
@@ -197,26 +190,38 @@
     <string name="ssrsub_remove_tip">Delete this subscription without removing its nodes (nodes that bear its group name)?</string>
     <string name="ssrsub_remove_tip_direct">Delete the URL only</string>
     <string name="ssrsub_remove_tip_delete">Delete the nodes too</string>
-
-
     <string name="scan_qrcode_install_title">Scanner installation</string>
+
+
     <string name="scan_qrcode_install_text">It seems that \'zxing scanner\' is not currently installed. You may click the \'ok\' button below to install it from Play Store, or \'Install Manually\' to manually download the apk and installed it.</string>
     <string name="scan_qrcode_direct_download_text">Install Manually</string>
+    <string name="toggle_service_state">Start the service</string>
 
     <!-- tasker -->
-    <string name="toggle_service_state">Start the service</string>
     <string name="start_service_default">Connect to the current server</string>
     <string name="start_service">Connect to %s</string>
     <string name="stop_service">Switch to %s</string>
     <string name="profile_default">Use the current profile</string>
+    <string name="sent">Sent:</string>
 
     <!-- status -->
-    <string name="sent">Sent:</string>
     <string name="received">Received:</string>
+    <string name="kcp_summary">启用KCP协议</string>
 
     <!-- kcp -->
-    <string name="kcp_summary">启用KCP协议</string>
     <string name="kcp_port">KCP端口</string>
     <string name="kcp_port_summary">%d（远程KCPTUN服务器的端口号）</string>
     <string name="kcpcli">KCP参数</string>
+    <string name="group_choose_spinner">Choose Group</string>
+    <string name="allgroups">All Groups</string>
+    <string name="sub_autoupdate_success">%s: autoupdate success</string>
+    <string-array name="route_entry">
+        <item>All</item>
+        <item>Bypass LAN</item>
+        <item>Bypass China</item>
+        <item>Bypass LAN &amp; China</item>
+        <item>GFW List</item>
+        <item>China List</item>
+        <item>Customize ACL File</item>
+    </string-array>
 </resources>

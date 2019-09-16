@@ -15,6 +15,8 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
+        <include layout="@layout/toolbar_light_dark"/>
+
         <LinearLayout
             android:id="@+id/stat"
             android:layout_width="match_parent"
@@ -28,6 +30,8 @@
             android:orientation="vertical"
             android:paddingBottom="16dip"
             android:paddingEnd="88dip"
+            android:paddingLeft="16dip"
+            android:paddingRight="88dip"
             android:paddingStart="16dip"
             android:paddingTop="16dip"
             android:visibility="gone">
@@ -64,6 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
                     android:ellipsize="marquee"
                     android:gravity="end"
                     android:text="@string/sent"
@@ -106,6 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
+                    android:layout_marginRight="24dp"
                     android:ellipsize="marquee"
                     android:gravity="end"
                     android:text="@string/received"
@@ -155,8 +161,7 @@
         android:name="com.github.shadowsocks.ShadowsocksSettings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/title_bar"
-        tools:layout="@layout/layout_front_proxy" />
+        android:layout_below="@+id/title_bar"/>
 
     <com.github.jorgecastilloprz.FABProgressCircle
         android:id="@+id/fabProgressCircle"
@@ -164,8 +169,10 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/title_bar"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:elevation="6dp"
 
         app:arcColor="@color/material_blue_grey_700"
@@ -182,6 +189,4 @@
             app:srcCompat="@drawable/ic_start_idle"
             tools:ignore="VectorDrawableCompat"/>
     </com.github.jorgecastilloprz.FABProgressCircle>
-
-    <include layout="@layout/toolbar_light_dark" />
 </RelativeLayout>

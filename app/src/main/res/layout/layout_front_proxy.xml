@@ -11,66 +11,85 @@
         android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
     <Switch
         android:id="@+id/sw_frontproxy_enable"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
 
     <TextView
         android:text="@string/frontproxy_type"
         android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
     <Spinner
         android:id="@+id/sp_frontproxy_type"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/frontproxy_type_entry"/>
+        android:layout_height="40dp"
+        android:entries="@array/frontproxy_type_entry"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
 
     <TextView
         android:text="@string/frontproxy_addr"
         android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
     <EditText
         android:id="@+id/et_frontproxy_addr"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 
     <TextView
         android:text="@string/frontproxy_port"
         android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
     <EditText
         android:id="@+id/et_frontproxy_port"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 
     <TextView
         android:text="@string/frontproxy_username"
         android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
     <EditText
         android:id="@+id/et_frontproxy_username"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 
     <TextView
         android:text="@string/frontproxy_password"
         android:gravity="left"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"/>
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"/>
     <EditText
         android:id="@+id/et_frontproxy_password"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 
 </LinearLayout>

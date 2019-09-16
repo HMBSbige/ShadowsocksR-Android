@@ -1,42 +1,4 @@
 package com.github.shadowsocks;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2014 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
 
 import android.Manifest;
 import android.app.TaskStackBuilder;
@@ -62,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.github.shadowsocks.R;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.ToastUtils;
@@ -82,8 +45,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
-
 public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
 
     private static AppManager instance;
@@ -98,7 +59,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
     private View loadingView;
     private AtomicBoolean appsLoading;
     private Handler handler;
-    private Profile profile = app.currentProfile();
+    private Profile profile = ShadowsocksApplication.app.currentProfile();
 
     private void initProxiedApps() {
         initProxiedApps(profile.individual);
@@ -124,15 +85,19 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        String proxiedAppString = null;
+        String proxiedAppString;
         switch (item.getItemId()) {
             case R.id.action_apply_all:
-                List<Profile> profiles = app.profileManager.getAllProfiles();
+                List<Profile> profiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
                 if (profiles != null) {
                     proxiedAppString = profile.individual;
+                    boolean in_proxyapp = profile.proxyApps;
+                    boolean in_bypass = profile.bypass;
                     for (Profile p : profiles) {
                         p.individual = proxiedAppString;
-                        app.profileManager.updateProfile(p);
+                        p.bypass = in_bypass;
+                        p.proxyApps = in_proxyapp;
+                        ShadowsocksApplication.app.profileManager.updateProfile(p);
                     }
                     ToastUtils.showShort(R.string.action_apply_all);
                 } else {
@@ -168,7 +133,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
 
                                 bypassSwitch.setChecked(Boolean.parseBoolean(enabled));
                                 profile.individual = apps;
-                                app.profileManager.updateProfile(profile);
+                                ShadowsocksApplication.app.profileManager.updateProfile(profile);
                                 ToastUtils.showShort(R.string.action_import_msg);
                                 appListView.setVisibility(View.GONE);
                                 loadingView.setVisibility(View.VISIBLE);
@@ -200,20 +165,17 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
         appsLoading = new AtomicBoolean();
 
         setContentView(R.layout.layout_apps);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.proxied_apps);
         toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getParentActivityIntent();
-                if (shouldUpRecreateTask(intent) || isTaskRoot()) {
-                    TaskStackBuilder.create(AppManager.this)
-                            .addNextIntentWithParentStack(intent)
-                            .startActivities();
-                } else {
-                    finish();
-                }
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = getParentActivityIntent();
+            if (shouldUpRecreateTask(intent) || isTaskRoot()) {
+                TaskStackBuilder.create(AppManager.this)
+                        .addNextIntentWithParentStack(intent)
+                        .startActivities();
+            } else {
+                finish();
             }
         });
         toolbar.inflateMenu(R.menu.app_manager_menu);
@@ -221,37 +183,36 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
 
         if (!profile.proxyApps) {
             profile.proxyApps = true;
-            app.profileManager.updateProfile(profile);
+            ShadowsocksApplication.app.profileManager.updateProfile(profile);
         }
 
         ((Switch) findViewById(R.id.onSwitch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
                 profile.proxyApps = checked;
-                app.profileManager.updateProfile(profile);
+                ShadowsocksApplication.app.profileManager.updateProfile(profile);
                 finish();
             }
         });
 
-        bypassSwitch = (Switch) findViewById(R.id.bypassSwitch);
+        bypassSwitch = findViewById(R.id.bypassSwitch);
         bypassSwitch.setChecked(profile.bypass);
-        bypassSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                profile.bypass = isChecked;
-                app.profileManager.updateProfile(profile);
-            }
+        bypassSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            profile.bypass = isChecked;
+            ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
-
         initProxiedApps();
         loadingView = findViewById(R.id.loading);
-        appListView = (RecyclerView) findViewById(R.id.applistview);
+        appListView = findViewById(R.id.applistview);
         appListView.setLayoutManager(new LinearLayoutManager(this));
         appListView.setItemAnimator(new DefaultItemAnimator());
 
         instance = this;
-        loadAppsAsync();
+
+        new Thread(() -> loadAppsAsync()).start();
+
     }
+
 
     private void reloadApps() {
         if (!appsLoading.compareAndSet(true, false)) {
@@ -263,20 +224,16 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
         if (!appsLoading.compareAndSet(false, true)) {
             return;
         }
-
-        AppsAdapter tempAdapter = null;
+        AppsAdapter tempAdapter;
         do {
             appsLoading.set(true);
             tempAdapter = new AppsAdapter();
         } while (!appsLoading.compareAndSet(true, false));
 
         final AppsAdapter adapter = tempAdapter;
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                appListView.setAdapter(adapter);
-                Utils.crossFade(AppManager.this, loadingView, appListView);
-            }
+        handler.post(() -> {
+            appListView.setAdapter(adapter);
+            Utils.crossFade(AppManager.this, loadingView, appListView);
         });
     }
 
@@ -297,7 +254,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
             IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
             filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
             filter.addDataScheme("package");
-            app.registerReceiver(new BroadcastReceiver() {
+            ShadowsocksApplication.app.registerReceiver(new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     if (Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction()) || !intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
@@ -363,8 +320,8 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
 
         public AppViewHolder(View view) {
             super(view);
-            icon = (ImageView) itemView.findViewById(R.id.itemicon);
-            check = (Switch) itemView.findViewById(R.id.itemcheck);
+            icon = itemView.findViewById(R.id.itemicon);
+            check = itemView.findViewById(R.id.itemcheck);
 
             itemView.setOnClickListener(this);
         }
@@ -391,7 +348,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
             }
             if (!appsLoading.get()) {
                 profile.individual = Utils.makeString(proxiedApps, "\n");
-                app.profileManager.updateProfile(profile);
+                ShadowsocksApplication.app.profileManager.updateProfile(profile);
             }
         }
     }
@@ -407,7 +364,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
                 public int compare(ProxiedApp a, ProxiedApp b) {
                     boolean aProxied = proxiedApps.contains(a.packageName);
                     if (aProxied ^ proxiedApps.contains(b.packageName)) {
-                        return aProxied ? 1 : -1;
+                        return aProxied ? -1 : 1;
                     } else {
                         boolean result = a.name.compareToIgnoreCase(b.name) < 0;
                         return result ? 1 : -1;

@@ -1,49 +1,11 @@
 package com.github.shadowsocks.database;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2014 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
+
 
 import com.github.shadowsocks.utils.VayLog;
+import com.github.shadowsocks.ShadowsocksApplication;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class SSRSubManager {
 
@@ -70,7 +32,7 @@ public class SSRSubManager {
             invokeSSRSubAdded(ssrsub);
         } catch (Exception e) {
             VayLog.e(TAG, "addSSRSub", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
         return ssrsub;
     }
@@ -81,7 +43,7 @@ public class SSRSubManager {
             return true;
         } catch (Exception e) {
             VayLog.e(TAG, "updateSSRSub", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return false;
         }
     }
@@ -91,7 +53,7 @@ public class SSRSubManager {
             return dbHelper.ssrsubDao.queryForId(id);
         } catch (Exception e) {
             VayLog.e(TAG, "getSSRSub", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
@@ -102,7 +64,7 @@ public class SSRSubManager {
             return true;
         } catch (Exception e) {
             VayLog.e(TAG, "delSSRSub", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return false;
         }
     }
@@ -117,7 +79,7 @@ public class SSRSubManager {
             }
         } catch (Exception e) {
             VayLog.e(TAG, "getAllSSRSubs", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
@@ -127,14 +89,14 @@ public class SSRSubManager {
             return dbHelper.ssrsubDao.query(dbHelper.ssrsubDao.queryBuilder().prepare());
         } catch (Exception e) {
             VayLog.e(TAG, "getAllSSRSubs", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
 
     public SSRSub createDefault() {
         SSRSub ssrSub = new SSRSub();
-        ssrSub.url = "https://raw.githubusercontent.com/breakwa11/breakwa11.github.io/master/free/freenodeplain.txt";
+        ssrSub.url = "https://raw.githubusercontent.com/HMBSbige/Text_Translation/master/ShadowsocksR/freenodeplain.txt";
         ssrSub.url_group = "FreeSSR-public";
         return createSSRSub(ssrSub);
     }

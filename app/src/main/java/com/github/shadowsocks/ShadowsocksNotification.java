@@ -51,9 +51,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.RemoteException;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-
+import com.github.shadowsocks.R;
 import com.github.shadowsocks.aidl.IShadowsocksService;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
@@ -64,7 +62,8 @@ import com.github.shadowsocks.utils.Utils;
 import java.util.List;
 import java.util.Locale;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * @author Mygod
@@ -233,6 +232,7 @@ public class ShadowsocksNotification {
         String channelId = "net_speed";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, "NetSpeed", NotificationManager.IMPORTANCE_MIN);
+            channel.setSound(null, null);
             nm.createNotificationChannel(channel);
         }
         builder = new NotificationCompat.Builder(service, channelId)
@@ -247,7 +247,7 @@ public class ShadowsocksNotification {
                 service.getString(R.string.stop),
                 PendingIntent.getBroadcast(service, 0, new Intent(Constants.Action.CLOSE), 0));
 
-        List<Profile> profiles = app.profileManager.getAllProfiles();
+        List<Profile> profiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
         if (profiles != null && !profiles.isEmpty()) {
             builder.addAction(R.drawable.ic_action_settings, service.getString(R.string.quick_switch),
                     PendingIntent.getActivity(service, 0, new Intent(Constants.Action.QUICK_SWITCH), 0));

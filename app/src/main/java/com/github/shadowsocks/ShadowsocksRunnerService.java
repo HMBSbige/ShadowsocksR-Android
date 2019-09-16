@@ -50,8 +50,6 @@ import com.github.shadowsocks.utils.VayLog;
 
 import androidx.annotation.Nullable;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
-
 public class ShadowsocksRunnerService extends ServiceBoundService {
 
     private static final String TAG = ShadowsocksRunnerService.class.getSimpleName();
@@ -74,7 +72,7 @@ public class ShadowsocksRunnerService extends ServiceBoundService {
     @Override
     protected void onServiceConnected() {
         if (bgService != null) {
-            if (app.isNatEnabled()) {
+            if (ShadowsocksApplication.app.isNatEnabled()) {
                 startBackgroundService();
             } else if (VpnService.prepare(ShadowsocksRunnerService.this) == null) {
                 startBackgroundService();
@@ -91,10 +89,10 @@ public class ShadowsocksRunnerService extends ServiceBoundService {
 
     private void startBackgroundService() {
         try {
-            bgService.use(app.profileId());
+            bgService.use(ShadowsocksApplication.app.profileId());
         } catch (RemoteException e) {
             VayLog.e(TAG, "startBackgroundService", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
     }
 

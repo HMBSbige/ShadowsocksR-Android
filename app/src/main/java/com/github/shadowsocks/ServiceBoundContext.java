@@ -140,11 +140,7 @@ public class ServiceBoundContext extends ContextWrapper implements IBinder.Death
         this.callback = callback;
         if (bgService == null) {
             Class<?> clazz;
-            if (app.isNatEnabled()) {
-                clazz = ShadowsocksNatService.class;
-            } else {
-                clazz = ShadowsocksVpnService.class;
-            }
+            clazz = ShadowsocksVpnService.class;
 
             Intent intent = new Intent(this, clazz);
             intent.setAction(Constants.Action.SERVICE);

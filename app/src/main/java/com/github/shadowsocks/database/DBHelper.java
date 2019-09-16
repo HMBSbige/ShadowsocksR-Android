@@ -1,42 +1,5 @@
 package com.github.shadowsocks.database;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2013 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
+
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -48,19 +11,18 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.github.shadowsocks.ShadowsocksApplication;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class DBHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String TAG = DBHelper.class.getSimpleName();
 
     public static final String PROFILE = "profile.db";
-    private static final int VERSION = 24;
+    private static final int VERSION = 25;
 
     private List<ApplicationInfo> apps;
 
@@ -197,7 +159,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
 
 
                 if (oldVersion < 16) {
-                    profileDao.executeRawNoArgs("UPDATE `profile` SET route = 'bypass-lan-china' WHERE route = 'bypass-china'");
+                    profileDao.executeRawNoArgs("UPDATE `profile` SET route = 'HMBSbige-whitelist' WHERE route = 'bypass-china'");
                 }
 
                 if (oldVersion < 19) {
@@ -217,15 +179,20 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
                 }
 
                 if (oldVersion < 23) {
-                    profileDao.executeRawNoArgs("ALTER TABLE `profile` ADD COLUMN url_group VARCHAR DEFAULT '';");
+                    profileDao.executeRawNoArgs("ALTER TABLE `profile` ADD COLUMN tcpdelay LONG DEFAULT 0;");
                 }
 
                 if (oldVersion < 24) {
+                    profileDao.executeRawNoArgs("ALTER TABLE `profile` ADD COLUMN url_group VARCHAR DEFAULT '';");
+                }
+
+                if (oldVersion < 25) {
                     TableUtils.createTable(connectionSource, SSRSub.class);
                 }
+
             } catch (Exception e) {
                 VayLog.e(TAG, "onUpgrade", e);
-                app.track(e);
+                ShadowsocksApplication.app.track(e);
 
                 try {
                     profileDao.executeRawNoArgs("DROP TABLE IF EXISTS 'profile';");

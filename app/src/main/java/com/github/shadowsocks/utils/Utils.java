@@ -1,42 +1,5 @@
 package com.github.shadowsocks.utils;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2014 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
+
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -55,6 +18,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.github.shadowsocks.ShadowsocksRunnerService;
+import com.github.shadowsocks.ShadowsocksApplication;
 
 import org.xbill.DNS.AAAARecord;
 import org.xbill.DNS.ARecord;
@@ -81,8 +45,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class Utils {
 
@@ -186,7 +148,7 @@ public class Utils {
             return new String(Base64.encode(mdg.digest(), 0));
         } catch (Exception e) {
             VayLog.e(TAG, "getSignature", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
         return null;
     }
@@ -238,7 +200,7 @@ public class Utils {
             return scanner.next();
         } catch (Exception e) {
             VayLog.e(TAG, "readAllLines", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         } finally {
             if (scanner != null) {
@@ -369,7 +331,7 @@ public class Utils {
             }
         } catch (Exception e) {
             VayLog.e(TAG, "resolve", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
         return null;
     }
@@ -380,7 +342,7 @@ public class Utils {
             return addr.getHostAddress();
         } catch (Exception e) {
             VayLog.e(TAG, "resolve", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
         return null;
     }
@@ -416,7 +378,7 @@ public class Utils {
             return (boolean) isNumericMethod().invoke(null, address);
         } catch (Exception e) {
             VayLog.e(TAG, "isNumeric", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
         return false;
     }
@@ -441,7 +403,7 @@ public class Utils {
             }
         } catch (Exception e) {
             VayLog.e(TAG, "Failed to get interfaces' addresses.", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
         return false;
     }

@@ -40,11 +40,11 @@ package com.github.shadowsocks.utils;
 
 public class Constants {
     public static class Executable {
-        public static final String REDSOCKS = "redsocks";
-        public static final String PDNSD = "pdnsd";
-        public static final String SS_LOCAL = "ss-local";
+        public static final String REDSOCKS = "libredsocks.so";
+        public static final String PDNSD = "libpdnsd.so";
+        public static final String SS_LOCAL = "libssr-local.so";
         public static final String SS_TUNNEL = "ss-tunnel";
-        public static final String TUN2SOCKS = "tun2socks";
+        public static final String TUN2SOCKS = "libtun2socks.so";
         public static final String KCPTUN = "kcptun";
     }
 
@@ -62,7 +62,7 @@ public class Constants {
                 " daemon = off;\n" +
                 " redirector = iptables;\n" +
                 "}\n" +
-                "redsocks {\n" +
+                "libredsocks.so {\n" +
                 " local_ip = 127.0.0.1;\n" +
                 " local_port = 8123;\n" +
                 " ip = 127.0.0.1;\n" +
@@ -77,68 +77,68 @@ public class Constants {
 
         public static final String PDNSD_LOCAL =
                 "global {" +
-                        "perm_cache = 2048;" +
-                        "%s" +
-                        "cache_dir = \"%s\";" +
-                        "server_ip = %s;" +
-                        "server_port = %d;" +
-                        "query_method = tcp_only;" +
-                        "min_ttl = 15m;" +
-                        "max_ttl = 1w;" +
-                        "timeout = 10;" +
-                        "daemon = off;" +
+                            "perm_cache = 2048;" +
+                            "%s" +
+                            "cache_dir = \"%s\";" +
+                            "server_ip = %s;" +
+                            "server_port = %d;" +
+                            "query_method = tcp_only;" +
+                            "min_ttl = 15m;" +
+                            "max_ttl = 1w;" +
+                            "timeout = 10;" +
+                            "daemon = off;" +
                         "}" +
                         "" +
-                        "server {" +
-                        "label = \"local\";" +
-                        "ip = 127.0.0.1;" +
-                        "port = %d;" +
-                        "reject = %s;" +
-                        "reject_policy = negate;" +
-                        "reject_recursively = on;" +
+                "server {" +
+                            "label = \"local\";" +
+                            "ip = 127.0.0.1;" +
+                            "port = %d;" +
+                            "reject = %s;" +
+                            "reject_policy = negate;" +
+                            "reject_recursively = on;" +
                         "}" +
                         "" +
-                        "rr {" +
-                        "name=localhost;" +
-                        "reverse=on;" +
-                        "a=127.0.0.1;" +
-                        "owner=localhost;" +
-                        "soa=localhost,root.localhost,42,86400,900,86400,86400;" +
+                    "rr {" +
+                            "name=localhost;" +
+                            "reverse=on;" +
+                            "a=127.0.0.1;" +
+                            "owner=localhost;" +
+                            "soa=localhost,root.localhost,42,86400,900,86400,86400;" +
                         "}";
 
         public static final String PDNSD_DIRECT =
                 "global {" +
-                        "perm_cache = 2048;" +
-                        "%s" +
-                        "cache_dir = \"%s\";" +
-                        "server_ip = %s;" +
-                        "server_port = %d;" +
-                        "query_method = udp_only;" +
-                        "min_ttl = 15m;" +
-                        "max_ttl = 1w;" +
-                        "timeout = 10;" +
-                        "daemon = off;" +
-                        "par_queries = 4;" +
+                            "perm_cache = 2048;" +
+                            "%s" +
+                            "cache_dir = \"%s\";" +
+                            "server_ip = %s;" +
+                            "server_port = %d;" +
+                            "query_method = udp_only;" +
+                            "min_ttl = 15m;" +
+                            "max_ttl = 1w;" +
+                            "timeout = 10;" +
+                            "daemon = off;" +
+                            "par_queries = 4;" +
                         "}" +
                         "" +
-                        "%s" +
+                "%s" +
                         "" +
-                        "server {" +
-                        "label = \"local-server\";" +
-                        "ip = 127.0.0.1;" +
-                        "query_method = tcp_only;" +
-                        "port = %d;" +
-                        "reject = %s;" +
-                        "reject_policy = negate;" +
-                        "reject_recursively = on;" +
+                "server {" +
+                            "label = \"local-server\";" +
+                            "ip = 127.0.0.1;" +
+                            "query_method = tcp_only;" +
+                            "port = %d;" +
+                            "reject = %s;" +
+                            "reject_policy = negate;" +
+                            "reject_recursively = on;" +
                         "}" +
-                        "" +
-                        "rr {" +
-                        "name=localhost;" +
-                        "reverse=on;" +
-                        "a=127.0.0.1;" +
-                        "owner=localhost;" +
-                        "soa=localhost,root.localhost,42,86400,900,86400,86400;" +
+                            "" +
+                    "rr {" +
+                            "name=localhost;" +
+                            "reverse=on;" +
+                            "a=127.0.0.1;" +
+                            "owner=localhost;" +
+                            "soa=localhost,root.localhost,42,86400,900,86400,86400;" +
                         "}";
 
         public static final String REMOTE_SERVER =

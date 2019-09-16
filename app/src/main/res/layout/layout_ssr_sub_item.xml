@@ -6,9 +6,9 @@
               android:layout_height="wrap_content"
               android:id="@+id/container"
               android:background="?android:attr/selectableItemBackground"
-              android:paddingStart="20dp"
+              android:paddingStart="24dp"
               android:paddingEnd="?attr/dialogPreferredPadding"
-              android:paddingLeft="20dp"
+              android:paddingLeft="24dp"
               android:paddingRight="?attr/dialogPreferredPadding"
               android:focusable="true">
       <TextView

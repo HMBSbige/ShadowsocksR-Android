@@ -1,42 +1,5 @@
 package com.github.shadowsocks;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2014 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
+
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -58,31 +21,51 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatDrawableManager;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.TaskStackBuilder;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.snackbar.Snackbar;
+
+import net.glxn.qrgen.android.QRCode;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.database.ProfileManager;
@@ -100,26 +83,6 @@ import com.github.shadowsocks.utils.ToastUtils;
 import com.github.shadowsocks.utils.TrafficMonitor;
 import com.github.shadowsocks.utils.Utils;
 import com.github.shadowsocks.widget.UndoSnackbarManager;
-import com.google.android.material.snackbar.Snackbar;
-
-import net.glxn.qrgen.android.QRCode;
-
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatDrawableManager;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.TaskStackBuilder;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class ProfileManagerActivity extends AppCompatActivity implements View.OnClickListener, Toolbar.OnMenuItemClickListener, NfcAdapter.CreateNdefMessageCallback, ProfileManager.ProfileAddedListener, SSRSubManager.SSRSubAddedListener {
 
@@ -174,43 +137,31 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         }
 
         if (action != null && action.equals(Constants.Action.SORT)) {
+            Log.i("ShadowsocksR Sort:", "TRUE");
             is_sort = true;
         }
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(R.layout.layout_profiles);
+
 
         initToolbar();
         initFab();
+        initGroupSpinner();
 
-        app.profileManager.addProfileAddedListener(this);
+        ShadowsocksApplication.app.profileManager.addProfileAddedListener(this);
 
-        final RecyclerView profilesList = (RecyclerView) findViewById(R.id.profilesList);
+        final RecyclerView profilesList = findViewById(R.id.profilesList);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         profilesList.setLayoutManager(layoutManager);
         profilesList.setItemAnimator(new DefaultItemAnimator());
         profilesList.setAdapter(profilesAdapter);
-        profilesList.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // scroll to position
-                int position = getCurrentProfilePosition();
-                profilesList.scrollToPosition(position);
-            }
+        profilesList.postDelayed(() -> {
+            // scroll to position
+            int position = getCurrentProfilePosition();
+            profilesList.scrollToPosition(position);
         }, 100);
 
-        undoManager = new UndoSnackbarManager<>(profilesList, new UndoSnackbarManager.OnUndoListener<Profile>() {
-            @Override
-            public void onUndo(SparseArray<Profile> undo) {
-                profilesAdapter.undo(undo);
-            }
-        }, new UndoSnackbarManager.OnCommitListener<Profile>() {
-            @Override
-            public void onCommit(SparseArray<Profile> commit) {
-                profilesAdapter.commit(commit);
-            }
-        });
+        undoManager = new UndoSnackbarManager<>(profilesList, undo -> profilesAdapter.undo(undo), commit -> profilesAdapter.commit(commit));
 
         if (!is_sort) {
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
@@ -234,12 +185,12 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         mServiceBoundContext.attachService(new IShadowsocksServiceCallback.Stub() {
 
             @Override
-            public void stateChanged(int state, String profileName, String msg) throws RemoteException {
+            public void stateChanged(int state, String profileName, String msg) {
                 // Ignored
             }
 
             @Override
-            public void trafficUpdated(long txRate, long rxRate, long txTotal, long rxTotal) throws RemoteException {
+            public void trafficUpdated(long txRate, long rxRate, long txTotal, long rxTotal) {
                 if (selectedItem != null) {
                     selectedItem.updateText(txTotal, rxTotal);
                 }
@@ -254,22 +205,40 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         }
     }
 
+
+    private void initGroupSpinner() {
+        Spinner spinner = findViewById(R.id.group_choose_spinner);
+        List<String> groups_name = ShadowsocksApplication.app.profileManager.getGroupNames();
+        groups_name.add(0, getString(R.string.allgroups));
+        ArrayAdapter<String> _Adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, groups_name);
+        spinner.setAdapter(_Adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                String str=parent.getItemAtPosition(position).toString();
+                profilesAdapter.onGroupChange(str);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+
     /**
      * init toolbar
      */
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.profiles);
         toolbar.setNavigationIcon(R.drawable.ic_navigation_close);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = getParentActivityIntent();
-                if (shouldUpRecreateTask(intent) || isTaskRoot()) {
-                    TaskStackBuilder.create(ProfileManagerActivity.this).addNextIntentWithParentStack(intent).startActivities();
-                } else {
-                    finish();
-                }
+        toolbar.setNavigationOnClickListener(v -> {
+            Intent intent = getParentActivityIntent();
+            if (shouldUpRecreateTask(intent) || isTaskRoot()) {
+                TaskStackBuilder.create(ProfileManagerActivity.this).addNextIntentWithParentStack(intent).startActivities();
+            } else {
+                finish();
             }
         });
         toolbar.inflateMenu(R.menu.profile_manager_menu);
@@ -281,7 +250,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         List<Profile> profiles = profilesAdapter.profiles;
         for (int i = 0; i < profiles.size(); i++) {
             Profile profile = profiles.get(i);
-            if (profile.id == app.profileId()) {
+            if (profile.id == ShadowsocksApplication.app.profileId()) {
                 position = i;
             }
         }
@@ -292,8 +261,8 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
      * show profile tips dialog
      */
     private void showProfileTipDialog() {
-        if (app.settings.getBoolean(Constants.Key.profileTip, true)) {
-            app.editor.putBoolean(Constants.Key.profileTip, false).apply();
+        if (ShadowsocksApplication.app.settings.getBoolean(Constants.Key.profileTip, true)) {
+            ShadowsocksApplication.app.editor.putBoolean(Constants.Key.profileTip, false).apply();
             new AlertDialog.Builder(this, R.style.Theme_Material_Dialog_Alert)
                     .setTitle(R.string.profile_manager_dialog)
                     .setMessage(R.string.profile_manager_dialog_content)
@@ -304,31 +273,28 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
     @SuppressLint("RestrictedApi")
     public void initFab() {
-        menu = (FloatingActionMenu) findViewById(R.id.menu);
+        menu = findViewById(R.id.menu);
         menu.setClosedOnTouchOutside(true);
         AppCompatDrawableManager dm = AppCompatDrawableManager.get();
-        FloatingActionButton manualAddFAB = (FloatingActionButton) findViewById(R.id.fab_manual_add);
+        FloatingActionButton manualAddFAB = findViewById(R.id.fab_manual_add);
         manualAddFAB.setImageDrawable(dm.getDrawable(this, R.drawable.ic_content_create));
         manualAddFAB.setOnClickListener(this);
-        final FloatingActionButton qrcodeAddFAB = (FloatingActionButton) findViewById(R.id.fab_qrcode_add);
+        final FloatingActionButton qrcodeAddFAB = findViewById(R.id.fab_qrcode_add);
         qrcodeAddFAB.setImageDrawable(dm.getDrawable(this, R.drawable.ic_image_camera_alt));
         qrcodeAddFAB.setOnClickListener(this);
-        FloatingActionButton nfcAddFAB = (FloatingActionButton) findViewById(R.id.fab_nfc_add);
+        FloatingActionButton nfcAddFAB = findViewById(R.id.fab_nfc_add);
         nfcAddFAB.setImageDrawable(dm.getDrawable(this, R.drawable.ic_device_nfc));
         nfcAddFAB.setOnClickListener(this);
-        FloatingActionButton importAddFAB = (FloatingActionButton) findViewById(R.id.fab_import_add);
+        FloatingActionButton importAddFAB = findViewById(R.id.fab_import_add);
         importAddFAB.setImageDrawable(dm.getDrawable(this, R.drawable.ic_content_paste));
         importAddFAB.setOnClickListener(this);
-        FloatingActionButton ssrsubAddFAB = (FloatingActionButton) findViewById(R.id.fab_ssr_sub);
+        FloatingActionButton ssrsubAddFAB = findViewById(R.id.fab_ssr_sub);
         ssrsubAddFAB.setImageDrawable(dm.getDrawable(this, R.drawable.ic_rss));
         ssrsubAddFAB.setOnClickListener(this);
-        menu.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                if (opened) {
-                    int visible = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) ? View.VISIBLE : View.GONE;
-                    qrcodeAddFAB.setVisibility(visible);
-                }
+        menu.setOnMenuToggleListener(opened -> {
+            if (opened) {
+                int visible = getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) ? View.VISIBLE : View.GONE;
+                qrcodeAddFAB.setVisibility(visible);
             }
         });
     }
@@ -352,25 +318,9 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
             startActivityForResult(intent, REQUEST_QRCODE);
         } catch (Throwable e) {
-            /*val dialog = new AlertDialog.Builder(this, R.style.Theme_Material_Dialog_Alert)
-              .setTitle(R.string.scan_qrcode_install_title)
-              .setPositiveButton(android.R.string.yes, ((_, _) => {
-                  val marketUri = Uri.parse("market://details?id=com.google.zxing.client.android")
-                  val marketIntent = new Intent(Intent.ACTION_VIEW, marketUri)
-                  startActivity(marketIntent)
-                }
-              ): DialogInterface.OnClickListener)
-              .setNeutralButton(R.string.scan_qrcode_direct_download_text, ((_, _) => {
-                  val marketUri = Uri.parse("https://breakwa11.github.io/download/BarcodeScanner.apk")
-                  val marketIntent = new Intent(Intent.ACTION_VIEW, marketUri)
-                  startActivity(marketIntent)
-                }
-              ): DialogInterface.OnClickListener)
-              .setNegativeButton(android.R.string.no, ((_, _) => finish()): DialogInterface.OnClickListener)
-              .setMessage(R.string.scan_qrcode_install_text)
-              .create()
-            dialog.show()*/
-            menu.toggle(false);
+            if (menu!=null) {
+                menu.toggle(false);
+            }
             startActivity(new Intent(this, ScannerActivity.class));
         }
     }
@@ -381,9 +331,9 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         switch (v.getId()) {
             case R.id.fab_manual_add:
                 menu.toggle(true);
-                Profile profile = app.profileManager.createProfile();
-                app.profileManager.updateProfile(profile);
-                app.switchProfile(profile.id);
+                Profile profile = ShadowsocksApplication.app.profileManager.createProfile();
+                ShadowsocksApplication.app.profileManager.updateProfile(profile);
+                ShadowsocksApplication.app.switchProfile(profile.id);
                 finish();
                 break;
             case R.id.fab_qrcode_add:
@@ -465,7 +415,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (Profile item : profiles) {
-                            app.profileManager.createProfile(item);
+                            ShadowsocksApplication.app.profileManager.createProfile(item);
                         }
                     }
                 })
@@ -473,7 +423,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (Profile item : profiles) {
-                            app.profileManager.createProfileDr(item);
+                            ShadowsocksApplication.app.profileManager.createProfileDr(item);
                         }
                     }
                 })
@@ -489,12 +439,12 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     public void ssrsubDialog() {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         View view = View.inflate(this, R.layout.layout_ssr_sub, null);
-        Switch subAutoUpdateEnable = (Switch) view.findViewById(R.id.sw_ssr_sub_autoupdate_enable);
+        Switch subAutoUpdateEnable = view.findViewById(R.id.sw_ssr_sub_autoupdate_enable);
 
         // adding listener
-        app.ssrsubManager.addSSRSubAddedListener(this);
+        ShadowsocksApplication.app.ssrsubManager.addSSRSubAddedListener(this);
 
-        RecyclerView ssusubsList = (RecyclerView) view.findViewById(R.id.ssrsubList);
+        RecyclerView ssusubsList = view.findViewById(R.id.ssrsubList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         ssusubsList.setLayoutManager(layoutManager);
         ssusubsList.setItemAnimator(new DefaultItemAnimator());
@@ -516,40 +466,24 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             subAutoUpdateEnable.setChecked(true);
         }
 
-        subAutoUpdateEnable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences.Editor editor = prefs.edit();
-                if (isChecked) {
-                    editor.putInt(Constants.Key.ssrsub_autoupdate, 1);
-                } else {
-                    editor.putInt(Constants.Key.ssrsub_autoupdate, 0);
-                }
-                editor.apply();
+        subAutoUpdateEnable.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = prefs.edit();
+            if (isChecked) {
+                editor.putInt(Constants.Key.ssrsub_autoupdate, 1);
+            } else {
+                editor.putInt(Constants.Key.ssrsub_autoupdate, 0);
             }
+            editor.apply();
         });
 
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.add_profile_methods_ssr_sub))
-                .setPositiveButton(R.string.ssrsub_ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        confirmWithUpdateSub();
-                    }
-                })
+                .setPositiveButton(R.string.ssrsub_ok, (dialog, which) -> confirmWithUpdateSub())
                 .setNegativeButton(android.R.string.no, null)
-                .setNeutralButton(R.string.ssrsub_add, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        showAddSSRSubAddrDialog();
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        // remove listener
-                        app.ssrsubManager.removeSSRSubAddedListener(ProfileManagerActivity.this);
-                    }
+                .setNeutralButton(R.string.ssrsub_add, (dialog, which) -> showAddSSRSubAddrDialog())
+                .setOnCancelListener(dialog -> {
+                    // remove listener
+                    ShadowsocksApplication.app.ssrsubManager.removeSSRSubAddedListener(ProfileManagerActivity.this);
                 })
                 .setView(view)
                 .create()
@@ -563,38 +497,27 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         final int index = viewHolder.getAdapterPosition();
         new AlertDialog.Builder(ProfileManagerActivity.this)
                 .setTitle(getString(R.string.ssrsub_remove_tip_title))
-                .setPositiveButton(R.string.ssrsub_remove_tip_direct, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ssrsubAdapter.remove(index);
-                        app.ssrsubManager.delSSRSub(((SSRSubViewHolder) viewHolder).item.id);
-                    }
+                .setPositiveButton(R.string.ssrsub_remove_tip_direct, (dialog, which) -> {
+                    ssrsubAdapter.remove(index);
+                    ShadowsocksApplication.app.ssrsubManager.delSSRSub(((SSRSubViewHolder) viewHolder).item.id);
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ssrsubAdapter.notifyDataSetChanged();
-                    }
-                })
-                .setNeutralButton(R.string.ssrsub_remove_tip_delete, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String group = ((SSRSubViewHolder) viewHolder).item.url_group;
-                        List<Profile> deleteProfiles = app.profileManager.getAllProfilesByGroup(group);
+                .setNegativeButton(android.R.string.no, (dialog, which) -> ssrsubAdapter.notifyDataSetChanged())
+                .setNeutralButton(R.string.ssrsub_remove_tip_delete, (dialog, which) -> {
+                    String group = ((SSRSubViewHolder) viewHolder).item.url_group;
+                    List<Profile> deleteProfiles = ShadowsocksApplication.app.profileManager.getAllProfilesByGroup(group);
 
-                        for (Profile profile : deleteProfiles) {
-                            if (profile.id != app.profileId()) {
-                                app.profileManager.delProfile(profile.id);
-                            }
+                    for (Profile profile : deleteProfiles) {
+                        if (profile.id != ShadowsocksApplication.app.profileId()) {
+                            ShadowsocksApplication.app.profileManager.delProfile(profile.id);
                         }
-
-                        int index = viewHolder.getAdapterPosition();
-                        ssrsubAdapter.remove(index);
-                        app.ssrsubManager.delSSRSub(((SSRSubViewHolder) viewHolder).item.id);
-
-                        finish();
-                        startActivity(new Intent(getIntent()));
                     }
+
+                    int index1 = viewHolder.getAdapterPosition();
+                    ssrsubAdapter.remove(index1);
+                    ShadowsocksApplication.app.ssrsubManager.delSSRSub(((SSRSubViewHolder) viewHolder).item.id);
+
+                    finish();
+                    startActivity(new Intent(getIntent()));
                 })
                 .setMessage(getString(R.string.ssrsub_remove_tip))
                 .setCancelable(false)
@@ -613,8 +536,8 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 true);
 
         // start update sub
-        List<SSRSub> subs = app.ssrsubManager.getAllSSRSubs();
-        SubUpdateHelper.instance().updateSub(subs, 0, new SubUpdateCallback() {
+        List<SSRSub> subs = ShadowsocksApplication.app.ssrsubManager.getAllSSRSubs();
+        SubUpdateHelper.Companion.instance().updateSub(subs, 0, new SubUpdateCallback() {
             @Override
             public void onFailed() {
                 ToastUtils.showShort(R.string.ssrsub_error);
@@ -633,26 +556,24 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     }
 
     private void showAddSSRSubAddrDialog() {
-        final EditText urlAddEdit = new EditText(ProfileManagerActivity.this);
-        new AlertDialog.Builder(ProfileManagerActivity.this)
+        LayoutInflater li = LayoutInflater.from(this);
+        final View myView = li.inflate(R.layout.layout_edittext, null);
+        AlertDialog.Builder cDialog =  new AlertDialog.Builder(ProfileManagerActivity.this);
+        cDialog.setView(myView)
                 .setTitle(getString(R.string.ssrsub_add))
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        EditText editText1 = myView.findViewById(R.id.editTextInput);
                         // add ssr sub by url
-                        String subUrl = urlAddEdit.getText().toString();
+                        String subUrl = editText1.getText().toString();
+                        Log.i("SubURL: ", subUrl);
                         addSSRSubByUrl(subUrl);
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ssrsubDialog();
-                    }
-                })
-                .setView(urlAddEdit)
-                .create()
-                .show();
+                .setNegativeButton(android.R.string.no, (dialog, which) -> ssrsubDialog());
+        AlertDialog dialog = cDialog.create();
+        dialog.show();
     }
 
     /**
@@ -670,11 +591,11 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     true);
 
             // request sub content
-            RequestHelper.instance().get(subUrl, new RequestCallback() {
+            RequestHelper.Companion.instance().get(subUrl, new RequestCallback() {
                 @Override
                 public void onSuccess(int code, String response) {
-                    SSRSub ssrsub = SubUpdateHelper.parseSSRSub(subUrl, response);
-                    app.ssrsubManager.createSSRSub(ssrsub);
+                    SSRSub ssrsub = SubUpdateHelper.Companion.parseSSRSub(subUrl, response);
+                    ShadowsocksApplication.app.ssrsubManager.createSSRSub(ssrsub);
                 }
 
                 @Override
@@ -738,7 +659,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (Profile profile : profiles) {
-                            app.profileManager.createProfile(profile);
+                            ShadowsocksApplication.app.profileManager.createProfile(profile);
                         }
                     }
                 })
@@ -746,7 +667,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (Profile profile : profiles) {
-                            app.profileManager.createProfileDr(profile);
+                            ShadowsocksApplication.app.profileManager.createProfileDr(profile);
                         }
                     }
                 })
@@ -781,7 +702,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 for (Profile profile : profiles) {
-                                    app.profileManager.createProfile(profile);
+                                    ShadowsocksApplication.app.profileManager.createProfile(profile);
                                 }
                             }
                         })
@@ -789,7 +710,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 for (Profile profile : profiles) {
-                                    app.profileManager.createProfileDr(profile);
+                                    ShadowsocksApplication.app.profileManager.createProfileDr(profile);
                                 }
                             }
                         })
@@ -840,7 +761,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         }
 
         undoManager.flush();
-        app.profileManager.removeProfileAddedListener(this);
+        ShadowsocksApplication.app.profileManager.removeProfileAddedListener(this);
         super.onDestroy();
     }
 
@@ -884,7 +805,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_export:
-                List<Profile> allProfiles = app.profileManager.getAllProfiles();
+                List<Profile> allProfiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
                 if (allProfiles != null && !allProfiles.isEmpty()) {
                     clipboard.setPrimaryClip(ClipData.newPlainText(null, makeString(allProfiles, "\n")));
                     ToastUtils.showShort(R.string.action_export_msg);
@@ -892,8 +813,15 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     ToastUtils.showShort(R.string.action_export_err);
                 }
                 return true;
+            case R.id.action_sort:
+                finish();
+                startActivity(new Intent(Constants.Action.SORT));
+                return true;
             case R.id.action_full_test:
-                pingAll();
+                pingAll(1);
+                return true;
+            case R.id.action_tcp_ping_full_test:
+                pingAll(2);
                 return true;
             default:
                 break;
@@ -901,7 +829,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         return false;
     }
 
-    private void pingAll() {
+    private void pingAll(int pingtype) {
         // reject repeat operation
         if (isTesting) {
             return;
@@ -928,47 +856,93 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     }
                 });
 
-        // get profile list
-        List<Profile> profiles = app.profileManager.getAllProfiles();
+        // get current profile list
+        List<Profile> profiles = profilesAdapter.profiles;
         // start test
-        PingHelper.instance().pingAll(this, profiles, new PingCallback() {
+        switch (pingtype) {
+            case 1:
+                PingHelper.Companion.instance().pingAll(this, profiles, new PingCallback() {
 
-            @Override
-            public void onSuccess(Profile profile, long elapsed) {
-                profile.elapsed = elapsed;
-                app.profileManager.updateProfile(profile);
+                    @Override
+                    public void onSuccess(Profile profile, long elapsed) {
+                        profile.elapsed = elapsed;
+                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
+                        // set progress message
+                        setProgressMessage(profile.name + " " + getResultMsg());
+                    }
 
-                // set progress message
-                setProgressMessage(profile.name + " " + getResultMsg());
-            }
+                    @Override
+                    public void onFailed(Profile profile) {
+                        profile.elapsed = -1;
+                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
 
-            @Override
-            public void onFailed(Profile profile) {
-                profile.elapsed = -1;
-                app.profileManager.updateProfile(profile);
+                        // set progress message
+                        setProgressMessage(getResultMsg());
+                    }
 
-                // set progress message
-                setProgressMessage(getResultMsg());
-            }
+                    /**
+                     * set progress message
+                     *
+                     * @param message tips message
+                     */
+                    private void setProgressMessage(String message) {
+                        if (testProgressDialog != null) {
+                            testProgressDialog.setMessage(message);
+                        }
+                    }
 
-            /**
-             * set progress message
-             *
-             * @param message tips message
-             */
-            private void setProgressMessage(String message) {
-                if (testProgressDialog != null) {
-                    testProgressDialog.setMessage(message);
-                }
-            }
+                    @Override
+                    public void onFinished(Profile profile) {
+                        mProgressHandler.sendEmptyMessageDelayed(MSG_FULL_TEST_FINISH, 2000);
+                        PingHelper.Companion.instance().releaseTempActivity();
+                    }
+                }, 1);
+                break;
+            case 2:
+                PingHelper.Companion.instance().pingAll(this, profiles, new PingCallback() {
 
-            @Override
-            public void onFinished(Profile profile) {
-                mProgressHandler.sendEmptyMessageDelayed(MSG_FULL_TEST_FINISH, 2000);
-                PingHelper.instance().releaseTempActivity();
-            }
-        });
+                    @Override
+                    public void onSuccess(Profile profile, long tcpdelay) {
+                        profile.tcpdelay = tcpdelay;
+                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
+                        // set progress message
+                        setProgressMessage(profile.name + " " + getResultMsg());
+                    }
+
+                    @Override
+                    public void onFailed(Profile profile) {
+                        profile.elapsed = -1;
+                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
+
+                        // set progress message
+                        setProgressMessage(getResultMsg());
+                    }
+
+                    /**
+                     * set progress message
+                     *
+                     * @param message tips message
+                     */
+                    private void setProgressMessage(String message) {
+                        if (testProgressDialog != null) {
+                            testProgressDialog.setMessage(message);
+                        }
+                    }
+
+                    @Override
+                    public void onFinished(Profile profile) {
+                        mProgressHandler.sendEmptyMessageDelayed(MSG_FULL_TEST_FINISH, 2000);
+                        PingHelper.Companion.instance().releaseTempActivity();
+                    }
+                }, 2);
+                break;
+        }
+
     }
+
+
+
+
 
     /**
      * use string divider list value
@@ -1005,6 +979,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             itemView.setOnKeyListener(this);
 
             initShareBtn();
+            initTcpPingBtn();
             initPingBtn();
         }
 
@@ -1044,31 +1019,18 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                         dialog.setMessage(getString(R.string.share_message_without_nfc));
                     } else if (!isNfcBeamEnabled) {
                         dialog.setMessage(getString(R.string.share_message_nfc_disabled));
-                        dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.turn_on_nfc), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
-                            }
-                        });
+                        dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.turn_on_nfc), (dialog12, which) -> startActivity(new Intent(Settings.ACTION_NFC_SETTINGS)));
                     } else {
                         dialog.setMessage(getString(R.string.share_message));
-                        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                nfcAdapter.setNdefPushMessageCallback(null, ProfileManagerActivity.this);
-                            }
-                        });
+                        dialog.setOnDismissListener(dialog1 -> nfcAdapter.setNdefPushMessageCallback(null, ProfileManagerActivity.this));
                     }
                     dialog.show();
                 }
             });
-            shareBtn.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Utils.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.share, Toast.LENGTH_SHORT), shareBtn,
-                            getWindow(), 0, Utils.dpToPx(ProfileManagerActivity.this, 8)).show();
-                    return true;
-                }
+            shareBtn.setOnLongClickListener(v -> {
+                Utils.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.share, Toast.LENGTH_SHORT), shareBtn,
+                        getWindow(), 0, Utils.dpToPx(ProfileManagerActivity.this, 8)).show();
+                return true;
             });
         }
 
@@ -1076,84 +1038,129 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
          * init ping btn
          */
         private void initPingBtn() {
-            final ImageView pingBtn = (ImageView) itemView.findViewById(R.id.ping_single);
-            pingBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final ProgressDialog singleTestProgressDialog = ProgressDialog.show(ProfileManagerActivity.this, getString(R.string.tips_testing), getString(R.string.tips_testing), false, true);
-                    PingHelper.instance().ping(ProfileManagerActivity.this, item, new PingCallback() {
-                        @Override
-                        public void onSuccess(Profile profile, long elapsed) {
+            final ImageView pingBtn = itemView.findViewById(R.id.ping_single);
+            pingBtn.setOnClickListener(v -> {
+                item.elapsed = 0;
+                final ProgressDialog singleTestProgressDialog = ProgressDialog.show(ProfileManagerActivity.this, getString(R.string.tips_testing), getString(R.string.tips_testing), false, true);
+                PingHelper.Companion.instance().ping(ProfileManagerActivity.this, item, new PingCallback() {
+                    @Override
+                    public void onSuccess(Profile profile, long elapsed) {
+                        if (profile.elapsed==0) {
                             profile.elapsed = elapsed;
-                            app.profileManager.updateProfile(profile);
-                            updateText(0, 0, elapsed);
+                        } else if(profile.elapsed>elapsed) {
+                            profile.elapsed = elapsed;
                         }
 
-                        @Override
-                        public void onFailed(Profile profile) {
-                        }
+                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
+                        updateText(profile.tx, profile.rx, elapsed, profile.tcpdelay);
+                    }
 
-                        @Override
-                        public void onFinished(Profile profile) {
-                            Snackbar.make(findViewById(android.R.id.content), getResultMsg(), Snackbar.LENGTH_LONG).show();
-                            singleTestProgressDialog.dismiss();
-                            PingHelper.instance().releaseTempActivity();
-                        }
-                    });
-                }
+                    @Override
+                    public void onFailed(Profile profile) {
+                    }
+
+                    @Override
+                    public void onFinished(Profile profile) {
+                        Snackbar.make(findViewById(android.R.id.content), getResultMsg(), Snackbar.LENGTH_LONG).show();
+                        singleTestProgressDialog.dismiss();
+                        PingHelper.Companion.instance().releaseTempActivity();
+                    }
+                });
             });
 
-            pingBtn.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    Utils.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.ping, Toast.LENGTH_SHORT),
-                            pingBtn,
-                            getWindow(),
-                            0,
-                            Utils.dpToPx(ProfileManagerActivity.this, 8))
-                            .show();
-                    return true;
-                }
+            pingBtn.setOnLongClickListener(v -> {
+                Utils.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.ping, Toast.LENGTH_SHORT),
+                        pingBtn,
+                        getWindow(),
+                        0,
+                        Utils.dpToPx(ProfileManagerActivity.this, 8))
+                        .show();
+                return true;
             });
         }
+
+        /**
+         * init tcp ping btn
+         */
+        private void initTcpPingBtn() {
+            final ImageView pingBtn = itemView.findViewById(R.id.tcp_ping_single);
+            pingBtn.setOnClickListener(v -> {
+                item.elapsed = 0;
+                final ProgressDialog singleTestProgressDialog = ProgressDialog.show(ProfileManagerActivity.this, getString(R.string.tips_testing), getString(R.string.tips_testing), false, true);
+                PingHelper.Companion.instance().tcp_ping(ProfileManagerActivity.this, item, new PingCallback() {
+                    @Override
+                    public void onSuccess(Profile profile, long tcpdelay) {
+                        if (profile.tcpdelay==0) {
+                            profile.tcpdelay = tcpdelay;
+                        } else if(profile.tcpdelay>tcpdelay) {
+                            profile.tcpdelay = tcpdelay;
+                        }
+
+                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
+                        updateText(profile.tx, profile.rx, profile.elapsed, tcpdelay);
+                    }
+
+                    @Override
+                    public void onFailed(Profile profile) {
+                    }
+
+                    @Override
+                    public void onFinished(Profile profile) {
+                        Snackbar.make(findViewById(android.R.id.content), getResultMsg(), Snackbar.LENGTH_LONG).show();
+                        singleTestProgressDialog.dismiss();
+                        PingHelper.Companion.instance().releaseTempActivity();
+                    }
+                });
+            });
+
+            pingBtn.setOnLongClickListener(v -> {
+                Utils.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.tcp_ping, Toast.LENGTH_SHORT),
+                        pingBtn,
+                        getWindow(),
+                        0,
+                        Utils.dpToPx(ProfileManagerActivity.this, 8))
+                        .show();
+                return true;
+            });
+        }
+
 
         public void updateText() {
             updateText(0, 0);
         }
 
         public void updateText(long txTotal, long rxTotal) {
-            updateText(txTotal, rxTotal, -1);
+            updateText(txTotal, rxTotal, -1, -1);
         }
 
-        public void updateText(long txTotal, long rxTotal, long elapsedInput) {
+        public void updateText(long txTotal, long rxTotal, long elapsedInput, long tcpdelayInput) {
             final SpannableStringBuilder builder = new SpannableStringBuilder();
             long tx = item.tx + txTotal;
             long rx = item.rx + rxTotal;
             long elapsed = item.elapsed;
+            long tcpdelay = item.tcpdelay;
             if (elapsedInput != -1) {
                 elapsed = elapsedInput;
+            }
+            if (tcpdelayInput!= -1) {
+                tcpdelay = tcpdelayInput;
             }
             builder.append(item.name);
             if (tx != 0 || rx != 0 || elapsed != 0 || item.url_group != "") {
                 int start = builder.length();
                 builder.append(getString(R.string.stat_profiles,
-                        TrafficMonitor.formatTraffic(tx), TrafficMonitor.formatTraffic(rx), String.valueOf(elapsed), item.url_group));
+                        TrafficMonitor.formatTraffic(tx), TrafficMonitor.formatTraffic(rx), String.valueOf(tcpdelay),String.valueOf(elapsed)));
                 builder.setSpan(new TextAppearanceSpan(ProfileManagerActivity.this, android.R.style.TextAppearance_Small),
                         start + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
 
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    text.setText(builder);
-                }
-            });
+            handler.post(() -> text.setText(builder));
         }
 
         public void bind(Profile item) {
             this.item = item;
             updateText();
-            if (item.id == app.profileId()) {
+            if (item.id == ShadowsocksApplication.app.profileId()) {
                 text.setChecked(true);
                 selectedItem = this;
             } else {
@@ -1166,7 +1173,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         @Override
         public void onClick(View v) {
-            app.switchProfile(item.id);
+            ShadowsocksApplication.app.switchProfile(item.id);
             finish();
         }
 
@@ -1198,12 +1205,12 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public ProfilesAdapter() {
             if (is_sort) {
-                List<Profile> list = app.profileManager.getAllProfilesByElapsed();
+                List<Profile> list = ShadowsocksApplication.app.profileManager.getAllProfilesByElapsed();
                 if (list != null && !list.isEmpty()) {
                     profiles = list;
                 }
             } else {
-                List<Profile> list = app.profileManager.getAllProfiles();
+                List<Profile> list = ShadowsocksApplication.app.profileManager.getAllProfiles();
                 if (list != null && !list.isEmpty()) {
                     profiles = list;
                 }
@@ -1212,6 +1219,32 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             if (profiles == null) {
                 profiles = new ArrayList<>();
             }
+        }
+
+
+        public void onGroupChange(String groupname) {
+            List<Profile> list;
+            if (groupname.equals("All Groups")||groupname.equals("全部群组")) {
+                if (is_sort) {
+                    list = ShadowsocksApplication.app.profileManager.getAllProfilesByElapsed();
+                } else {
+                    list = ShadowsocksApplication.app.profileManager.getAllProfiles();
+                }
+            } else {
+                if (is_sort) {
+                    list = ShadowsocksApplication.app.profileManager.getAllProfilesByGroupOrderbyElapse(groupname);
+
+                } else {
+                    list = ShadowsocksApplication.app.profileManager.getAllProfilesByGroup(groupname);
+                }
+            }
+            if (list != null && !list.isEmpty()) {
+                profiles = list;
+            }
+            if (profiles == null) {
+                profiles = new ArrayList<>();
+            }
+            notifyDataSetChanged();
         }
 
         @Override
@@ -1248,17 +1281,17 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 next.userOrder = previousOrder;
                 previousOrder = order;
                 profiles.set(i, next);
-                app.profileManager.updateProfile(next);
+                ShadowsocksApplication.app.profileManager.updateProfile(next);
             }
             first.userOrder = previousOrder;
             profiles.set(to, first);
-            app.profileManager.updateProfile(first);
+            ShadowsocksApplication.app.profileManager.updateProfile(first);
             notifyItemMoved(from, to);
         }
 
         public void remove(int pos) {
             Profile remove = profiles.remove(pos);
-            app.profileManager.delProfile(remove.id);
+            ShadowsocksApplication.app.profileManager.delProfile(remove.id);
             notifyItemRemoved(pos);
 
         }
@@ -1277,9 +1310,9 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             for (int index = 0; index < actions.size(); index++) {
                 Profile item = actions.get(index);
                 if (item != null) {
-                    app.profileManager.delProfile(item.id);
-                    if (item.id == app.profileId()) {
-                        app.profileId(-1);
+                    ShadowsocksApplication.app.profileManager.delProfile(item.id);
+                    if (item.id == ShadowsocksApplication.app.profileId()) {
+                        ShadowsocksApplication.app.profileId(-1);
                     }
                 }
             }
@@ -1341,7 +1374,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         private List<SSRSub> profiles;
 
         public SSRSubAdapter() {
-            List<SSRSub> all = app.ssrsubManager.getAllSSRSubs();
+            List<SSRSub> all = ShadowsocksApplication.app.ssrsubManager.getAllSSRSubs();
             if (all != null && !all.isEmpty()) {
                 profiles = all;
             } else {

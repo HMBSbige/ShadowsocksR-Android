@@ -171,7 +171,7 @@
 
   <string name="tips_testing">測試中...</string>
   <string name="tips_sorting">排序中...</string>
-  <string name="action_full_test">完整延時測試</string>
+  <string name="action_full_test">完整HTTP延時測試</string>
   <string name="action_sort">基於延時自動排序</string>
   <string name="ping">測試延時</string>
 
@@ -205,5 +205,9 @@
   <!-- status -->
   <string name="sent">傳送:</string>
   <string name="received">接收:</string>
+    <string name="tcp_ping">TCP 延迟</string>
+  <string name="action_tcp_ping_full_test">完整TCP延迟测试</string>
+    <string name="allgroups">All Groups</string>
+    <string name="sub_autoupdate_success">%s: autoupdate success</string>
 
 </resources>

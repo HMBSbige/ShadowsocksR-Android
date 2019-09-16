@@ -51,6 +51,7 @@ import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.text.TextUtils;
 
+import com.github.shadowsocks.R;
 import com.github.shadowsocks.aidl.IShadowsocksService;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
@@ -80,8 +81,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
-
 /**
  * Created by vay on 2018/07/18
  */
@@ -99,7 +98,7 @@ public abstract class BaseVpnService extends VpnService {
     private final RemoteCallbackList<IShadowsocksServiceCallback> callbacks;
     private int callbacksCount;
     private Handler handler = new Handler(Looper.getMainLooper());
-    public static final String protectPath = app.getApplicationInfo().dataDir + "/protect_path";
+    public static final String protectPath = ShadowsocksApplication.app.getApplicationInfo().dataDir + "/protect_path";
 
     public BaseVpnService() {
         callbacks = new RemoteCallbackList<>();
@@ -162,7 +161,7 @@ public abstract class BaseVpnService extends VpnService {
                     cb.trafficUpdated(TrafficMonitor.txRate, TrafficMonitor.rxRate, TrafficMonitor.txTotal, TrafficMonitor.rxTotal);
                 } catch (RemoteException e) {
                     VayLog.e(TAG, "registerCallback", e);
-                    app.track(e);
+                    ShadowsocksApplication.app.track(e);
                 }
             }
         }
@@ -172,7 +171,7 @@ public abstract class BaseVpnService extends VpnService {
             if (profileId < 0) {
                 stopRunner(true);
             } else {
-                Profile profile = app.profileManager.getProfile(profileId);
+                Profile profile = ShadowsocksApplication.app.profileManager.getProfile(profileId);
                 if (profile == null) {
                     stopRunner(true);
                 } else {
@@ -213,7 +212,7 @@ public abstract class BaseVpnService extends VpnService {
 
     public void connect() throws NameNotResolvedException, KcpcliParseException, NullConnectionException {
         if ("198.199.101.152".equals(profile.host)) {
-            ContainerHolder holder = app.containerHolder;
+            ContainerHolder holder = ShadowsocksApplication.app.containerHolder;
             Container container = holder.getContainer();
             String url = container.getString("proxy_url");
             String sig = Utils.getSignature(this);
@@ -259,7 +258,7 @@ public abstract class BaseVpnService extends VpnService {
                 profile.method = proxy[3].trim();
             } catch (Exception e) {
                 VayLog.e(TAG, "connect", e);
-                app.track(e);
+                ShadowsocksApplication.app.track(e);
                 stopRunner(true, e.getMessage());
             }
         }
@@ -282,7 +281,7 @@ public abstract class BaseVpnService extends VpnService {
             closeReceiverRegistered = true;
         }
 
-        app.track(TAG, "start");
+        ShadowsocksApplication.app.track(TAG, "start");
 
         changeState(Constants.State.CONNECTING);
 
@@ -307,7 +306,7 @@ public abstract class BaseVpnService extends VpnService {
         } catch (Throwable exc) {
             stopRunner(true, getString(R.string.service_failed) + ": " + exc.getMessage());
             exc.printStackTrace();
-            app.track(exc);
+            ShadowsocksApplication.app.track(exc);
         }
     }
 
@@ -347,12 +346,12 @@ public abstract class BaseVpnService extends VpnService {
         // avoid race conditions without locking
         Profile profile = this.profile;
         if (profile != null) {
-            Profile p = app.profileManager.getProfile(profile.id);
+            Profile p = ShadowsocksApplication.app.profileManager.getProfile(profile.id);
             if (p != null) {
                 // default profile may have host, etc. modified
                 p.tx += tx;
                 p.rx += rx;
-                app.profileManager.updateProfile(p);
+                ShadowsocksApplication.app.profileManager.updateProfile(p);
             }
         }
     }
@@ -387,8 +386,8 @@ public abstract class BaseVpnService extends VpnService {
     @Override
     public void onCreate() {
         super.onCreate();
-        app.refreshContainerHolder();
-        app.updateAssets();
+        ShadowsocksApplication.app.refreshContainerHolder();
+        ShadowsocksApplication.app.updateAssets();
     }
 
     @Override
@@ -427,7 +426,7 @@ public abstract class BaseVpnService extends VpnService {
     public String getBlackList() {
         String defaultList = getString(R.string.black_list);
         try {
-            Container container = app.containerHolder.getContainer();
+            Container container = ShadowsocksApplication.app.containerHolder.getContainer();
             String update = container.getString("black_list_lite");
 
             String list;

@@ -1,25 +1,29 @@
+ext {
+    supportVersion = '28.0.0'
+}
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 buildscript {
     ext {
         support_version = "28.0.0"
-        compile_Version = 28
+        compile_Version = 29
         min_version = 21
-        target_version = 26
+        target_version = 28
     }
 }
 
 android {
     compileSdkVersion compile_Version
+    lintOptions {
+        abortOnError false
+    }
     defaultConfig {
         applicationId "com.github.shadowsocksr_hmbsbige"
         minSdkVersion min_version
         targetSdkVersion target_version
-        versionCode 325    // multiDex的一些相关配置，这样配置可以让你的编译速度更快
+        versionCode 112    // multiDex的一些相关配置，这样配置可以让你的编译速度更快
         dexOptions {
             // 让它不要对Lib做preDexing
             preDexLibraries = false
@@ -32,10 +36,11 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags "-frtti -fexceptions"
-                abiFilters "armeabi-v7a", "x86"
+                abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
             }
         }
         multiDexEnabled true
+        proguardFiles
     }
     buildTypes {
         release {
@@ -60,17 +65,21 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0'
+
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
-    implementation 'com.evernote:android-job:1.2.6'
+    implementation 'com.evernote:android-job:1.3.0-rc1'
+    implementation "android.arch.work:work-runtime:1.0.1"
     implementation "com.github.clans:fab:1.6.4"
     implementation "com.github.jorgecastilloprz:fabprogresscircle:1.01"
     implementation "com.google.android.gms:play-services-analytics:17.0.0"
@@ -87,4 +96,11 @@ dependencies {
     implementation "net.glxn.qrgen:android:2.0"
     implementation 'com.squareup.okhttp3:okhttp:4.2.0'
     implementation "com.google.code.findbugs:jsr305:3.0.2"
+
+
+}
+
+
+repositories {
+    mavenCentral()
 }

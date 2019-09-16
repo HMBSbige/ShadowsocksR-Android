@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_tcp_ping_full_test"
+        android:title="@string/action_tcp_ping_full_test"
+        android:alphabeticShortcut="f"
+        android:numericShortcut="1"
+        android:icon="@drawable/ic_click_white"
+        app:showAsAction="always"/>
     <item android:id="@+id/action_full_test"
           android:title="@string/action_full_test"
           android:alphabeticShortcut="f"

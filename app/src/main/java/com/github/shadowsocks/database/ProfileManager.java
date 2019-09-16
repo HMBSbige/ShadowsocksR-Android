@@ -1,50 +1,12 @@
 package com.github.shadowsocks.database;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2014 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
+
 
 import com.github.shadowsocks.utils.VayLog;
+import com.github.shadowsocks.ShadowsocksApplication;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class ProfileManager {
 
@@ -76,7 +38,7 @@ public class ProfileManager {
             profile = p;
         }
         profile.id = 0;
-        Profile oldProfile = app.currentProfile();
+        Profile oldProfile = ShadowsocksApplication.app.currentProfile();
         if (oldProfile != null) {
             // Copy Feature Settings from old profile
             profile.route = oldProfile.route;
@@ -98,7 +60,7 @@ public class ProfileManager {
             invokeProfileAdded(profile);
         } catch (SQLException e) {
             VayLog.e(TAG, "createProfile", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
         return profile;
     }
@@ -116,7 +78,7 @@ public class ProfileManager {
             profile = p;
         }
         profile.id = 0;
-        Profile oldProfile = app.currentProfile();
+        Profile oldProfile = ShadowsocksApplication.app.currentProfile();
         if (oldProfile != null) {
             // Copy Feature Settings from old profile
             profile.route = oldProfile.route;
@@ -153,7 +115,7 @@ public class ProfileManager {
             }
         } catch (SQLException e) {
             VayLog.e(TAG, "createProfileDr", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
         }
         return profile;
     }
@@ -171,7 +133,7 @@ public class ProfileManager {
             profile = p;
         }
         profile.id = 0;
-        Profile oldProfile = app.currentProfile();
+        Profile oldProfile = ShadowsocksApplication.app.currentProfile();
         if (oldProfile != null) {
             // Copy Feature Settings from old profile
             profile.route = oldProfile.route;
@@ -210,7 +172,7 @@ public class ProfileManager {
             }
         } catch (SQLException e) {
             VayLog.e(TAG, "createProfileSub", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return 0;
         }
     }
@@ -224,7 +186,7 @@ public class ProfileManager {
             return true;
         } catch (Exception e) {
             VayLog.e(TAG, "updateProfile", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return false;
         }
     }
@@ -242,7 +204,7 @@ public class ProfileManager {
             return true;
         } catch (Exception e) {
             VayLog.e(TAG, "updateAllProfileByString", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return false;
         }
     }
@@ -264,7 +226,7 @@ public class ProfileManager {
             return true;
         } catch (Exception e) {
             VayLog.e(TAG, "updateAllProfileByBoolean", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return false;
         }
     }
@@ -279,7 +241,7 @@ public class ProfileManager {
             return dbHelper.profileDao.queryForId(id);
         } catch (Exception e) {
             VayLog.e(TAG, "getProfile", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
@@ -296,7 +258,7 @@ public class ProfileManager {
             return true;
         } catch (Exception e) {
             VayLog.e(TAG, "delProfile", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return false;
         }
     }
@@ -316,7 +278,7 @@ public class ProfileManager {
             return null;
         } catch (Exception e) {
             VayLog.e(TAG, "getFirstProfile", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
@@ -328,10 +290,10 @@ public class ProfileManager {
      */
     public List<Profile> getAllProfiles() {
         try {
-            return dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("userOrder", true).prepare());
+            return dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("url_group", true).orderBy("name", true).prepare());
         } catch (Exception e) {
             VayLog.e(TAG, "getAllProfiles", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
@@ -344,10 +306,10 @@ public class ProfileManager {
      */
     public List<Profile> getAllProfilesByGroup(String group) {
         try {
-            return dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().where().eq("url_group", group).prepare());
+            return dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("name", true).where().like("url_group", group+"%").prepare());
         } catch (Exception e) {
             VayLog.e(TAG, "getAllProfilesByGroup", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
@@ -369,10 +331,28 @@ public class ProfileManager {
             return result;
         } catch (Exception e) {
             VayLog.e(TAG, "getAllProfilesByElapsed", e);
-            app.track(e);
+            ShadowsocksApplication.app.track(e);
             return null;
         }
     }
+
+    public List<Profile> getAllProfilesByGroupOrderbyElapse(String groupname) {
+        try {
+            List<Profile> notlist = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("elapsed", true).where().eq("url_group",groupname).and().not().eq("elapsed", 0).prepare());
+            List<Profile> eqList = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("elapsed", true).where().eq("url_group",groupname).and().eq("elapsed", 0).prepare());
+
+            // merge list
+            List<Profile> result = new ArrayList<>();
+            result.addAll(notlist);
+            result.addAll(eqList);
+            return result;
+        } catch (Exception e) {
+            VayLog.e(TAG, "getAllProfilesByElapsed", e);
+            ShadowsocksApplication.app.track(e);
+            return null;
+        }
+    }
+
 
     /**
      * create default profile
@@ -380,7 +360,7 @@ public class ProfileManager {
     public Profile createDefault() {
         Profile profile = new Profile();
         profile.name = "Android SSR Default";
-        profile.host = "137.74.141.42";
+        profile.host = "1.1.1.1";
         profile.remotePort = 80;
         profile.password = "androidssr";
         profile.protocol = "auth_chain_a";
@@ -451,4 +431,21 @@ public class ProfileManager {
          */
         void onProfileAdded(Profile profile);
     }
+
+    public List<String> getGroupNames() {
+        try {
+            List<Profile> groupdistinktprofile =  dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().selectColumns("url_group").distinct().prepare());
+            List<String> groupnames = new ArrayList<String>();
+            for (Profile profile: groupdistinktprofile) {
+                groupnames.add(profile.url_group);
+            }
+            return groupnames;
+        } catch (Exception e) {
+            VayLog.e(TAG, "getAllProfilesByGroup", e);
+            ShadowsocksApplication.app.track(e);
+            return null;
+        }
+    }
+
+
 }

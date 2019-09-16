@@ -51,8 +51,6 @@ import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.VayLog;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
-
 /**
  * @author Mygod
  */
@@ -136,11 +134,7 @@ public abstract class ServiceBoundService extends Service implements IBinder.Dea
         this.callback = callback;
         if (bgService == null) {
             Class<?> clazz = null;
-            if (app.isNatEnabled()) {
-                clazz = ShadowsocksNatService.class;
-            } else {
-                clazz = ShadowsocksVpnService.class;
-            }
+            clazz = ShadowsocksVpnService.class;
 
             Intent intent = new Intent(this, clazz);
             intent.setAction(Constants.Action.SERVICE);

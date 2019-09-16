@@ -48,6 +48,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.github.shadowsocks.R;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.utils.Parser;
 import com.github.shadowsocks.utils.ToastUtils;
@@ -62,8 +63,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-
-import static com.github.shadowsocks.ShadowsocksApplication.app;
 
 public class ScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 1;
@@ -146,14 +145,14 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
             List<Profile> all = Parser.findAll(uri);
             if (all != null && !all.isEmpty()) {
                 for (Profile p : all) {
-                    app.profileManager.createProfile(p);
+                    ShadowsocksApplication.app.profileManager.createProfile(p);
                 }
             }
 
             List<Profile> allSSR = Parser.findAll_ssr(uri);
             if (allSSR != null && !allSSR.isEmpty()) {
                 for (Profile p : allSSR) {
-                    app.profileManager.createProfile(p);
+                    ShadowsocksApplication.app.profileManager.createProfile(p);
                 }
             }
         }
