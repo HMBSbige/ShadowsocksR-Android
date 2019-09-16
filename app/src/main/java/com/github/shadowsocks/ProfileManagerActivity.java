@@ -58,14 +58,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.material.snackbar.Snackbar;
-
-import net.glxn.qrgen.android.QRCode;
-
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.database.ProfileManager;
@@ -83,6 +75,13 @@ import com.github.shadowsocks.utils.ToastUtils;
 import com.github.shadowsocks.utils.TrafficMonitor;
 import com.github.shadowsocks.utils.Utils;
 import com.github.shadowsocks.widget.UndoSnackbarManager;
+import com.google.android.material.snackbar.Snackbar;
+
+import net.glxn.qrgen.android.QRCode;
+
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileManagerActivity extends AppCompatActivity implements View.OnClickListener, Toolbar.OnMenuItemClickListener, NfcAdapter.CreateNdefMessageCallback, ProfileManager.ProfileAddedListener, SSRSubManager.SSRSubAddedListener {
 
@@ -210,15 +209,16 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         Spinner spinner = findViewById(R.id.group_choose_spinner);
         List<String> groups_name = ShadowsocksApplication.app.profileManager.getGroupNames();
         groups_name.add(0, getString(R.string.allgroups));
-        ArrayAdapter<String> _Adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, groups_name);
+        ArrayAdapter<String> _Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, groups_name);
         spinner.setAdapter(_Adapter);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                String str=parent.getItemAtPosition(position).toString();
+                String str = parent.getItemAtPosition(position).toString();
                 profilesAdapter.onGroupChange(str);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
@@ -318,7 +318,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
             startActivityForResult(intent, REQUEST_QRCODE);
         } catch (Throwable e) {
-            if (menu!=null) {
+            if (menu != null) {
                 menu.toggle(false);
             }
             startActivity(new Intent(this, ScannerActivity.class));
@@ -558,7 +558,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     private void showAddSSRSubAddrDialog() {
         LayoutInflater li = LayoutInflater.from(this);
         final View myView = li.inflate(R.layout.layout_edittext, null);
-        AlertDialog.Builder cDialog =  new AlertDialog.Builder(ProfileManagerActivity.this);
+        AlertDialog.Builder cDialog = new AlertDialog.Builder(ProfileManagerActivity.this);
         cDialog.setView(myView)
                 .setTitle(getString(R.string.ssrsub_add))
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -941,9 +941,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     }
 
 
-
-
-
     /**
      * use string divider list value
      *
@@ -974,7 +971,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public ProfileViewHolder(View view) {
             super(view);
-            text = (CheckedTextView) itemView.findViewById(android.R.id.text1);
+            text = itemView.findViewById(android.R.id.text1);
             itemView.setOnClickListener(this);
             itemView.setOnKeyListener(this);
 
@@ -987,7 +984,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
          * init share btn
          */
         private void initShareBtn() {
-            final ImageView shareBtn = (ImageView) itemView.findViewById(R.id.share);
+            final ImageView shareBtn = itemView.findViewById(R.id.share);
             shareBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1045,9 +1042,9 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 PingHelper.Companion.instance().ping(ProfileManagerActivity.this, item, new PingCallback() {
                     @Override
                     public void onSuccess(Profile profile, long elapsed) {
-                        if (profile.elapsed==0) {
+                        if (profile.elapsed == 0) {
                             profile.elapsed = elapsed;
-                        } else if(profile.elapsed>elapsed) {
+                        } else if (profile.elapsed > elapsed) {
                             profile.elapsed = elapsed;
                         }
 
@@ -1090,9 +1087,9 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 PingHelper.Companion.instance().tcp_ping(ProfileManagerActivity.this, item, new PingCallback() {
                     @Override
                     public void onSuccess(Profile profile, long tcpdelay) {
-                        if (profile.tcpdelay==0) {
+                        if (profile.tcpdelay == 0) {
                             profile.tcpdelay = tcpdelay;
-                        } else if(profile.tcpdelay>tcpdelay) {
+                        } else if (profile.tcpdelay > tcpdelay) {
                             profile.tcpdelay = tcpdelay;
                         }
 
@@ -1142,14 +1139,14 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             if (elapsedInput != -1) {
                 elapsed = elapsedInput;
             }
-            if (tcpdelayInput!= -1) {
+            if (tcpdelayInput != -1) {
                 tcpdelay = tcpdelayInput;
             }
             builder.append(item.name);
             if (tx != 0 || rx != 0 || elapsed != 0 || item.url_group != "") {
                 int start = builder.length();
                 builder.append(getString(R.string.stat_profiles,
-                        TrafficMonitor.formatTraffic(tx), TrafficMonitor.formatTraffic(rx), String.valueOf(tcpdelay),String.valueOf(elapsed)));
+                        TrafficMonitor.formatTraffic(tx), TrafficMonitor.formatTraffic(rx), String.valueOf(tcpdelay), String.valueOf(elapsed)));
                 builder.setSpan(new TextAppearanceSpan(ProfileManagerActivity.this, android.R.style.TextAppearance_Small),
                         start + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
@@ -1224,7 +1221,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public void onGroupChange(String groupname) {
             List<Profile> list;
-            if (groupname.equals("All Groups")||groupname.equals("全部群组")) {
+            if (groupname.equals("All Groups") || groupname.equals("全部群组")) {
                 if (is_sort) {
                     list = ShadowsocksApplication.app.profileManager.getAllProfilesByElapsed();
                 } else {
@@ -1326,7 +1323,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public SSRSubViewHolder(View view) {
             super(view);
-            text = (TextView) itemView.findViewById(android.R.id.text2);
+            text = itemView.findViewById(android.R.id.text2);
             itemView.setOnClickListener(this);
         }
 

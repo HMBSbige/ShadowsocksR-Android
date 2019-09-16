@@ -43,7 +43,7 @@ jstring Java_com_github_shadowsocks_system_getabi(JNIEnv *env, jobject thiz) {
 }
 
 jint Java_com_github_shadowsocks_system_exec(JNIEnv *env, jobject thiz, jstring cmd) {
-    const char *cmd_str  = env->GetStringUTFChars(cmd, 0);
+    const char *cmd_str = env->GetStringUTFChars(cmd, 0);
 
     pid_t pid;
 
@@ -69,30 +69,31 @@ void Java_com_github_shadowsocks_system_jniclose(JNIEnv *env, jobject thiz, jint
     close(fd);
 }
 
-jint Java_com_github_shadowsocks_system_sendfd(JNIEnv *env, jobject thiz, jint tun_fd, jstring path) {
+jint
+Java_com_github_shadowsocks_system_sendfd(JNIEnv *env, jobject thiz, jint tun_fd, jstring path) {
     int fd;
     struct sockaddr_un addr;
-    const char *sock_str  = env->GetStringUTFChars(path, 0);
+    const char *sock_str = env->GetStringUTFChars(path, 0);
 
-    if ( (fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
+    if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
         LOGE("socket() failed: %s (socket fd = %d)\n", strerror(errno), fd);
-        return (jint)-1;
+        return (jint) -1;
     }
 
     memset(&addr, 0, sizeof(addr));
     addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, sock_str, sizeof(addr.sun_path)-1);
+    strncpy(addr.sun_path, sock_str, sizeof(addr.sun_path) - 1);
 
-    if (connect(fd, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
+    if (connect(fd, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
         LOGE("connect() failed: %s (fd = %d)\n", strerror(errno), fd);
         close(fd);
-        return (jint)-1;
+        return (jint) -1;
     }
 
     if (ancil_send_fd(fd, tun_fd)) {
         LOGE("ancil_send_fd: %s", strerror(errno));
         close(fd);
-        return (jint)-1;
+        return (jint) -1;
     }
 
     close(fd);
@@ -103,24 +104,22 @@ jint Java_com_github_shadowsocks_system_sendfd(JNIEnv *env, jobject thiz, jint t
 static const char *classPathName = "com/github/shadowsocks/System";
 
 static JNINativeMethod method_table[] = {
-        { "jniclose", "(I)V",
-                (void*) Java_com_github_shadowsocks_system_jniclose },
-        { "sendfd", "(ILjava/lang/String;)I",
-                (void*) Java_com_github_shadowsocks_system_sendfd },
-        { "exec", "(Ljava/lang/String;)I",
-                (void*) Java_com_github_shadowsocks_system_exec },
-        { "getABI", "()Ljava/lang/String;",
-                (void*) Java_com_github_shadowsocks_system_getabi }
+        {"jniclose", "(I)V",
+                (void *) Java_com_github_shadowsocks_system_jniclose},
+        {"sendfd",   "(ILjava/lang/String;)I",
+                (void *) Java_com_github_shadowsocks_system_sendfd},
+        {"exec",     "(Ljava/lang/String;)I",
+                (void *) Java_com_github_shadowsocks_system_exec},
+        {"getABI",   "()Ljava/lang/String;",
+                (void *) Java_com_github_shadowsocks_system_getabi}
 };
-
 
 
 /*
  * Register several native methods for one class.
  */
-static int registerNativeMethods(JNIEnv* env, const char* className,
-                                 JNINativeMethod* gMethods, int numMethods)
-{
+static int registerNativeMethods(JNIEnv *env, const char *className,
+                                 JNINativeMethod *gMethods, int numMethods) {
     jclass clazz;
 
     clazz = env->FindClass(className);
@@ -141,8 +140,7 @@ static int registerNativeMethods(JNIEnv* env, const char* className,
  *
  * returns JNI_TRUE on success.
  */
-static int registerNatives(JNIEnv* env)
-{
+static int registerNatives(JNIEnv *env) {
     if (!registerNativeMethods(env, classPathName, method_table,
                                sizeof(method_table) / sizeof(method_table[0]))) {
         return JNI_FALSE;
@@ -156,15 +154,15 @@ static int registerNatives(JNIEnv* env)
  */
 
 typedef union {
-    JNIEnv* env;
-    void* venv;
+    JNIEnv *env;
+    void *venv;
 } UnionJNIEnvToVoid;
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved) {
+jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     UnionJNIEnvToVoid uenv;
     uenv.venv = NULL;
     jint result = -1;
-    JNIEnv* env = NULL;
+    JNIEnv *env = NULL;
 
     LOGI("JNI_OnLoad");
 

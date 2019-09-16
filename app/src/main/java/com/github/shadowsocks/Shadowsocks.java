@@ -57,12 +57,15 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+
 import com.github.jorgecastilloprz.FABProgressCircle;
-import com.github.shadowsocks.R;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.database.SSRSub;
@@ -80,11 +83,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.lang.System;
 import java.lang.reflect.Field;
 import java.util.Locale;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
 public class Shadowsocks extends AppCompatActivity {
 
@@ -312,11 +310,11 @@ public class Shadowsocks extends AppCompatActivity {
         preferences = (ShadowsocksSettings) getFragmentManager().findFragmentById(android.R.id.content);
 
         stat = findViewById(R.id.stat);
-        connectionTestText = (TextView) findViewById(R.id.connection_test);
-        txText = (TextView) findViewById(R.id.tx);
-        txRateText = (TextView) findViewById(R.id.txRate);
-        rxText = (TextView) findViewById(R.id.rx);
-        rxRateText = (TextView) findViewById(R.id.rxRate);
+        connectionTestText = findViewById(R.id.connection_test);
+        txText = findViewById(R.id.tx);
+        txRateText = findViewById(R.id.txRate);
+        rxText = findViewById(R.id.rx);
+        rxRateText = findViewById(R.id.rxRate);
         stat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -324,8 +322,8 @@ public class Shadowsocks extends AppCompatActivity {
             }
         });
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fabProgressCircle = (FABProgressCircle) findViewById(R.id.fabProgressCircle);
+        fab = findViewById(R.id.fab);
+        fabProgressCircle = findViewById(R.id.fabProgressCircle);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -371,7 +369,7 @@ public class Shadowsocks extends AppCompatActivity {
      * init toolbar
      */
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         // non-translatable logo
         toolbar.setTitle("shadowsocks R");
         toolbar.setTitleTextAppearance(toolbar.getContext(), R.style.Toolbar_Logo);
@@ -417,12 +415,12 @@ public class Shadowsocks extends AppCompatActivity {
         connectionTestText.setText(R.string.connection_test_testing);
 
         // start test connect
-        RequestHelper instance =  RequestHelper.Companion.instance();
+        RequestHelper instance = RequestHelper.Companion.instance();
         RequestCallback requestCallback = new RequestCallback() {
 
             @Override
             public boolean isRequestOk(int code) {
-                return code == 204 || code == 200 || code==404;
+                return code == 204 || code == 200 || code == 404;
             }
 
             @Override

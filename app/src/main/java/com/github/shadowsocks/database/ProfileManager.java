@@ -1,8 +1,8 @@
 package com.github.shadowsocks.database;
 
 
-import com.github.shadowsocks.utils.VayLog;
 import com.github.shadowsocks.ShadowsocksApplication;
+import com.github.shadowsocks.utils.VayLog;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -306,7 +306,7 @@ public class ProfileManager {
      */
     public List<Profile> getAllProfilesByGroup(String group) {
         try {
-            return dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("name", true).where().like("url_group", group+"%").prepare());
+            return dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("name", true).where().like("url_group", group + "%").prepare());
         } catch (Exception e) {
             VayLog.e(TAG, "getAllProfilesByGroup", e);
             ShadowsocksApplication.app.track(e);
@@ -338,8 +338,8 @@ public class ProfileManager {
 
     public List<Profile> getAllProfilesByGroupOrderbyElapse(String groupname) {
         try {
-            List<Profile> notlist = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("elapsed", true).where().eq("url_group",groupname).and().not().eq("elapsed", 0).prepare());
-            List<Profile> eqList = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("elapsed", true).where().eq("url_group",groupname).and().eq("elapsed", 0).prepare());
+            List<Profile> notlist = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("elapsed", true).where().eq("url_group", groupname).and().not().eq("elapsed", 0).prepare());
+            List<Profile> eqList = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("elapsed", true).where().eq("url_group", groupname).and().eq("elapsed", 0).prepare());
 
             // merge list
             List<Profile> result = new ArrayList<>();
@@ -397,9 +397,7 @@ public class ProfileManager {
         }
 
         // remove listener
-        if (mProfileAddedListeners.contains(l)) {
-            mProfileAddedListeners.remove(l);
-        }
+        mProfileAddedListeners.remove(l);
     }
 
     /**
@@ -427,16 +425,17 @@ public class ProfileManager {
 
         /**
          * profile added
-         * @param profile   profile object
+         *
+         * @param profile profile object
          */
         void onProfileAdded(Profile profile);
     }
 
     public List<String> getGroupNames() {
         try {
-            List<Profile> groupdistinktprofile =  dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().selectColumns("url_group").distinct().prepare());
+            List<Profile> groupdistinktprofile = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().selectColumns("url_group").distinct().prepare());
             List<String> groupnames = new ArrayList<String>();
-            for (Profile profile: groupdistinktprofile) {
+            for (Profile profile : groupdistinktprofile) {
                 groupnames.add(profile.url_group);
             }
             return groupnames;

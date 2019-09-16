@@ -43,6 +43,10 @@ import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 
+import androidx.annotation.NonNull;
+
+import com.github.shadowsocks.ShadowsocksApplication;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,10 +56,6 @@ import java.nio.ByteOrder;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
-
-import androidx.annotation.NonNull;
-
-import com.github.shadowsocks.ShadowsocksApplication;
 
 public class TrafficMonitorThread extends Thread {
 

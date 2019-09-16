@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-          package="com.github.shadowsocks">
+    package="com.github.shadowsocks">
 
     <application
         android:name=".ShadowsocksApplication"
@@ -48,17 +48,17 @@
             android:launchMode="singleTask"
             android:parentActivityName=".Shadowsocks">
             <intent-filter>
-                <action android:name="com.github.shadowsocks.ProfileManagerActivity"/>
+                <action android:name="com.github.shadowsocks.ProfileManagerActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.github.shadowsocks.intent.action.SORT"/>
+                <action android:name="com.github.shadowsocks.intent.action.SORT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
-                <action android:name="com.github.shadowsocks.intent.action.SCAN"/>
+                <action android:name="com.github.shadowsocks.intent.action.SCAN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -119,7 +119,7 @@
             android:taskAffinity=""
             android:theme="@style/PopupTheme.QuickSwitch">
             <intent-filter>
-                <action android:name="com.github.shadowsocks.QUICK_SWITCH"/>
+                <action android:name="com.github.shadowsocks.QUICK_SWITCH" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -135,6 +135,7 @@
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -163,6 +164,7 @@
         <receiver
             android:name="com.evernote.android.job.JobBootReceiver"
             android:process=":bg" />
+
         <service
             android:name=".ShadowsocksRunnerService"
             android:exported="false"></service> <!-- android-job components -->
@@ -197,8 +199,9 @@
             android:name="com.evernote.android.job.gcm.PlatformGcmService"
             android:enabled="true"
             tools:replace="android:enabled"
-            android:process=":bg"/>
+            android:process=":bg" />
     </application>
+
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
@@ -211,6 +214,7 @@
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 

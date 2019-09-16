@@ -41,10 +41,11 @@ package com.github.shadowsocks.utils;
 import android.text.TextUtils;
 import android.util.Base64;
 
-import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.ShadowsocksApplication;
+import com.github.shadowsocks.database.Profile;
 
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -82,7 +83,7 @@ public class Parser {
         try {
             List<Profile> list = new ArrayList<>();
             while (m.find()) {
-                Matcher ss = decodedPattern.matcher(new String(Base64.decode(m.group(1), Base64.NO_PADDING), "UTF-8"));
+                Matcher ss = decodedPattern.matcher(new String(Base64.decode(m.group(1), Base64.NO_PADDING), StandardCharsets.UTF_8));
                 if (ss.find()) {
                     Profile profile = new Profile();
                     profile.method = ss.group(2).toLowerCase();
@@ -127,7 +128,7 @@ public class Parser {
         try {
             List<Profile> list = new ArrayList<>();
             while (m.find()) {
-                String uri = new String(Base64.decode(m.group(1).replaceAll("=", ""), Base64.URL_SAFE), "UTF-8");
+                String uri = new String(Base64.decode(m.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                 Matcher ss = decodedPattern_ssr.matcher(uri);
                 if (ss.find()) {
                     Profile profile = new Profile();
@@ -136,30 +137,30 @@ public class Parser {
                     profile.protocol = ss.group(4).toLowerCase();
                     profile.method = ss.group(5).toLowerCase();
                     profile.obfs = ss.group(6).toLowerCase();
-                    profile.password = new String(Base64.decode(ss.group(7).replaceAll("=", ""), Base64.URL_SAFE), "UTF-8");
+                    profile.password = new String(Base64.decode(ss.group(7).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
 
                     Matcher param = null;
 
                     param = decodedPattern_ssr_obfsparam.matcher(uri);
                     if (param.find()) {
-                        profile.obfs_param = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), "UTF-8");
+                        profile.obfs_param = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                     }
 
                     param = decodedPattern_ssr_protocolparam.matcher(uri);
                     if (param.find()) {
-                        profile.protocol_param = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), "UTF-8");
+                        profile.protocol_param = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                     }
 
                     param = decodedPattern_ssr_remarks.matcher(uri);
                     if (param.find()) {
-                        profile.name = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), "UTF-8");
+                        profile.name = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                     } else {
                         profile.name = ss.group(2).toLowerCase();
                     }
 
                     param = decodedPattern_ssr_groupparam.matcher(uri);
                     if (param.find()) {
-                        profile.url_group = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), "UTF-8");
+                        profile.url_group = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                     }
 
                     // add to list

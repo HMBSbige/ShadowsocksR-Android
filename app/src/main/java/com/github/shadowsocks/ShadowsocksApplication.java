@@ -12,8 +12,10 @@ import android.os.LocaleList;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.evernote.android.job.JobManager;
-import com.github.shadowsocks.R;
 import com.github.shadowsocks.database.DBHelper;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.database.ProfileManager;
@@ -49,8 +51,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
 import eu.chainfire.libsuperuser.Shell;
 
 public class ShadowsocksApplication extends Application {
@@ -68,7 +68,7 @@ public class ShadowsocksApplication extends Application {
             Constants.Executable.KCPTUN};
 
     /**
-     *  The ones in Locale doesn't have script included
+     * The ones in Locale doesn't have script included
      */
     private static final Locale SIMPLIFIED_CHINESE;
     private static final Locale TRADITIONAL_CHINESE;

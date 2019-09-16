@@ -46,6 +46,7 @@ import java.util.Locale;
 
 /**
  * Make your preference support %s in summary. Override getSummaryValue to customize what to put in.
+ *
  * @author Mygod
  */
 public abstract class SummaryPreference extends Preference {
@@ -71,7 +72,8 @@ public abstract class SummaryPreference extends Preference {
 
     /**
      * get summary value
-     * @return  summary value
+     *
+     * @return summary value
      */
     public abstract Object getSummaryValue();
 }

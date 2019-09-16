@@ -11,19 +11,18 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.Switch;
 
-import com.github.shadowsocks.R;
-import com.github.shadowsocks.database.Profile;
-import com.github.shadowsocks.utils.TaskerSettings;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.shadowsocks.database.Profile;
+import com.github.shadowsocks.utils.TaskerSettings;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.shadowsocks.ShadowsocksApplication.app;
 
@@ -40,7 +39,7 @@ public class TaskerActivity extends AppCompatActivity {
 
         profilesAdapter = new ProfilesAdapter();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
         toolbar.setNavigationIcon(R.drawable.ic_navigation_close);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -51,9 +50,9 @@ public class TaskerActivity extends AppCompatActivity {
         });
 
         taskerOption = TaskerSettings.fromIntent(getIntent());
-        mSwitch = (Switch) findViewById(R.id.serviceSwitch);
+        mSwitch = findViewById(R.id.serviceSwitch);
         mSwitch.setChecked(taskerOption.switchOn);
-        RecyclerView profilesList = (RecyclerView) findViewById(R.id.profilesList);
+        RecyclerView profilesList = findViewById(R.id.profilesList);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         profilesList.setLayoutManager(lm);
         profilesList.setItemAnimator(new DefaultItemAnimator());
@@ -84,7 +83,7 @@ public class TaskerActivity extends AppCompatActivity {
             view.setBackgroundResource(typedArray.getResourceId(0, 0));
             typedArray.recycle();
 
-            text = (CheckedTextView) itemView.findViewById(android.R.id.text1);
+            text = itemView.findViewById(android.R.id.text1);
             itemView.setOnClickListener(this);
         }
 

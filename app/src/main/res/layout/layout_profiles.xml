@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar_light_dark"/>
+    <include layout="@layout/toolbar_light_dark" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -31,11 +31,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/profilesList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
-
-
-
 
 
         <com.github.clans.fab.FloatingActionMenu
@@ -59,8 +56,7 @@
                 app:fab_colorPressed="@color/material_accent_700"
                 app:fab_colorRipple="@android:color/white"
                 app:fab_label="@string/add_profile_methods_ssr_sub"
-                app:fab_size="mini"
-                />
+                app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_manual_add"
@@ -70,8 +66,7 @@
                 app:fab_colorPressed="@color/material_accent_700"
                 app:fab_colorRipple="@android:color/white"
                 app:fab_label="@string/add_profile_methods_manual_settings"
-                app:fab_size="mini"
-                />
+                app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_qrcode_add"
@@ -81,8 +76,7 @@
                 app:fab_colorPressed="@color/material_accent_700"
                 app:fab_colorRipple="@android:color/white"
                 app:fab_label="@string/add_profile_methods_scan_qr_code"
-                app:fab_size="mini"
-                />
+                app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_nfc_add"
@@ -92,8 +86,7 @@
                 app:fab_colorPressed="@color/material_accent_700"
                 app:fab_colorRipple="@android:color/white"
                 app:fab_label="NFC"
-                app:fab_size="mini"
-                />
+                app:fab_size="mini" />
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_import_add"
@@ -103,8 +96,7 @@
                 app:fab_colorPressed="@color/material_accent_700"
                 app:fab_colorRipple="@android:color/white"
                 app:fab_label="@string/action_import"
-                app:fab_size="mini"
-                />
+                app:fab_size="mini" />
         </com.github.clans.fab.FloatingActionMenu>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

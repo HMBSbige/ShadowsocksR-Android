@@ -44,7 +44,6 @@ import android.os.IBinder;
 import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 
-import com.github.shadowsocks.R;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.job.AclSyncJob;
 import com.github.shadowsocks.utils.Constants;
@@ -389,9 +388,9 @@ public class ShadowsocksVpnService extends BaseVpnService {
         LinkedList<String> cmds = new LinkedList<>(Arrays.asList(cmd));
         cmds.add("-L");
         if (Constants.Route.CHINALIST.equals(profile.route)) {
-            cmds.add(china_dns_address + ":" + String.valueOf(china_dns_port));
+            cmds.add(china_dns_address + ":" + china_dns_port);
         } else {
-            cmds.add(dns_address + ":" + String.valueOf(dns_port));
+            cmds.add(dns_address + ":" + dns_port);
         }
 
         if (proxychains_enable) {

@@ -46,6 +46,7 @@ import java.util.Locale;
 
 /**
  * Make your preference support %s in summary. Override getSummaryValue to customize what to put in.
+ *
  * @author Mygod
  */
 public abstract class SummaryDialogPreference extends DialogPreference {
@@ -71,6 +72,7 @@ public abstract class SummaryDialogPreference extends DialogPreference {
 
     /**
      * get summary value
+     *
      * @return summary value
      */
     public abstract Object getSummaryValue();

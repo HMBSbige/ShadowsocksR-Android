@@ -48,7 +48,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.github.shadowsocks.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.utils.Parser;
 import com.github.shadowsocks.utils.ToastUtils;
@@ -56,12 +62,6 @@ import com.google.zxing.Result;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class ScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -96,7 +96,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_scanner);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(getTitle());
         toolbar.setNavigationIcon(R.drawable.abc_ic_ab_back_material);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -106,7 +106,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
             }
         });
 
-        scannerView = (ZXingScannerView) findViewById(R.id.scanner);
+        scannerView = findViewById(R.id.scanner);
 
         if (Build.VERSION.SDK_INT >= 25) {
             ShortcutManager service = getSystemService(ShortcutManager.class);

@@ -37,6 +37,7 @@
 #include <sys/socket.h>
 #include <sys/uio.h>
 #include <assert.h>
+
 #if defined(__FreeBSD__)
 # include <sys/param.h> /* FreeBSD sucks */
 #endif
@@ -44,8 +45,7 @@
 #include "ancillary.h"
 
 int
-ancil_send_fds_with_buffer(int sock, const int *fds, unsigned n_fds, void *buffer)
-{
+ancil_send_fds_with_buffer(int sock, const int *fds, unsigned n_fds, void *buffer) {
     struct msghdr msghdr;
     char nothing = '!';
     struct iovec nothing_ptr;
@@ -65,28 +65,30 @@ ancil_send_fds_with_buffer(int sock, const int *fds, unsigned n_fds, void *buffe
     cmsg->cmsg_len = msghdr.msg_controllen;
     cmsg->cmsg_level = SOL_SOCKET;
     cmsg->cmsg_type = SCM_RIGHTS;
-    for(i = 0; i < n_fds; i++)
-	((int *)CMSG_DATA(cmsg))[i] = fds[i];
-    return(sendmsg(sock, &msghdr, 0) >= 0 ? 0 : -1);
+    for (i = 0; i < n_fds; i++)
+        ((int *) CMSG_DATA(cmsg))[i] = fds[i];
+    return (sendmsg(sock, &msghdr, 0) >= 0 ? 0 : -1);
 }
 
 #ifndef SPARE_SEND_FDS
+
 int
-ancil_send_fds(int sock, const int *fds, unsigned n_fds)
-{
+ancil_send_fds(int sock, const int *fds, unsigned n_fds) {
     ANCIL_FD_BUFFER(ANCIL_MAX_N_FDS) buffer;
 
     assert(n_fds <= ANCIL_MAX_N_FDS);
-    return(ancil_send_fds_with_buffer(sock, fds, n_fds, &buffer));
+    return (ancil_send_fds_with_buffer(sock, fds, n_fds, &buffer));
 }
+
 #endif /* SPARE_SEND_FDS */
 
 #ifndef SPARE_SEND_FD
+
 int
-ancil_send_fd(int sock, int fd)
-{
+ancil_send_fd(int sock, int fd) {
     ANCIL_FD_BUFFER(1) buffer;
 
-    return(ancil_send_fds_with_buffer(sock, &fd, 1, &buffer));
+    return (ancil_send_fds_with_buffer(sock, &fd, 1, &buffer));
 }
+
 #endif /* SPARE_SEND_FD */

@@ -199,23 +199,23 @@ extern uint64_t android_getCpuFeatures(void);
  * android_getCpuFeatures() will return a different set of bitflags
  */
 enum {
-    ANDROID_CPU_ARM_FEATURE_ARMv7       = (1 << 0),
-    ANDROID_CPU_ARM_FEATURE_VFPv3       = (1 << 1),
-    ANDROID_CPU_ARM_FEATURE_NEON        = (1 << 2),
+    ANDROID_CPU_ARM_FEATURE_ARMv7 = (1 << 0),
+    ANDROID_CPU_ARM_FEATURE_VFPv3 = (1 << 1),
+    ANDROID_CPU_ARM_FEATURE_NEON = (1 << 2),
     ANDROID_CPU_ARM_FEATURE_LDREX_STREX = (1 << 3),
-    ANDROID_CPU_ARM_FEATURE_VFPv2       = (1 << 4),
-    ANDROID_CPU_ARM_FEATURE_VFP_D32     = (1 << 5),
-    ANDROID_CPU_ARM_FEATURE_VFP_FP16    = (1 << 6),
-    ANDROID_CPU_ARM_FEATURE_VFP_FMA     = (1 << 7),
-    ANDROID_CPU_ARM_FEATURE_NEON_FMA    = (1 << 8),
-    ANDROID_CPU_ARM_FEATURE_IDIV_ARM    = (1 << 9),
+    ANDROID_CPU_ARM_FEATURE_VFPv2 = (1 << 4),
+    ANDROID_CPU_ARM_FEATURE_VFP_D32 = (1 << 5),
+    ANDROID_CPU_ARM_FEATURE_VFP_FP16 = (1 << 6),
+    ANDROID_CPU_ARM_FEATURE_VFP_FMA = (1 << 7),
+    ANDROID_CPU_ARM_FEATURE_NEON_FMA = (1 << 8),
+    ANDROID_CPU_ARM_FEATURE_IDIV_ARM = (1 << 9),
     ANDROID_CPU_ARM_FEATURE_IDIV_THUMB2 = (1 << 10),
-    ANDROID_CPU_ARM_FEATURE_iWMMXt      = (1 << 11),
-    ANDROID_CPU_ARM_FEATURE_AES         = (1 << 12),
-    ANDROID_CPU_ARM_FEATURE_PMULL       = (1 << 13),
-    ANDROID_CPU_ARM_FEATURE_SHA1        = (1 << 14),
-    ANDROID_CPU_ARM_FEATURE_SHA2        = (1 << 15),
-    ANDROID_CPU_ARM_FEATURE_CRC32       = (1 << 16),
+    ANDROID_CPU_ARM_FEATURE_iWMMXt = (1 << 11),
+    ANDROID_CPU_ARM_FEATURE_AES = (1 << 12),
+    ANDROID_CPU_ARM_FEATURE_PMULL = (1 << 13),
+    ANDROID_CPU_ARM_FEATURE_SHA1 = (1 << 14),
+    ANDROID_CPU_ARM_FEATURE_SHA2 = (1 << 15),
+    ANDROID_CPU_ARM_FEATURE_CRC32 = (1 << 16),
 };
 
 /* The bit flags corresponding to the output of android_getCpuFeatures()
@@ -244,13 +244,13 @@ enum {
  *     CPU supports 64-bit PMULL and PMULL2 instructions.
  */
 enum {
-    ANDROID_CPU_ARM64_FEATURE_FP      = (1 << 0),
-    ANDROID_CPU_ARM64_FEATURE_ASIMD   = (1 << 1),
-    ANDROID_CPU_ARM64_FEATURE_AES     = (1 << 2),
-    ANDROID_CPU_ARM64_FEATURE_PMULL   = (1 << 3),
-    ANDROID_CPU_ARM64_FEATURE_SHA1    = (1 << 4),
-    ANDROID_CPU_ARM64_FEATURE_SHA2    = (1 << 5),
-    ANDROID_CPU_ARM64_FEATURE_CRC32   = (1 << 6),
+    ANDROID_CPU_ARM64_FEATURE_FP = (1 << 0),
+    ANDROID_CPU_ARM64_FEATURE_ASIMD = (1 << 1),
+    ANDROID_CPU_ARM64_FEATURE_AES = (1 << 2),
+    ANDROID_CPU_ARM64_FEATURE_PMULL = (1 << 3),
+    ANDROID_CPU_ARM64_FEATURE_SHA1 = (1 << 4),
+    ANDROID_CPU_ARM64_FEATURE_SHA2 = (1 << 5),
+    ANDROID_CPU_ARM64_FEATURE_CRC32 = (1 << 6),
 };
 
 /* The bit flags corresponding to the output of android_getCpuFeatures()
@@ -258,15 +258,15 @@ enum {
  * ANDROID_CPU_FAMILY_X86_64.
  */
 enum {
-    ANDROID_CPU_X86_FEATURE_SSSE3  = (1 << 0),
+    ANDROID_CPU_X86_FEATURE_SSSE3 = (1 << 0),
     ANDROID_CPU_X86_FEATURE_POPCNT = (1 << 1),
-    ANDROID_CPU_X86_FEATURE_MOVBE  = (1 << 2),
+    ANDROID_CPU_X86_FEATURE_MOVBE = (1 << 2),
     ANDROID_CPU_X86_FEATURE_SSE4_1 = (1 << 3),
     ANDROID_CPU_X86_FEATURE_SSE4_2 = (1 << 4),
     ANDROID_CPU_X86_FEATURE_AES_NI = (1 << 5),
-    ANDROID_CPU_X86_FEATURE_AVX =    (1 << 6),
+    ANDROID_CPU_X86_FEATURE_AVX = (1 << 6),
     ANDROID_CPU_X86_FEATURE_RDRAND = (1 << 7),
-    ANDROID_CPU_X86_FEATURE_AVX2 =   (1 << 8),
+    ANDROID_CPU_X86_FEATURE_AVX2 = (1 << 8),
     ANDROID_CPU_X86_FEATURE_SHA_NI = (1 << 9),
 };
 
@@ -282,8 +282,8 @@ enum {
  *     CPU supports Mips SIMD Architecture instructions.
  */
 enum {
-    ANDROID_CPU_MIPS_FEATURE_R6    = (1 << 0),
-    ANDROID_CPU_MIPS_FEATURE_MSA   = (1 << 1),
+    ANDROID_CPU_MIPS_FEATURE_R6 = (1 << 0),
+    ANDROID_CPU_MIPS_FEATURE_MSA = (1 << 1),
 };
 
 
@@ -300,7 +300,7 @@ extern int android_getCpuCount(void);
  *
  * This function return 1 on success, and 0 on failure.
  */
-extern int android_setCpu(int      cpu_count,
+extern int android_setCpu(int cpu_count,
                           uint64_t cpu_features);
 
 #ifdef __arm__

@@ -48,19 +48,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 
-import com.github.shadowsocks.R;
-import com.github.shadowsocks.database.Profile;
-import com.github.shadowsocks.utils.Utils;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.github.shadowsocks.database.Profile;
+import com.github.shadowsocks.utils.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lucas on 3/10/16.
@@ -75,10 +74,10 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
         setContentView(R.layout.layout_quick_switch);
         profilesAdapter = new ProfilesAdapter();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.quick_switch);
 
-        RecyclerView profilesList = (RecyclerView) findViewById(R.id.profilesList);
+        RecyclerView profilesList = findViewById(R.id.profilesList);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         profilesList.setLayoutManager(lm);
         profilesList.setItemAnimator(new DefaultItemAnimator());
@@ -114,7 +113,7 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
             view.setBackgroundResource(typedArray.getResourceId(0, 0));
             typedArray.recycle();
 
-            text = (CheckedTextView) itemView.findViewById(android.R.id.text1);
+            text = itemView.findViewById(android.R.id.text1);
             itemView.setOnClickListener(this);
         }
 

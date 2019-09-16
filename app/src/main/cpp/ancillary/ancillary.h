@@ -40,6 +40,7 @@ extern "C" {
  ***************************************************************************/
 
 #define ANCIL_MAX_N_FDS 960
+
 /*
  * Maximum number of fds that can be sent or received using the "esay"
  * functions; this is so that all can fit in one page.
@@ -47,6 +48,7 @@ extern "C" {
 
 extern int
 ancil_send_fds_with_buffer(int, const int *, unsigned, void *);
+
 /*
  * ancil_send_fds_with_buffer(sock, n_fds, fds, buffer)
  *
@@ -72,9 +74,10 @@ ancil_recv_fds_with_buffer(int, int *, unsigned, void *);
 
 #define ANCIL_FD_BUFFER(n) \
     struct { \
-	struct cmsghdr h; \
-	int fd[n]; \
+    struct cmsghdr h; \
+    int fd[n]; \
     }
+
 /* ANCIL_FD_BUFFER(n)
  *
  * A structure type suitable to be used as buffer for n file descriptors.
@@ -86,6 +89,7 @@ ancil_recv_fds_with_buffer(int, int *, unsigned, void *);
 
 extern int
 ancil_send_fds(int, const int *, unsigned);
+
 /*
  * ancil_send_fds(sock, n_fds, fds)
  *
@@ -97,6 +101,7 @@ ancil_send_fds(int, const int *, unsigned);
 
 extern int
 ancil_recv_fds(int, int *, unsigned);
+
 /*
  * ancil_recv_fds(sock, n_fds, fds)
  *
@@ -110,6 +115,7 @@ ancil_recv_fds(int, int *, unsigned);
 
 extern int
 ancil_send_fd(int, int);
+
 /* ancil_recv_fd(sock, fd);
  *
  * Sends the file descriptor fd on the socket sock.

@@ -47,11 +47,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.github.shadowsocks.R;
-
 import androidx.annotation.ArrayRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatSpinner;
+
+import com.github.shadowsocks.R;
 
 public class DropDownPreference extends SummaryPreference {
 

@@ -4,20 +4,27 @@ package com.github.shadowsocks.network.ssrsub
 /**
  * Created by vay on 2018/07/19
  */
-open class SubUpdateCallback {
+open class SubUpdateCallback
+{
 
-    /**
-     * success
-     */
-    open fun onSuccess(subname:String) {}
+	/**
+	 * success
+	 */
+	open fun onSuccess(subname: String)
+	{
+	}
 
-    /**
-     * failed
-     */
-    open fun onFailed() {}
+	/**
+	 * failed
+	 */
+	open fun onFailed()
+	{
+	}
 
-    /**
-     * finished
-     */
-    open fun onFinished() {}
+	/**
+	 * finished
+	 */
+	open fun onFinished()
+	{
+	}
 }

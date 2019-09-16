@@ -17,8 +17,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.github.shadowsocks.ShadowsocksRunnerService;
 import com.github.shadowsocks.ShadowsocksApplication;
+import com.github.shadowsocks.ShadowsocksRunnerService;
 
 import org.xbill.DNS.AAAARecord;
 import org.xbill.DNS.ARecord;

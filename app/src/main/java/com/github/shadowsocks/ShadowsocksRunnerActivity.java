@@ -49,9 +49,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
 
-import com.github.shadowsocks.utils.VayLog;
-
 import androidx.annotation.Nullable;
+
+import com.github.shadowsocks.utils.VayLog;
 
 public class ShadowsocksRunnerActivity extends Activity {
     private static final String TAG = ShadowsocksRunnerActivity.class.getSimpleName();

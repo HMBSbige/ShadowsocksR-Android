@@ -57,7 +57,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-import com.github.shadowsocks.R;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.preferences.DropDownPreference;
 import com.github.shadowsocks.preferences.NumberPickerPreference;
@@ -81,9 +83,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 public class ShadowsocksSettings extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -480,12 +479,12 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                 final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
 
                 View view = View.inflate(activity, R.layout.layout_front_proxy, null);
-                Switch sw_frontproxy_enable = (Switch) view.findViewById(R.id.sw_frontproxy_enable);
-                final Spinner sp_frontproxy_type = (Spinner) view.findViewById(R.id.sp_frontproxy_type);
-                final EditText et_frontproxy_addr = (EditText) view.findViewById(R.id.et_frontproxy_addr);
-                final EditText et_frontproxy_port = (EditText) view.findViewById(R.id.et_frontproxy_port);
-                final EditText et_frontproxy_username = (EditText) view.findViewById(R.id.et_frontproxy_username);
-                final EditText et_frontproxy_password = (EditText) view.findViewById(R.id.et_frontproxy_password);
+                Switch sw_frontproxy_enable = view.findViewById(R.id.sw_frontproxy_enable);
+                final Spinner sp_frontproxy_type = view.findViewById(R.id.sp_frontproxy_type);
+                final EditText et_frontproxy_addr = view.findViewById(R.id.et_frontproxy_addr);
+                final EditText et_frontproxy_port = view.findViewById(R.id.et_frontproxy_port);
+                final EditText et_frontproxy_username = view.findViewById(R.id.et_frontproxy_username);
+                final EditText et_frontproxy_password = view.findViewById(R.id.et_frontproxy_password);
 
                 List<String> stringArray = Arrays.asList(getResources().getStringArray(R.array.frontproxy_type_entry));
                 int indexOf = stringArray.indexOf(prefs.getString("frontproxy_type", "socks5"));

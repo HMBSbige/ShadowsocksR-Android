@@ -46,7 +46,6 @@ import android.os.RemoteException;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 
-import com.github.shadowsocks.R;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.Utils;

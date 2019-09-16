@@ -5,6 +5,8 @@ import android.net.LocalServerSocket;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 
+import androidx.annotation.NonNull;
+
 import com.github.shadowsocks.utils.IOUtils;
 import com.github.shadowsocks.utils.VayLog;
 
@@ -17,8 +19,6 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
-
-import androidx.annotation.NonNull;
 
 public class ShadowsocksVpnThread extends Thread {
 

@@ -71,7 +71,7 @@ public class GuardedProcess {
                     }
                 } catch (Exception ignored) {
                     VayLog.i(TAG, "thread interrupt, destroy process: " + cmd);
-                    if (process!=null) {
+                    if (process != null) {
                         process.destroy();
                     }
                 } finally {
@@ -88,7 +88,7 @@ public class GuardedProcess {
     public void destroy() {
         isDestroyed = true;
         guardThread.interrupt();
-        if (process!=null){
+        if (process != null) {
             process.destroy();
         }
         try {
@@ -101,7 +101,7 @@ public class GuardedProcess {
     public void restart() {
         synchronized (this) {
             isRestart = true;
-            if (process!=null){
+            if (process != null) {
                 process.destroy();
             }
         }
@@ -118,7 +118,7 @@ public class GuardedProcess {
     public interface RestartCallback {
 
         /**
-         *  restart callback
+         * restart callback
          */
         void onRestart();
     }

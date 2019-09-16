@@ -45,10 +45,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import androidx.annotation.Nullable;
+
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.utils.VayLog;
-
-import androidx.annotation.Nullable;
 
 public class ShadowsocksRunnerService extends ServiceBoundService {
 

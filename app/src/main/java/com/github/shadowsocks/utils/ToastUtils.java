@@ -15,32 +15,32 @@ public class ToastUtils {
         sContext = context;
     }
 
-    public static void showLong(String str){
+    public static void showLong(String str) {
         cancelToast();
         mToast = Toast.makeText(getContext(), str, Toast.LENGTH_LONG);
         mToast.show();
     }
 
-    public static void showLong(int strId){
+    public static void showLong(int strId) {
         cancelToast();
         mToast = Toast.makeText(getContext(), strId, Toast.LENGTH_LONG);
         mToast.show();
     }
 
-    public static void showShort(String str){
+    public static void showShort(String str) {
         cancelToast();
         mToast = Toast.makeText(getContext(), str, Toast.LENGTH_SHORT);
         mToast.show();
     }
 
-    public static void showShort(int strId){
+    public static void showShort(int strId) {
         cancelToast();
         mToast = Toast.makeText(getContext(), strId, Toast.LENGTH_SHORT);
         mToast.show();
     }
 
-    private static void cancelToast(){
-        if(mToast != null){
+    private static void cancelToast() {
+        if (mToast != null) {
             mToast.cancel();
         }
     }

@@ -9,12 +9,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
 
-import com.github.shadowsocks.R;
+import androidx.annotation.Nullable;
+
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.ToastUtils;
 import com.github.shadowsocks.utils.Utils;
-
-import androidx.annotation.Nullable;
 
 /**
  * @author Mygod

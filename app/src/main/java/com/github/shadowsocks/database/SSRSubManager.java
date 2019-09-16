@@ -1,8 +1,8 @@
 package com.github.shadowsocks.database;
 
 
-import com.github.shadowsocks.utils.VayLog;
 import com.github.shadowsocks.ShadowsocksApplication;
+import com.github.shadowsocks.utils.VayLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,9 +128,7 @@ public class SSRSubManager {
         }
 
         // remove listener
-        if (mSSRSubAddedListeners.contains(l)) {
-            mSSRSubAddedListeners.remove(l);
-        }
+        mSSRSubAddedListeners.remove(l);
     }
 
     /**

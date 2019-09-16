@@ -43,8 +43,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.github.shadowsocks.R;
-import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.ShadowsocksApplication;
+import com.github.shadowsocks.database.Profile;
 
 public class TaskerSettings {
 

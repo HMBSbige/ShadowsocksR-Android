@@ -1,17 +1,17 @@
 package com.github.shadowsocks.job;
 
+import androidx.annotation.NonNull;
+
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
+import com.github.shadowsocks.ShadowsocksApplication;
 import com.github.shadowsocks.utils.IOUtils;
 import com.github.shadowsocks.utils.VayLog;
-import com.github.shadowsocks.ShadowsocksApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.NonNull;
 
 /**
  * @author Mygod

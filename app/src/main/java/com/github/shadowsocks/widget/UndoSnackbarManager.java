@@ -110,6 +110,7 @@ public class UndoSnackbarManager<T> {
 
         /**
          * commit recycle bin
+         *
          * @param commit commit list
          */
         void onCommit(SparseArray<T> commit);
@@ -119,6 +120,7 @@ public class UndoSnackbarManager<T> {
 
         /**
          * undo recycle bin
+         *
          * @param undo undo list
          */
         void onUndo(SparseArray<T> undo);

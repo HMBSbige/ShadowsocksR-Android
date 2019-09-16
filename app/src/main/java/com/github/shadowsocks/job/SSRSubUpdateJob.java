@@ -3,22 +3,21 @@ package com.github.shadowsocks.job;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
-
 import com.github.shadowsocks.R;
+import com.github.shadowsocks.ShadowsocksApplication;
 import com.github.shadowsocks.database.SSRSub;
 import com.github.shadowsocks.network.ssrsub.SubUpdateCallback;
 import com.github.shadowsocks.network.ssrsub.SubUpdateHelper;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.ToastUtils;
 import com.github.shadowsocks.utils.VayLog;
-import com.github.shadowsocks.ShadowsocksApplication;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import androidx.annotation.NonNull;
 
 /**
  * @author Mygod
@@ -41,7 +40,7 @@ public class SSRSubUpdateJob extends Job {
     protected Result onRunJob(Params params) {
         if (ShadowsocksApplication.app.settings.getInt(Constants.Key.ssrsub_autoupdate, 0) == 1) {
             List<SSRSub> subs = ShadowsocksApplication.app.ssrsubManager.getAllSSRSubs();
-            SubUpdateHelper.Companion.instance().updateSub(subs,  new SubUpdateCallback() {
+            SubUpdateHelper.Companion.instance().updateSub(subs, new SubUpdateCallback() {
                 @Override
                 public void onSuccess(String subname) {
                     VayLog.d(TAG, "onRunJob() update sub success!");

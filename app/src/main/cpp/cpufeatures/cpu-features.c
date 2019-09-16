@@ -73,11 +73,11 @@
 #include <sys/system_properties.h>
 #include <unistd.h>
 
-static  pthread_once_t     g_once;
-static  int                g_inited;
-static  AndroidCpuFamily   g_cpuFamily;
-static  uint64_t           g_cpuFeatures;
-static  int                g_cpuCount;
+static pthread_once_t g_once;
+static int g_inited;
+static AndroidCpuFamily g_cpuFamily;
+static uint64_t g_cpuFeatures;
+static int g_cpuCount;
 
 #ifdef __arm__
 static  uint32_t           g_cpuIdArm;
@@ -93,8 +93,8 @@ static const int android_cpufeatures_debug = 0;
     } while (0)
 
 #ifdef __i386__
-static __inline__ void x86_cpuid(int func, int values[4])
-{
+
+static __inline__ void x86_cpuid(int func, int values[4]) {
     int a, b, c, d;
     /* We need to preserve ebx since we're compiling PIC code */
     /* this means we can't use "=b" for the second output register */
@@ -103,7 +103,7 @@ static __inline__ void x86_cpuid(int func, int values[4])
       "cpuid\n" \
       "mov %%ebx, %1\n"
       "pop %%ebx\n"
-      : "=a" (a), "=r" (b), "=c" (c), "=d" (d) \
+    : "=a" (a), "=r" (b), "=c" (c), "=d" (d) \
       : "a" (func) \
     );
     values[0] = a;
@@ -111,6 +111,7 @@ static __inline__ void x86_cpuid(int func, int values[4])
     values[2] = c;
     values[3] = d;
 }
+
 #elif defined(__x86_64__)
 static __inline__ void x86_cpuid(int func, int values[4])
 {
@@ -137,10 +138,9 @@ static __inline__ void x86_cpuid(int func, int values[4])
  * using fseek(0, SEEK_END) + ftell(). Nor can they be mmap()-ed.
  */
 static int
-get_file_size(const char* pathname)
-{
+get_file_size(const char *pathname) {
 
-   int fd, result = 0;
+    int fd, result = 0;
     char buffer[256];
 
     fd = open(pathname, O_RDONLY);
@@ -172,9 +172,8 @@ get_file_size(const char* pathname)
  * than 'buffsize' bytes.
  */
 static int
-read_file(const char*  pathname, char*  buffer, size_t  buffsize)
-{
-    int  fd, count;
+read_file(const char *pathname, char *buffer, size_t buffsize) {
+    int fd, count;
 
     fd = open(pathname, O_RDONLY);
     if (fd < 0) {
@@ -182,7 +181,7 @@ read_file(const char*  pathname, char*  buffer, size_t  buffsize)
         return -1;
     }
     count = 0;
-    while (count < (int)buffsize) {
+    while (count < (int) buffsize) {
         int ret = read(fd, buffer + count, buffsize - count);
         if (ret < 0) {
             if (errno == EINTR)
@@ -298,24 +297,23 @@ has_list_item(const char* list, const char* item)
  * position after the decimal number in case of success (which will always
  * be <= 'limit').
  */
-static const char*
-parse_number(const char* input, const char* limit, int base, int* result)
-{
-    const char* p = input;
+static const char *
+parse_number(const char *input, const char *limit, int base, int *result) {
+    const char *p = input;
     int val = 0;
     while (p < limit) {
         int d = (*p - '0');
-        if ((unsigned)d >= 10U) {
+        if ((unsigned) d >= 10U) {
             d = (*p - 'a');
-            if ((unsigned)d >= 6U)
-              d = (*p - 'A');
-            if ((unsigned)d >= 6U)
-              break;
+            if ((unsigned) d >= 6U)
+                d = (*p - 'A');
+            if ((unsigned) d >= 6U)
+                break;
             d += 10;
         }
         if (d >= base)
-          break;
-        val = val*base + d;
+            break;
+        val = val * base + d;
         p++;
     }
     if (p == input)
@@ -325,9 +323,8 @@ parse_number(const char* input, const char* limit, int base, int* result)
     return p;
 }
 
-static const char*
-parse_decimal(const char* input, const char* limit, int* result)
-{
+static const char *
+parse_decimal(const char *input, const char *limit, int *result) {
     return parse_number(input, limit, 10, result);
 }
 
@@ -350,24 +347,24 @@ typedef struct {
 } CpuList;
 
 static __inline__ void
-cpulist_init(CpuList* list) {
+cpulist_init(CpuList *list) {
     list->mask = 0;
 }
 
 static __inline__ void
-cpulist_and(CpuList* list1, CpuList* list2) {
+cpulist_and(CpuList *list1, CpuList *list2) {
     list1->mask &= list2->mask;
 }
 
 static __inline__ void
-cpulist_set(CpuList* list, int index) {
-    if ((unsigned)index < 32) {
-        list->mask |= (uint32_t)(1U << index);
+cpulist_set(CpuList *list, int index) {
+    if ((unsigned) index < 32) {
+        list->mask |= (uint32_t) (1U << index);
     }
 }
 
 static __inline__ int
-cpulist_count(CpuList* list) {
+cpulist_count(CpuList *list) {
     return __builtin_popcount(list->mask);
 }
 
@@ -382,21 +379,19 @@ cpulist_count(CpuList* list) {
  *             0-1
  */
 static void
-cpulist_parse(CpuList* list, const char* line, int line_len)
-{
-    const char* p = line;
-    const char* end = p + line_len;
-    const char* q;
+cpulist_parse(CpuList *list, const char *line, int line_len) {
+    const char *p = line;
+    const char *end = p + line_len;
+    const char *q;
 
     /* NOTE: the input line coming from sysfs typically contains a
      * trailing newline, so take care of it in the code below
      */
-    while (p < end && *p != '\n')
-    {
+    while (p < end && *p != '\n') {
         int val, start_value, end_value;
 
         /* Find the end of current item, and put it into 'q' */
-        q = memchr(p, ',', end-p);
+        q = memchr(p, ',', end - p);
         if (q == NULL) {
             q = end;
         }
@@ -412,7 +407,7 @@ cpulist_parse(CpuList* list, const char* line, int line_len)
          * and integer; extract end value.
          */
         if (p < q && *p == '-') {
-            p = parse_decimal(p+1, q, &end_value);
+            p = parse_decimal(p + 1, q, &end_value);
             if (p == NULL)
                 goto BAD_FORMAT;
         }
@@ -428,16 +423,14 @@ cpulist_parse(CpuList* list, const char* line, int line_len)
             p++;
     }
 
-BAD_FORMAT:
-    ;
+    BAD_FORMAT:;
 }
 
 /* Read a CPU list from one sysfs file */
 static void
-cpulist_read_from(CpuList* list, const char* filename)
-{
-    char   file[64];
-    int    filelen;
+cpulist_read_from(CpuList *list, const char *filename) {
+    char file[64];
+    int filelen;
 
     cpulist_init(list);
 
@@ -449,6 +442,7 @@ cpulist_read_from(CpuList* list, const char* filename)
 
     cpulist_parse(list, file, filelen);
 }
+
 #if defined(__aarch64__)
 // see <uapi/asm/hwcap.h> kernel header
 #define HWCAP_FP                (1 << 0)
@@ -636,8 +630,7 @@ get_elf_hwcap_from_proc_cpuinfo(const char* cpuinfo, int cpuinfo_len) {
  * the result.
  */
 static int
-get_cpu_count(void)
-{
+get_cpu_count(void) {
     CpuList cpus_present[1];
     CpuList cpus_possible[1];
 
@@ -653,47 +646,45 @@ get_cpu_count(void)
 }
 
 static void
-android_cpuInitFamily(void)
-{
+android_cpuInitFamily(void) {
 #if defined(__arm__)
     g_cpuFamily = ANDROID_CPU_FAMILY_ARM;
 #elif defined(__i386__)
     g_cpuFamily = ANDROID_CPU_FAMILY_X86;
 #elif defined(__mips64)
-/* Needs to be before __mips__ since the compiler defines both */
-    g_cpuFamily = ANDROID_CPU_FAMILY_MIPS64;
+    /* Needs to be before __mips__ since the compiler defines both */
+        g_cpuFamily = ANDROID_CPU_FAMILY_MIPS64;
 #elif defined(__mips__)
-    g_cpuFamily = ANDROID_CPU_FAMILY_MIPS;
+        g_cpuFamily = ANDROID_CPU_FAMILY_MIPS;
 #elif defined(__aarch64__)
-    g_cpuFamily = ANDROID_CPU_FAMILY_ARM64;
+        g_cpuFamily = ANDROID_CPU_FAMILY_ARM64;
 #elif defined(__x86_64__)
-    g_cpuFamily = ANDROID_CPU_FAMILY_X86_64;
+        g_cpuFamily = ANDROID_CPU_FAMILY_X86_64;
 #else
-    g_cpuFamily = ANDROID_CPU_FAMILY_UNKNOWN;
+        g_cpuFamily = ANDROID_CPU_FAMILY_UNKNOWN;
 #endif
 }
 
 static void
-android_cpuInit(void)
-{
-    char* cpuinfo = NULL;
-    int   cpuinfo_len;
+android_cpuInit(void) {
+    char *cpuinfo = NULL;
+    int cpuinfo_len;
 
     android_cpuInitFamily();
 
     g_cpuFeatures = 0;
-    g_cpuCount    = 1;
-    g_inited      = 1;
+    g_cpuCount = 1;
+    g_inited = 1;
 
     cpuinfo_len = get_file_size("/proc/cpuinfo");
     if (cpuinfo_len < 0) {
-      D("cpuinfo_len cannot be computed!");
-      return;
+        D("cpuinfo_len cannot be computed!");
+        return;
     }
     cpuinfo = malloc(cpuinfo_len);
     if (cpuinfo == NULL) {
-      D("cpuinfo buffer could not be allocated");
-      return;
+        D("cpuinfo buffer could not be allocated");
+        return;
     }
     cpuinfo_len = read_file("/proc/cpuinfo", cpuinfo, cpuinfo_len);
     D("cpuinfo_len is (%d):\n%.*s\n", cpuinfo_len,
@@ -1065,37 +1056,32 @@ android_cpuInit(void)
 
 
 AndroidCpuFamily
-android_getCpuFamily(void)
-{
+android_getCpuFamily(void) {
     pthread_once(&g_once, android_cpuInit);
     return g_cpuFamily;
 }
 
 
 uint64_t
-android_getCpuFeatures(void)
-{
+android_getCpuFeatures(void) {
     pthread_once(&g_once, android_cpuInit);
     return g_cpuFeatures;
 }
 
 
 int
-android_getCpuCount(void)
-{
+android_getCpuCount(void) {
     pthread_once(&g_once, android_cpuInit);
     return g_cpuCount;
 }
 
 static void
-android_cpuInitDummy(void)
-{
+android_cpuInitDummy(void) {
     g_inited = 1;
 }
 
 int
-android_setCpu(int cpu_count, uint64_t cpu_features)
-{
+android_setCpu(int cpu_count, uint64_t cpu_features) {
     /* Fail if the library was already initialized. */
     if (g_inited)
         return 0;

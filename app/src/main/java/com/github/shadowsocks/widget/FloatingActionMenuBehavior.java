@@ -43,13 +43,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
-
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 /**
  * Behavior for com.github.clans.fab.FloatingActionMenu that is aware of Snackbars and scrolling.

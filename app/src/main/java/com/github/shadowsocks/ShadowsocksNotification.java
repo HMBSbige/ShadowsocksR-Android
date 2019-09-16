@@ -51,7 +51,9 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.RemoteException;
 
-import com.github.shadowsocks.R;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+
 import com.github.shadowsocks.aidl.IShadowsocksService;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
@@ -61,9 +63,6 @@ import com.github.shadowsocks.utils.Utils;
 
 import java.util.List;
 import java.util.Locale;
-
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
 /**
  * @author Mygod

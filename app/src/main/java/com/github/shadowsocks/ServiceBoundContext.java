@@ -51,8 +51,6 @@ import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.VayLog;
 
-import static com.github.shadowsocks.ShadowsocksApplication.app;
-
 /**
  * @author Mygod
  */

@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical">
-
-<TextView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="left"
-    android:layout_marginTop="16dp"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
-    android:text="@string/ssrsub_autoupdate_enable" />
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-<Switch
-    android:id="@+id/sw_ssr_sub_autoupdate_enable"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingEnd="14dp"
-    android:paddingStart="14dp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_marginTop="16dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="@string/ssrsub_autoupdate_enable" />
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="left"
-    android:paddingStart="24dp"
-    android:paddingEnd="24dp"
-    android:text="@string/ssrsub_list" />
+    <Switch
+        android:id="@+id/sw_ssr_sub_autoupdate_enable"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="14dp"
+        android:paddingStart="14dp" />
 
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/ssrsubList"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="@string/ssrsub_list" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ssrsubList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

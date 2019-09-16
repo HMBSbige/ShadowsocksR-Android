@@ -19,7 +19,7 @@ public class TaskerReceiver extends BroadcastReceiver {
         Profile profile = ShadowsocksApplication.app.profileManager.getProfile(settings.profileId);
 
         if (profile != null) {
-             ShadowsocksApplication.app.switchProfile(settings.profileId);
+            ShadowsocksApplication.app.switchProfile(settings.profileId);
         }
 
         if (settings.switchOn) {
