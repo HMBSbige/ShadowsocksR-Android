@@ -23,7 +23,7 @@ android {
         applicationId "com.github.shadowsocksr_hmbsbige"
         minSdkVersion min_version
         targetSdkVersion target_version
-        versionCode 112    // multiDex的一些相关配置，这样配置可以让你的编译速度更快
+        versionCode 326    // multiDex的一些相关配置，这样配置可以让你的编译速度更快
         dexOptions {
             // 让它不要对Lib做preDexing
             preDexLibraries = false
@@ -32,7 +32,7 @@ android {
             // 增加java堆内存大小
             javaMaxHeapSize "4g"
         }
-        versionName "3.5.4.1"
+        versionName "3.5.4.2"
         externalNativeBuild {
             cmake {
                 cppFlags "-frtti -fexceptions"
