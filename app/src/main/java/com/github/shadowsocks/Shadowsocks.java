@@ -420,7 +420,7 @@ public class Shadowsocks extends AppCompatActivity {
 
             @Override
             public boolean isRequestOk(int code) {
-                return code == 204 || code == 200 || code == 404;
+                return code == 204 || code == 200;
             }
 
             @Override

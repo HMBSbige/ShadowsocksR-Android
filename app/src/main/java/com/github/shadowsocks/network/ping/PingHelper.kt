@@ -255,7 +255,7 @@ private constructor()
 			{
 				override fun isRequestOk(code: Int): Boolean
 				{
-					return code == 204 || code == 200 || code == 404
+					return code == 204 || code == 200
 				}
 
 				override fun onSuccess(code: Int, response: String)
