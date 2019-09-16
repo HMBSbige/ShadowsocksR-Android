@@ -50,10 +50,6 @@ public class Constants {
 
     public static class ConfigUtils {
 
-        public static String EscapedJson(String OriginString) {
-            return OriginString.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"");
-        }
-
         public static final String SHADOWSOCKS = "{\"server\": \"%s\", \"server_port\": %d, \"local_port\": %d, \"password\": \"%s\", \"method\":\"%s\", \"timeout\": %d, \"protocol\": \"%s\", \"obfs\": \"%s\", \"obfs_param\": \"%s\", \"protocol_param\": \"%s\"}";
         public static final String REDSOCKS = "base {\n" +
                 " log_debug = off;\n" +
@@ -69,12 +65,10 @@ public class Constants {
                 " port = %d;\n" +
                 " type = socks5;\n" +
                 "}\n";
-
         public static final String PROXYCHAINS = "strict_chain\n" +
                 "localnet 127.0.0.0/255.0.0.0\n" +
                 "[ProxyList]\n" +
                 "%s %s %s %s %s";
-
         public static final String PDNSD_LOCAL =
                 "global {" +
                         "perm_cache = 2048;" +
@@ -105,7 +99,6 @@ public class Constants {
                         "owner=localhost;" +
                         "soa=localhost,root.localhost,42,86400,900,86400,86400;" +
                         "}";
-
         public static final String PDNSD_DIRECT =
                 "global {" +
                         "perm_cache = 2048;" +
@@ -140,7 +133,6 @@ public class Constants {
                         "owner=localhost;" +
                         "soa=localhost,root.localhost,42,86400,900,86400,86400;" +
                         "}";
-
         public static final String REMOTE_SERVER =
                 "server {" +
                         "label = \"remote-servers\";" +
@@ -154,6 +146,10 @@ public class Constants {
                         "reject_policy = fail;" +
                         "reject_recursively = on;" +
                         "}";
+
+        public static String EscapedJson(String OriginString) {
+            return OriginString.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"");
+        }
     }
 
     public static class Key {

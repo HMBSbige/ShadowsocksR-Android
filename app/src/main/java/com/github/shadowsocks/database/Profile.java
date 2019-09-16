@@ -48,81 +48,56 @@ import java.util.Locale;
 
 public class Profile {
 
-    @DatabaseField(generatedId = true)
-    public int id = 0;
-
-    @DatabaseField
-    public String name = "ShadowsocksR";
-
-    @DatabaseField
-    public String host = "1.1.1.1";
-
-    @DatabaseField
-    public int localPort = 1080;
-
-    @DatabaseField
-    public int remotePort = 8388;
-
-    @DatabaseField
-    public String password = "";
-
-    @DatabaseField
-    public String protocol = "origin";
-
-    @DatabaseField
-    public String protocol_param = "";
-
-    @DatabaseField
-    public String obfs = "plain";
-
-    @DatabaseField
-    public String obfs_param = "";
-
-    @DatabaseField
-    public String method = "aes-256-cfb";
-
-    @DatabaseField
-    public String route = "HMBSbige-whitelist";
-
-    @DatabaseField
-    public boolean proxyApps = false;
-
-    @DatabaseField
-    public boolean bypass = false;
-
-    @DatabaseField
-    public boolean udpdns = false;
-
-    @DatabaseField
-    public String url_group = "ShadowsocksR";
-
-    @DatabaseField
-    public String dns = "8.8.8.8:53";
-
-    @DatabaseField
-    public String china_dns = "114.114.114.114:53,223.5.5.5:53";
-
-    @DatabaseField
-    public boolean ipv6 = false;
-
-    @DatabaseField(dataType = DataType.LONG_STRING)
-    public String individual = "";
-
-    @DatabaseField
-    public long tx = 0;
-
-    @DatabaseField
-    public long rx = 0;
-
-    @DatabaseField
-    public long elapsed = 0;
-
-    @DatabaseField
-    public long tcpdelay = 0;
-
     @DatabaseField
     public final Date date = new java.util.Date();
-
+    @DatabaseField(generatedId = true)
+    public int id = 0;
+    @DatabaseField
+    public String name = "ShadowsocksR";
+    @DatabaseField
+    public String host = "1.1.1.1";
+    @DatabaseField
+    public int localPort = 1080;
+    @DatabaseField
+    public int remotePort = 8388;
+    @DatabaseField
+    public String password = "";
+    @DatabaseField
+    public String protocol = "origin";
+    @DatabaseField
+    public String protocol_param = "";
+    @DatabaseField
+    public String obfs = "plain";
+    @DatabaseField
+    public String obfs_param = "";
+    @DatabaseField
+    public String method = "aes-256-cfb";
+    @DatabaseField
+    public String route = "HMBSbige-whitelist";
+    @DatabaseField
+    public boolean proxyApps = false;
+    @DatabaseField
+    public boolean bypass = false;
+    @DatabaseField
+    public boolean udpdns = false;
+    @DatabaseField
+    public String url_group = "ShadowsocksR";
+    @DatabaseField
+    public String dns = "8.8.8.8:53";
+    @DatabaseField
+    public String china_dns = "114.114.114.114:53,223.5.5.5:53";
+    @DatabaseField
+    public boolean ipv6 = false;
+    @DatabaseField(dataType = DataType.LONG_STRING)
+    public String individual = "";
+    @DatabaseField
+    public long tx = 0;
+    @DatabaseField
+    public long rx = 0;
+    @DatabaseField
+    public long elapsed = 0;
+    @DatabaseField
+    public long tcpdelay = 0;
     @DatabaseField
     public long userOrder = 0;
 

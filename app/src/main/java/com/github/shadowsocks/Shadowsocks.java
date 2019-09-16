@@ -88,49 +88,24 @@ public class Shadowsocks extends AppCompatActivity {
 
     private static final String TAG = Shadowsocks.class.getSimpleName();
     private static final int REQUEST_CONNECT = 1;
-
+    public Handler handler = new Handler();
     private boolean serviceStarted;
     private FloatingActionButton fab;
     private FABProgressCircle fabProgressCircle;
     private ProgressDialog progressDialog;
     private int state = Constants.State.STOPPED;
-
     private ServiceBoundContext mServiceBoundContext;
-
     private boolean isDestroyed;
     private boolean isTestConnect;
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(newBase);
-
-        mServiceBoundContext = new ServiceBoundContext(newBase) {
-            @Override
-            protected void onServiceConnected() {
-                // Update the UI
-                if (fab != null) {
-                    fab.setEnabled(true);
-                }
-
-                updateState();
-            }
-
-            @Override
-            protected void onServiceDisconnected() {
-                if (fab != null) {
-                    fab.setEnabled(false);
-                }
-            }
-
-            @Override
-            public void binderDied() {
-                detachService();
-                ShadowsocksApplication.app.crashRecovery();
-                attachService();
-            }
-        };
-    }
-
+    private View stat;
+    private TextView connectionTestText;
+    private TextView txText;
+    private TextView rxText;
+    private TextView txRateText;
+    private TextView rxRateText;
+    private ColorStateList greyTint;
+    private ColorStateList greenTint;
+    private ShadowsocksSettings preferences;
     /**
      * Services
      */
@@ -221,6 +196,37 @@ public class Shadowsocks extends AppCompatActivity {
         }
     };
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(newBase);
+
+        mServiceBoundContext = new ServiceBoundContext(newBase) {
+            @Override
+            protected void onServiceConnected() {
+                // Update the UI
+                if (fab != null) {
+                    fab.setEnabled(true);
+                }
+
+                updateState();
+            }
+
+            @Override
+            protected void onServiceDisconnected() {
+                if (fab != null) {
+                    fab.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void binderDied() {
+                detachService();
+                ShadowsocksApplication.app.crashRecovery();
+                attachService();
+            }
+        };
+    }
+
     public void updateTraffic(long txRate, long rxRate, long txTotal, long rxTotal) {
         txText.setText(TrafficMonitor.formatTraffic(txTotal));
         rxText.setText(TrafficMonitor.formatTraffic(rxTotal));
@@ -235,19 +241,6 @@ public class Shadowsocks extends AppCompatActivity {
     public void detachService() {
         mServiceBoundContext.detachService();
     }
-
-    private View stat;
-    private TextView connectionTestText;
-    private TextView txText;
-    private TextView rxText;
-    private TextView txRateText;
-    private TextView rxRateText;
-
-    private ColorStateList greyTint;
-    private ColorStateList greenTint;
-    private ShadowsocksSettings preferences;
-
-    public Handler handler = new Handler();
 
     private void changeSwitch(boolean checked) {
         serviceStarted = checked;

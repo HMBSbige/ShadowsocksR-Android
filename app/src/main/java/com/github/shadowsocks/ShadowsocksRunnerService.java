@@ -55,6 +55,27 @@ public class ShadowsocksRunnerService extends ServiceBoundService {
     private static final String TAG = ShadowsocksRunnerService.class.getSimpleName();
 
     private Handler handler = new Handler();
+    /**
+     * callback
+     */
+    private IShadowsocksServiceCallback.Stub mCallback = new IShadowsocksServiceCallback.Stub() {
+        @Override
+        public void stateChanged(int state, String profileName, String msg) throws RemoteException {
+        }
+
+        @Override
+        public void trafficUpdated(long txRate, long rxRate, long txTotal, long rxTotal) throws RemoteException {
+        }
+    };
+    /**
+     * stop self runnable
+     */
+    private Runnable mStopSelfRunnable = new Runnable() {
+        @Override
+        public void run() {
+            stopSelf();
+        }
+    };
 
     @Nullable
     @Override
@@ -106,27 +127,4 @@ public class ShadowsocksRunnerService extends ServiceBoundService {
         super.onDestroy();
         detachService();
     }
-
-    /**
-     * callback
-     */
-    private IShadowsocksServiceCallback.Stub mCallback = new IShadowsocksServiceCallback.Stub() {
-        @Override
-        public void stateChanged(int state, String profileName, String msg) throws RemoteException {
-        }
-
-        @Override
-        public void trafficUpdated(long txRate, long rxRate, long txTotal, long rxTotal) throws RemoteException {
-        }
-    };
-
-    /**
-     * stop self runnable
-     */
-    private Runnable mStopSelfRunnable = new Runnable() {
-        @Override
-        public void run() {
-            stopSelf();
-        }
-    };
 }

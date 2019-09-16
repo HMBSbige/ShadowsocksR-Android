@@ -59,25 +59,10 @@ private constructor(builder: OkHttpClient.Builder? = null)
 	}
 
 	/**
-	 * network request by post
-	 *
-	 * @param url      request url
-	 * @param body     request body
-	 * @param callback request callback
-	 */
-	fun post(url: String, body: RequestBody, callback: RequestCallback)
-	{
-		val request = createRequest(url, body, callback) ?: return
-
-		// request
-		request(request, callback)
-	}
-
-	/**
 	 * network request
 	 *
 	 * @param request  request object
-	 * @param callback request callback
+	 * @param _callback request callback
 	 */
 	fun request(request: Request, _callback: RequestCallback?)
 	{
@@ -121,7 +106,7 @@ private constructor(builder: OkHttpClient.Builder? = null)
 	/**
 	 * create request object
 	 *
-	 * @param url  request url
+	 * @param _url  request url
 	 * @param body request body
 	 * @return create failed return null.
 	 */
@@ -153,7 +138,7 @@ private constructor(builder: OkHttpClient.Builder? = null)
 	/**
 	 * format url string
 	 *
-	 * @param url request url
+	 * @param _url request url
 	 * @return url
 	 */
 	private fun formatUrl(_url: String): String
@@ -172,14 +157,7 @@ private constructor(builder: OkHttpClient.Builder? = null)
 	 */
 	private fun setClientBuilder(builder: OkHttpClient.Builder?)
 	{
-		if (builder != null)
-		{
-			mClientBuilder = builder
-		}
-		else
-		{
-			mClientBuilder = mDefaultBuilder
-		}
+		mClientBuilder = builder ?: mDefaultBuilder
 		mClient = mClientBuilder!!.build()
 	}
 
@@ -283,19 +261,12 @@ private constructor(builder: OkHttpClient.Builder? = null)
 	{
 
 		private var sInstance: RequestHelper? = null
-		private val mDefaultBuilder: OkHttpClient.Builder
-
-		init
-		{
-			// init default builder
-			mDefaultBuilder = OkHttpClient.Builder()
-				.connectTimeout(5, TimeUnit.SECONDS)
-				.writeTimeout(5, TimeUnit.SECONDS)
-				.readTimeout(5, TimeUnit.SECONDS)
-				.followRedirects(false)
-				.followSslRedirects(false)
-
-		}
+		private val mDefaultBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
+			.connectTimeout(5, TimeUnit.SECONDS)
+			.writeTimeout(5, TimeUnit.SECONDS)
+			.readTimeout(5, TimeUnit.SECONDS)
+			.followRedirects(false)
+			.followSslRedirects(false)
 
 		/**
 		 * init

@@ -10,7 +10,7 @@ open class SubUpdateCallback
 	/**
 	 * success
 	 */
-	open fun onSuccess(subname: String)
+	open fun onSuccess(subName: String)
 	{
 	}
 

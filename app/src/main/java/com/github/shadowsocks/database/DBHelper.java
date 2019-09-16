@@ -19,12 +19,27 @@ import java.util.List;
 
 public class DBHelper extends OrmLiteSqliteOpenHelper {
 
-    private static final String TAG = DBHelper.class.getSimpleName();
-
     public static final String PROFILE = "profile.db";
+    private static final String TAG = DBHelper.class.getSimpleName();
     private static final int VERSION = 25;
-
+    Dao<Profile, Integer> profileDao;
+    Dao<SSRSub, Integer> ssrsubDao;
     private List<ApplicationInfo> apps;
+    private Context context;
+    public DBHelper(Context context) {
+        super(context, DBHelper.PROFILE, null, VERSION);
+        this.context = context;
+        try {
+            profileDao = getDao(Profile.class);
+        } catch (SQLException e) {
+            VayLog.e(TAG, "", e);
+        }
+        try {
+            ssrsubDao = getDao(SSRSub.class);
+        } catch (SQLException e) {
+            VayLog.e(TAG, "", e);
+        }
+    }
 
     /**
      * is all digits
@@ -70,26 +85,6 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
             }
         }
         return sb.toString();
-    }
-
-    Dao<Profile, Integer> profileDao;
-    Dao<SSRSub, Integer> ssrsubDao;
-
-    private Context context;
-
-    public DBHelper(Context context) {
-        super(context, DBHelper.PROFILE, null, VERSION);
-        this.context = context;
-        try {
-            profileDao = getDao(Profile.class);
-        } catch (SQLException e) {
-            VayLog.e(TAG, "", e);
-        }
-        try {
-            ssrsubDao = getDao(SSRSub.class);
-        } catch (SQLException e) {
-            VayLog.e(TAG, "", e);
-        }
     }
 
     @Override

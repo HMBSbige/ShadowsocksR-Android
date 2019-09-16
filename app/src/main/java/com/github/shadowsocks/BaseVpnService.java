@@ -86,23 +86,16 @@ import okhttp3.Response;
 @SuppressLint("Registered")
 public abstract class BaseVpnService extends VpnService {
 
+    public static final String protectPath = ShadowsocksApplication.app.getApplicationInfo().dataDir + "/protect_path";
     private static final String TAG = BaseVpnService.class.getSimpleName();
-
-    private int state = Constants.State.STOPPED;
+    private final RemoteCallbackList<IShadowsocksServiceCallback> callbacks;
     protected Profile profile;
-
+    private int state = Constants.State.STOPPED;
     private Timer timer;
     private TrafficMonitorThread trafficMonitorThread;
-
-    private final RemoteCallbackList<IShadowsocksServiceCallback> callbacks;
     private int callbacksCount;
     private Handler handler = new Handler(Looper.getMainLooper());
-    public static final String protectPath = ShadowsocksApplication.app.getApplicationInfo().dataDir + "/protect_path";
-
-    public BaseVpnService() {
-        callbacks = new RemoteCallbackList<>();
-    }
-
+    private boolean closeReceiverRegistered;
     private BroadcastReceiver closeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -110,9 +103,6 @@ public abstract class BaseVpnService extends VpnService {
             stopRunner(true);
         }
     };
-
-    private boolean closeReceiverRegistered;
-
     public IShadowsocksService.Stub binder = new IShadowsocksService.Stub() {
         @Override
         public int getState() {
@@ -199,6 +189,10 @@ public abstract class BaseVpnService extends VpnService {
             use(profileId);
         }
     };
+
+    public BaseVpnService() {
+        callbacks = new RemoteCallbackList<>();
+    }
 
     private boolean checkProfile(Profile profile) {
         if (TextUtils.isEmpty(profile.host) || TextUtils.isEmpty(profile.password)) {

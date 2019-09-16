@@ -112,6 +112,15 @@ public class DropDownPreference extends SummaryPreference {
     }
 
     /**
+     * The list of entries to be shown in the list in subsequent dialogs.
+     *
+     * @return The list as an array.
+     */
+    public CharSequence[] getEntries() {
+        return mEntries;
+    }
+
+    /**
      * Sets the human-readable entries to be shown in the list. This will be shown in subsequent dialogs.
      * <p>
      * Each entry must have a corresponding index in [[setEntryValues(CharSequence[])]].
@@ -138,12 +147,12 @@ public class DropDownPreference extends SummaryPreference {
     }
 
     /**
-     * The list of entries to be shown in the list in subsequent dialogs.
+     * Returns the array of values to be saved for the preference.
      *
-     * @return The list as an array.
+     * @return The array of values.
      */
-    public CharSequence[] getEntries() {
-        return mEntries;
+    public CharSequence[] getEntryValues() {
+        return mEntryValues;
     }
 
     /**
@@ -164,39 +173,12 @@ public class DropDownPreference extends SummaryPreference {
         setEntryValues(mContext.getResources().getTextArray(entryValuesResId));
     }
 
-    /**
-     * Returns the array of values to be saved for the preference.
-     *
-     * @return The array of values.
-     */
-    public CharSequence[] getEntryValues() {
-        return mEntryValues;
-    }
-
     public String getValue(int index) {
         if (mEntryValues == null) {
             return null;
         } else {
             return mEntryValues[index].toString();
         }
-    }
-
-    /**
-     * Sets the value of the key. This should be one of the entries in [[getEntryValues]].
-     *
-     * @param value The value to set for the key.
-     */
-    public void setValue(String value) {
-        setValue(findIndexOfValue(value), value);
-    }
-
-    /**
-     * Sets the value to the given index from the entry values.
-     *
-     * @param index The index of the value to set.
-     */
-    public void setValueIndex(int index) {
-        setValue(index, getValue(index));
     }
 
     public void setValue(int index, String value) {
@@ -217,6 +199,15 @@ public class DropDownPreference extends SummaryPreference {
         } else {
             return mEntryValues[mSelectedIndex].toString();
         }
+    }
+
+    /**
+     * Sets the value of the key. This should be one of the entries in [[getEntryValues]].
+     *
+     * @param value The value to set for the key.
+     */
+    public void setValue(String value) {
+        setValue(findIndexOfValue(value), value);
     }
 
     /**
@@ -254,6 +245,15 @@ public class DropDownPreference extends SummaryPreference {
 
     public int getValueIndex() {
         return mSelectedIndex;
+    }
+
+    /**
+     * Sets the value to the given index from the entry values.
+     *
+     * @param index The index of the value to set.
+     */
+    public void setValueIndex(int index) {
+        setValue(index, getValue(index));
     }
 
     @Override

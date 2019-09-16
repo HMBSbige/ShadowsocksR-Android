@@ -76,7 +76,9 @@ public class ShadowsocksNotification {
 
     private KeyguardManager keyGuard;
     private NotificationManager nm;
-
+    private boolean callbackRegistered;
+    private NotificationCompat.Builder builder;
+    private NotificationCompat.BigTextStyle style;
     private IShadowsocksServiceCallback.Stub callback = new IShadowsocksServiceCallback.Stub() {
 
         @Override
@@ -99,12 +101,6 @@ public class ShadowsocksNotification {
             show();
         }
     };
-
-    private boolean callbackRegistered;
-
-    private NotificationCompat.Builder builder;
-
-    private NotificationCompat.BigTextStyle style;
     private boolean isVisible = true;
 
     /**

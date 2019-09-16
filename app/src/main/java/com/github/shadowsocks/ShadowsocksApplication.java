@@ -54,24 +54,14 @@ import java.util.concurrent.TimeUnit;
 import eu.chainfire.libsuperuser.Shell;
 
 public class ShadowsocksApplication extends Application {
-    public static ShadowsocksApplication app;
-
-    private static final String TAG = ShadowsocksApplication.class.getSimpleName();
     public static final String SIG_FUNC = "getSignature";
-
-    private String[] EXECUTABLES = {
-            Constants.Executable.PDNSD,
-            Constants.Executable.REDSOCKS,
-            Constants.Executable.SS_TUNNEL,
-            Constants.Executable.SS_LOCAL,
-            Constants.Executable.TUN2SOCKS,
-            Constants.Executable.KCPTUN};
-
+    private static final String TAG = ShadowsocksApplication.class.getSimpleName();
     /**
      * The ones in Locale doesn't have script included
      */
     private static final Locale SIMPLIFIED_CHINESE;
     private static final Locale TRADITIONAL_CHINESE;
+    public static ShadowsocksApplication app;
 
     static {
         if (Build.VERSION.SDK_INT >= 21) {
@@ -84,25 +74,28 @@ public class ShadowsocksApplication extends Application {
     }
 
     public ContainerHolder containerHolder;
-
-    private Tracker tracker;
     public SharedPreferences settings;
     public SharedPreferences.Editor editor;
-
     public ProfileManager profileManager;
     public SSRSubManager ssrsubManager;
     public Resources resources;
+    public ScheduledExecutorService mThreadPool;
+    private String[] EXECUTABLES = {
+            Constants.Executable.PDNSD,
+            Constants.Executable.REDSOCKS,
+            Constants.Executable.SS_TUNNEL,
+            Constants.Executable.SS_LOCAL,
+            Constants.Executable.TUN2SOCKS,
+            Constants.Executable.KCPTUN};
+    private Tracker tracker;
 
     public boolean isNatEnabled() {
         return false;
     }
 
-
     public boolean isVpnEnabled() {
         return !isNatEnabled();
     }
-
-    public ScheduledExecutorService mThreadPool;
 
     /**
      * /// xhao: init variable

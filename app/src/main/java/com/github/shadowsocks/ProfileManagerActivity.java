@@ -79,6 +79,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import net.glxn.qrgen.android.QRCode;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +115,50 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     private boolean is_sort = false;
 
     private ServiceBoundContext mServiceBoundContext;
+    /**
+     * progress handler
+     */
+    private Handler mProgressHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_FULL_TEST_FINISH:
+                    if (testProgressDialog != null) {
+                        testProgressDialog.dismiss();
+                        testProgressDialog = null;
+                    }
+
+                    finish();
+                    startActivity(new Intent(getIntent()));
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    /**
+     * use string divider list value
+     *
+     * @param list    list
+     * @param divider divider string
+     * @return list is empty, return null.
+     */
+    public static String makeString(List<Profile> list, String divider) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            Profile item = list.get(i);
+            if (i > 0) {
+                sb.append(divider);
+            }
+            sb.append(item);
+        }
+        return sb.toString();
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -204,7 +250,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         }
     }
 
-
     private void initGroupSpinner() {
         Spinner spinner = findViewById(R.id.group_choose_spinner);
         List<String> groups_name = ShadowsocksApplication.app.profileManager.getGroupNames();
@@ -224,7 +269,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             }
         });
     }
-
 
     /**
      * init toolbar
@@ -324,7 +368,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             startActivity(new Intent(this, ScannerActivity.class));
         }
     }
-
 
     @Override
     public void onClick(View v) {
@@ -779,28 +822,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         return new NdefMessage(new NdefRecord[]{new NdefRecord(NdefRecord.TNF_ABSOLUTE_URI, nfcShareItem, new byte[]{}, nfcShareItem)});
     }
 
-    /**
-     * progress handler
-     */
-    private Handler mProgressHandler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_FULL_TEST_FINISH:
-                    if (testProgressDialog != null) {
-                        testProgressDialog.dismiss();
-                        testProgressDialog = null;
-                    }
-
-                    finish();
-                    startActivity(new Intent(getIntent()));
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
-
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
@@ -940,30 +961,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
     }
 
-
-    /**
-     * use string divider list value
-     *
-     * @param list    list
-     * @param divider divider string
-     * @return list is empty, return null.
-     */
-    public static String makeString(List<Profile> list, String divider) {
-        if (list == null || list.isEmpty()) {
-            return null;
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            Profile item = list.get(i);
-            if (i > 0) {
-                sb.append(divider);
-            }
-            sb.append(item);
-        }
-        return sb.toString();
-    }
-
     private class ProfileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnKeyListener {
 
         private Profile item;
@@ -1041,7 +1038,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 final ProgressDialog singleTestProgressDialog = ProgressDialog.show(ProfileManagerActivity.this, getString(R.string.tips_testing), getString(R.string.tips_testing), false, true);
                 PingHelper.Companion.instance().ping(ProfileManagerActivity.this, item, new PingCallback() {
                     @Override
-                    public void onSuccess(Profile profile, long elapsed) {
+                    public void onSuccess(@NotNull Profile profile, long elapsed) {
                         if (profile.elapsed == 0) {
                             profile.elapsed = elapsed;
                         } else if (profile.elapsed > elapsed) {
@@ -1084,9 +1081,9 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             pingBtn.setOnClickListener(v -> {
                 item.elapsed = 0;
                 final ProgressDialog singleTestProgressDialog = ProgressDialog.show(ProfileManagerActivity.this, getString(R.string.tips_testing), getString(R.string.tips_testing), false, true);
-                PingHelper.Companion.instance().tcp_ping(ProfileManagerActivity.this, item, new PingCallback() {
+                PingHelper.Companion.instance().tcpPing(ProfileManagerActivity.this, item, new PingCallback() {
                     @Override
-                    public void onSuccess(Profile profile, long tcpdelay) {
+                    public void onSuccess(@NotNull Profile profile, long tcpdelay) {
                         if (profile.tcpdelay == 0) {
                             profile.tcpdelay = tcpdelay;
                         } else if (profile.tcpdelay > tcpdelay) {

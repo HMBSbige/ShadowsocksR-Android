@@ -73,22 +73,6 @@ public class NumberPickerPreference extends SummaryDialogPreference {
         return this.value;
     }
 
-    public int getMin() {
-        if (picker == null) {
-            return 0;
-        }
-
-        return picker.getMinValue();
-    }
-
-    public int getMax() {
-        if (picker == null) {
-            return 0;
-        }
-
-        return picker.getMaxValue();
-    }
-
     public void setValue(int i) {
         if (i == getValue()) {
             return;
@@ -100,12 +84,28 @@ public class NumberPickerPreference extends SummaryDialogPreference {
         notifyChanged();
     }
 
+    public int getMin() {
+        if (picker == null) {
+            return 0;
+        }
+
+        return picker.getMinValue();
+    }
+
     public void setMin(int value) {
         if (picker == null) {
             return;
         }
 
         picker.setMinValue(value);
+    }
+
+    public int getMax() {
+        if (picker == null) {
+            return 0;
+        }
+
+        return picker.getMaxValue();
     }
 
     public void setMax(int value) {

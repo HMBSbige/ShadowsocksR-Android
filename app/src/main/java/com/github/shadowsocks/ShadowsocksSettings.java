@@ -97,10 +97,10 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
     private static final String[] FEATURE_PREFS = {
             Constants.Key.route, Constants.Key.proxyApps,
             Constants.Key.udpdns, Constants.Key.ipv6, Constants.Key.tfo};
-
+    public Profile profile;
     private Shadowsocks activity;
-
     private SwitchPreference isProxyApps;
+    private boolean enabled = true;
 
     /**
      * Helper functions
@@ -642,8 +642,6 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     }
 
-    private boolean enabled = true;
-
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         List<String> list = new ArrayList<>();
@@ -657,8 +655,6 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
             }
         }
     }
-
-    public Profile profile;
 
     public void setProfile(Profile profile) {
         this.profile = profile;

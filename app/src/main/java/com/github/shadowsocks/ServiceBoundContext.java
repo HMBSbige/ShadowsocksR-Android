@@ -57,39 +57,14 @@ import com.github.shadowsocks.utils.VayLog;
 public class ServiceBoundContext extends ContextWrapper implements IBinder.DeathRecipient {
 
     private static final String TAG = ServiceBoundContext.class.getSimpleName();
-
-    private IBinder binder;
     protected IShadowsocksService bgService;
-
+    private IBinder binder;
     private IShadowsocksServiceCallback callback;
     private ShadowsocksServiceConnection connection;
     private boolean callbackRegistered;
 
     public ServiceBoundContext(Context base) {
         super(base);
-    }
-
-    public class ShadowsocksServiceConnection implements ServiceConnection {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            try {
-                binder = service;
-                service.linkToDeath(ServiceBoundContext.this, 0);
-                bgService = IShadowsocksService.Stub.asInterface(service);
-                registerCallback();
-                ServiceBoundContext.this.onServiceConnected();
-            } catch (RemoteException e) {
-                VayLog.e(TAG, "onServiceConnected", e);
-            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            unregisterCallback();
-            ServiceBoundContext.this.onServiceDisconnected();
-            bgService = null;
-            binder = null;
-        }
     }
 
     /**
@@ -169,5 +144,28 @@ public class ServiceBoundContext extends ContextWrapper implements IBinder.Death
         }
 
         bgService = null;
+    }
+
+    public class ShadowsocksServiceConnection implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            try {
+                binder = service;
+                service.linkToDeath(ServiceBoundContext.this, 0);
+                bgService = IShadowsocksService.Stub.asInterface(service);
+                registerCallback();
+                ServiceBoundContext.this.onServiceConnected();
+            } catch (RemoteException e) {
+                VayLog.e(TAG, "onServiceConnected", e);
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            unregisterCallback();
+            ServiceBoundContext.this.onServiceDisconnected();
+            bgService = null;
+            binder = null;
+        }
     }
 }

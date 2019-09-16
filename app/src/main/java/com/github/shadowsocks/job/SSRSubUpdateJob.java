@@ -42,10 +42,10 @@ public class SSRSubUpdateJob extends Job {
             List<SSRSub> subs = ShadowsocksApplication.app.ssrsubManager.getAllSSRSubs();
             SubUpdateHelper.Companion.instance().updateSub(subs, new SubUpdateCallback() {
                 @Override
-                public void onSuccess(String subname) {
+                public void onSuccess(String subName) {
                     VayLog.d(TAG, "onRunJob() update sub success!");
-                    ToastUtils.showShort(getContext().getString(R.string.sub_autoupdate_success, subname));
-                    Log.i("sub", subname);
+                    ToastUtils.showShort(getContext().getString(R.string.sub_autoupdate_success, subName));
+                    Log.i("sub", subName);
                 }
 
                 @Override

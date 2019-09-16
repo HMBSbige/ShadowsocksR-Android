@@ -77,7 +77,7 @@ class SubUpdateHelper private constructor()
 		{
 			val sub = subs[position]
 			// start request
-			RequestHelper.instance()!!.get(sub.url, object : RequestCallback()
+			RequestHelper.instance()!![sub.url, object : RequestCallback()
 			{
 
 				override fun onSuccess(code: Int, response: String)
@@ -98,7 +98,7 @@ class SubUpdateHelper private constructor()
 					callback.onFailed()
 					callback.onFinished()
 				}
-			})
+			}]
 		}
 		else
 		{
@@ -122,7 +122,7 @@ class SubUpdateHelper private constructor()
 		}
 		else
 		{
-			Collections.shuffle(profiles)
+			profiles.shuffle()
 		}
 
 		for (profile in profiles)
@@ -190,14 +190,14 @@ class SubUpdateHelper private constructor()
 		fun parseSSRSub(subUrl: String, base64text: String): SSRSub?
 		{
 			val profilesSSR = Parser.findAll_ssr(String(Base64.decode(base64text, Base64.URL_SAFE)))
-			if (profilesSSR != null && !profilesSSR.isEmpty())
+			if (profilesSSR != null && profilesSSR.isNotEmpty())
 			{
 				if (!TextUtils.isEmpty(profilesSSR[0].url_group))
 				{
-					val ssrsub = SSRSub()
-					ssrsub.url = subUrl
-					ssrsub.url_group = profilesSSR[0].url_group
-					return ssrsub
+					val ssrSub = SSRSub()
+					ssrSub.url = subUrl
+					ssrSub.url_group = profilesSSR[0].url_group
+					return ssrSub
 				}
 			}
 			return null

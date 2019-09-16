@@ -133,8 +133,8 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
 
     private class ProfilesAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
 
-        private List<Profile> profiles;
         private final String name;
+        private List<Profile> profiles;
 
         public ProfilesAdapter() {
             List<Profile> profiles = ShadowsocksApplication.app.profileManager.getAllProfiles();

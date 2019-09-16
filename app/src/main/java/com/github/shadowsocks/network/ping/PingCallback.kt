@@ -12,12 +12,7 @@ open class PingCallback
 {
 
 	/**
-	 * get test result message
-	 */
-	/**
-	 * set test result message
-	 *
-	 * @param resultMsg test result message
+	 * test result message
 	 */
 	open var resultMsg: String = ""
 

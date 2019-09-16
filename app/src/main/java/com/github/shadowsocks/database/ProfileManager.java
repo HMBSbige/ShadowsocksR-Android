@@ -418,19 +418,6 @@ public class ProfileManager {
         }
     }
 
-    /**
-     * pro file added listener
-     */
-    public interface ProfileAddedListener {
-
-        /**
-         * profile added
-         *
-         * @param profile profile object
-         */
-        void onProfileAdded(Profile profile);
-    }
-
     public List<String> getGroupNames() {
         try {
             List<Profile> groupdistinktprofile = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().selectColumns("url_group").distinct().prepare());
@@ -444,6 +431,19 @@ public class ProfileManager {
             ShadowsocksApplication.app.track(e);
             return null;
         }
+    }
+
+    /**
+     * pro file added listener
+     */
+    public interface ProfileAddedListener {
+
+        /**
+         * profile added
+         *
+         * @param profile profile object
+         */
+        void onProfileAdded(Profile profile);
     }
 
 

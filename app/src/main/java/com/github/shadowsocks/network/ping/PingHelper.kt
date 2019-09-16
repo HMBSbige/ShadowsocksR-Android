@@ -70,7 +70,7 @@ private constructor()
 	 * @param profile  profile object
 	 * @param callback ping callback object
 	 */
-	fun tcp_ping(aty: Activity, profile: Profile, callback: PingCallback)
+	fun tcpPing(aty: Activity, profile: Profile, callback: PingCallback)
 	{
 		mThreadPool.execute { pingByProfile(aty, profile, callback, 2) }
 	}
@@ -161,7 +161,7 @@ private constructor()
 		}
 	}
 
-	var mUIHandler = Handler(Looper.getMainLooper())
+	private var mUIHandler = Handler(Looper.getMainLooper())
 
 
 	/**
@@ -200,7 +200,7 @@ private constructor()
 
 			val cmd = arrayOf(applicationInfo!!.nativeLibraryDir + "/libssr-local.so", "-t", "600", "-L", "www.google.com:80", "-c", applicationInfo!!.dataDir + "/libssr-local.so-test.conf")
 
-			val cmds = ArrayList(Arrays.asList(*cmd))
+			val cmds = ArrayList(listOf(*cmd))
 
 			if (TcpFastOpen.sendEnabled())
 			{
@@ -270,14 +270,13 @@ private constructor()
 
 				override fun onFailed(code: Int, msg: String)
 				{
-					val result: String
-					if (code != 404)
+					val result: String = if (code != 404)
 					{
-						result = getString(R.string.connection_test_error_status_code, code)
+						getString(R.string.connection_test_error_status_code, code)
 					}
 					else
 					{
-						result = getString(R.string.connection_test_error, msg)
+						getString(R.string.connection_test_error, msg)
 					}
 					callback.resultMsg = result
 					callback.onFailed(profile)
@@ -382,25 +381,25 @@ private constructor()
 		}
 	}
 
-	fun tcping(target: String, port: Int): Long
+	private fun tcping(target: String, port: Int): Long
 	{
 		try
 		{
-			var mindelay: Long = 5000
+			var minDelay: Long = 5000
 			for (i in 1..2)
 			{
 				val start = System.currentTimeMillis()
-				var sock = Socket()
+				val sock = Socket()
 				val socketAddress = InetSocketAddress(target, port)
 				sock.connect(socketAddress, 1000)
 				val delay = System.currentTimeMillis() - start
 				sock.close()
-				if (delay < mindelay)
+				if (delay < minDelay)
 				{
-					mindelay = delay
+					minDelay = delay
 				}
 			}
-			return mindelay
+			return minDelay
 		}
 		catch (e: UnknownHostException)
 		{
