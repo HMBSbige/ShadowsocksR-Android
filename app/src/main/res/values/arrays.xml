@@ -107,6 +107,7 @@
         <item>bypass-lan-china</item>
         <item>gfwlist</item>
         <item>china-list</item>
+        <item>whitelist</item>
         <item>self</item>
     </string-array>
 

@@ -44,7 +44,7 @@ public class AclSyncJob extends Job {
         try {
             if ("self".equals(route)) {
                 // noinspection JavaAccessorMethodCalledAsEmptyParen
-                is = new URL("https://raw.githubusercontent.com/shadowsocksr/shadowsocksr-android/nokcp/src/main/assets/acl/" + filename).openConnection().getInputStream();
+                is = new URL("https://raw.githubusercontent.com/HMBSbige/Text_Translation/master/ShadowsocksR/" + filename).openConnection().getInputStream();
                 IOUtils.writeString(ShadowsocksApplication.app.getApplicationInfo().dataDir + '/' + filename, IOUtils.readString(is));
             }
             return Result.SUCCESS;
