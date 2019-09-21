@@ -108,7 +108,7 @@ public class DropDownPreference extends SummaryPreference {
 
     @Override
     public Object getSummaryValue() {
-        return getValue();
+        return getEntry();
     }
 
     /**

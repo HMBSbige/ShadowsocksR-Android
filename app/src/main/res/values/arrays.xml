@@ -100,7 +100,7 @@
         <item>tls1.2_ticket_auth</item>
     </string-array>
 
-    <string-array name="route_value">
+    <string-array name="route_value" translatable="false">
         <item>all</item>
         <item>bypass-lan</item>
         <item>bypass-china</item>
