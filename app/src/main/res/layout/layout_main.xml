@@ -15,8 +15,6 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar_light_dark" />
-
         <LinearLayout
             android:id="@+id/stat"
             android:layout_width="match_parent"
@@ -155,6 +153,8 @@
             </androidx.gridlayout.widget.GridLayout>
         </LinearLayout>
     </LinearLayout>
+
+    <include layout="@layout/toolbar_light_dark" />
 
     <fragment
         android:id="@android:id/content"

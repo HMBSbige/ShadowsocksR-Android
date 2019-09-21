@@ -1,29 +1,15 @@
-ext {
-    supportVersion = '28.0.0'
-}
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-buildscript {
-    ext {
-        support_version = "28.0.0"
-        compile_Version = 29
-        min_version = 21
-        target_version = 28
-    }
-}
-
 android {
-    compileSdkVersion compile_Version
-    lintOptions {
-        abortOnError false
-    }
+    compileSdkVersion rootProject.compileSdkVersion
     defaultConfig {
         applicationId "com.github.shadowsocksr_hmbsbige"
-        minSdkVersion min_version
-        targetSdkVersion target_version
-        versionCode 326    // multiDex的一些相关配置，这样配置可以让你的编译速度更快
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.sdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
         dexOptions {
             // 让它不要对Lib做preDexing
             preDexLibraries = false
@@ -32,7 +18,6 @@ android {
             // 增加java堆内存大小
             javaMaxHeapSize "4g"
         }
-        versionName "3.5.4.2"
         externalNativeBuild {
             cmake {
                 cppFlags "-frtti -fexceptions"
@@ -59,15 +44,16 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility javaVersion
+        targetCompatibility javaVersion
     }
+
+    kotlinOptions.jvmTarget = javaVersion
+
+    packagingOptions.exclude '**/*.kotlin_*'
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible
     implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -86,7 +72,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-gcm:17.0.0"
     implementation "com.j256.ormlite:ormlite-android:5.1"
     implementation "com.mikepenz:fastadapter:4.0.1"
-    implementation "com.mikepenz:iconics-core:2.8.2"
+    implementation "com.mikepenz:iconics-core:4.0.0"
     implementation "com.mikepenz:materialdrawer:6.1.2"
     implementation 'com.mikepenz:materialize:1.2.1'
     implementation "com.twofortyfouram:android-plugin-api-for-locale:1.0.4"
