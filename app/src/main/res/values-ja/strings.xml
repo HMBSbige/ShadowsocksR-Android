@@ -135,7 +135,6 @@
         <item>LAN及び中国本土のアドレスを迂回する</item>
         <item>中国本土からアクセス不可なアドレス以外を迂回する</item>
         <item>中国本土のアドレス以外を迂回する</item>
-        <item>HMBSbigeのホワイトリスト</item>
         <item>カスタム ACL ファイル</item>
     </string-array>
 
