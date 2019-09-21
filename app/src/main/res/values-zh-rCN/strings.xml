@@ -136,7 +136,6 @@
         <item>绕过局域网及中国大陆地址</item>
         <item>仅代理中国大陆无法访问的地址</item>
         <item>仅代理中国大陆地址</item>
-        <item>HMBSbige-whitelist</item>
         <item>自定义 ACL 文件</item>
     </string-array>
 

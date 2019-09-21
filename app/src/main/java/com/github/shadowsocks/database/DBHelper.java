@@ -154,7 +154,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
 
 
                 if (oldVersion < 16) {
-                    profileDao.executeRawNoArgs("UPDATE `profile` SET route = 'HMBSbige-whitelist' WHERE route = 'bypass-china'");
+                    profileDao.executeRawNoArgs("UPDATE `profile` SET route = 'bypass-lan-china' WHERE route = 'bypass-china'");
                 }
 
                 if (oldVersion < 19) {

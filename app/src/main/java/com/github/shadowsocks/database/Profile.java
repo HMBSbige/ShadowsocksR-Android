@@ -73,7 +73,7 @@ public class Profile {
     @DatabaseField
     public String method = "aes-256-cfb";
     @DatabaseField
-    public String route = "HMBSbige-whitelist";
+    public String route = "all";
     @DatabaseField
     public boolean proxyApps = false;
     @DatabaseField
