@@ -60,10 +60,10 @@ public class Parser {
 
     private static final String pattern_ssr_regex = "(?i)ssr://([A-Za-z0-9_=-]+)";
     private static final String decodedPattern_ssr_regex = "(?i)^((.+):(\\d+?):(.*):(.+):(.*):([^/]+))";
-    private static final String decodedPattern_ssr_obfsparam_regex = "(?i)[?&]obfsparam=([A-Za-z0-9_=-]*)";
-    private static final String decodedPattern_ssr_remarks_regex = "(?i)[?&]remarks=([A-Za-z0-9_=-]*)";
-    private static final String decodedPattern_ssr_protocolparam_regex = "(?i)[?&]protoparam=([A-Za-z0-9_=-]*)";
-    private static final String decodedPattern_ssr_groupparam_regex = "(?i)[?&]group=([A-Za-z0-9_=-]*)";
+    private static final String decodedPattern_ssr_obfsparam_regex = "(?i)[?&]obfsparam=([A-Za-z0-9+-/=_]*)";
+    private static final String decodedPattern_ssr_remarks_regex = "(?i)[?&]remarks=([A-Za-z0-9+-/=_]*)";
+    private static final String decodedPattern_ssr_protocolparam_regex = "(?i)[?&]protoparam=([A-Za-z0-9+-/=_]*)";
+    private static final String decodedPattern_ssr_groupparam_regex = "(?i)[?&]group=([A-Za-z0-9+-/=_]*)";
 
     private static Pattern getPattern(String regex) {
         return Pattern.compile(regex);
@@ -143,24 +143,24 @@ public class Parser {
 
                     param = decodedPattern_ssr_obfsparam.matcher(uri);
                     if (param.find()) {
-                        profile.obfs_param = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                        profile.obfs_param = new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                     }
 
                     param = decodedPattern_ssr_protocolparam.matcher(uri);
                     if (param.find()) {
-                        profile.protocol_param = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                        profile.protocol_param = new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                     }
 
                     param = decodedPattern_ssr_remarks.matcher(uri);
                     if (param.find()) {
-                        profile.name = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                        profile.name = new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                     } else {
                         profile.name = ss.group(2).toLowerCase();
                     }
 
                     param = decodedPattern_ssr_groupparam.matcher(uri);
                     if (param.find()) {
-                        profile.url_group = new String(Base64.decode(param.group(1).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                        profile.url_group = new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
                     }
 
                     // add to list
