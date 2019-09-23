@@ -69,6 +69,7 @@ import com.github.shadowsocks.preferences.SummaryEditTextPreference;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.IOUtils;
 import com.github.shadowsocks.utils.TcpFastOpen;
+import com.github.shadowsocks.utils.ToastUtils;
 import com.github.shadowsocks.utils.Utils;
 import com.github.shadowsocks.utils.VayLog;
 import com.google.android.material.snackbar.Snackbar;
@@ -588,31 +589,16 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                     IOUtils.writeString(ShadowsocksApplication.app.getApplicationInfo().dataDir + '/' + "self.acl", IOUtils.readString(inputStream));
 
                     progressDialog.dismiss();
-                    new AlertDialog.Builder(activity, R.style.Theme_Material_Dialog_Alert)
-                            .setTitle(getString(R.string.aclupdate))
-                            .setNegativeButton(android.R.string.yes, null)
-                            .setMessage(getString(R.string.aclupdate_successfully))
-                            .create()
-                            .show();
+                    ToastUtils.showShort(R.string.aclupdate_successfully);
                 } catch (IOException e) {
                     e.printStackTrace();
                     progressDialog.dismiss();
-                    new AlertDialog.Builder(activity, R.style.Theme_Material_Dialog_Alert)
-                            .setTitle(getString(R.string.aclupdate))
-                            .setNegativeButton(android.R.string.yes, null)
-                            .setMessage(getString(R.string.aclupdate_failed))
-                            .create()
-                            .show();
+                    ToastUtils.showShort(R.string.aclupdate_failed);
                 } catch (Exception e) {
                     // unknown failures, probably shouldn't retry
                     e.printStackTrace();
                     progressDialog.dismiss();
-                    new AlertDialog.Builder(activity, R.style.Theme_Material_Dialog_Alert)
-                            .setTitle(getString(R.string.aclupdate))
-                            .setNegativeButton(android.R.string.yes, null)
-                            .setMessage(getString(R.string.aclupdate_failed))
-                            .create()
-                            .show();
+                    ToastUtils.showShort(R.string.aclupdate_failed);
                 } finally {
                     IOUtils.close(inputStream);
                     IOUtils.disconnect(conn);

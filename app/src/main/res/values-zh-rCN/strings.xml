@@ -145,7 +145,7 @@
     <string name="aclupdate_url_notset">很抱歉，因为您没有设置 ACL 地址，所以无法进行更新。请在路由中选择 \'自定义 ACL 文件\' 之后再进行升级尝试。</string>
 
     <string name="aclupdate_downloading">文件更新中...</string>
-    <string name="aclupdate_successfully">文件更新成功!</string>
+    <string name="aclupdate_successfully">文件更新成功！</string>
     <string name="aclupdate_failed">文件更新失败！</string>
 
     <string name="action_apply_all">应用设置到所有配置文件</string>
