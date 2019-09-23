@@ -9,23 +9,23 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:layout_marginTop="16dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/ssrsub_autoupdate_enable" />
 
     <Switch
         android:id="@+id/sw_ssr_sub_autoupdate_enable"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="14dp"
-        android:paddingStart="14dp" />
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:text="@string/ssrsub_list" />
 
     <androidx.recyclerview.widget.RecyclerView

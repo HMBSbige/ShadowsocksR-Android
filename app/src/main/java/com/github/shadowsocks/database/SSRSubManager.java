@@ -97,7 +97,7 @@ public class SSRSubManager {
     public SSRSub createDefault() {
         SSRSub ssrSub = new SSRSub();
         ssrSub.url = "https://raw.githubusercontent.com/HMBSbige/Text_Translation/master/ShadowsocksR/freenodeplain.txt";
-        ssrSub.url_group = "FreeSSR-public";
+        ssrSub.url_group = "ShadowsocksR";
         return createSSRSub(ssrSub);
     }
 

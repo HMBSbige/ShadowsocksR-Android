@@ -22,7 +22,7 @@
     <string name="remote_dns_summary">用于远程分析的DNS（默认名称服务器8.8.8.8）</string>
     <string name="stat">Network Traffic</string>
     <string name="stat_summary">Sent: \t\t\t\t\t%3$s\t↑\t%1$s/s\nReceived: \t%4$s\t↓\t%2$s/s</string>
-    <string name="stat_profiles">\n%1$s↑\t%2$s↓\t%3$sms-%4$sms</string>
+    <string name="stat_profiles">\n%1$s↑\t%2$s↓\n%3$sms - %4$sms</string>
     <string name="traffic_summary">%1$s/s↑\t%2$s/s↓</string>
     <string name="connection_test_pending">Check Connectivity</string>
     <string name="connection_test_testing">Testing…</string>

@@ -49,6 +49,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -180,15 +181,18 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
             return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
         findPreference(Constants.Key.host).setOnPreferenceClickListener(preference -> {
-            final EditText HostEditText = new EditText(activity);
+            LayoutInflater li = LayoutInflater.from(activity);
+            final View myView = li.inflate(R.layout.layout_edittext, null);
+            final EditText HostEditText = myView.findViewById(R.id.editTextInput);
             HostEditText.setText(profile.host);
             new AlertDialog.Builder(activity)
+                    .setView(myView)
                     .setTitle(getString(R.string.proxy))
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         profile.host = HostEditText.getText().toString();
                         ShadowsocksApplication.app.profileManager.updateProfile(profile);
                     })
-                    .setNegativeButton(android.R.string.no, (dialog, which) -> setProfile(profile)).setView(HostEditText).create().show();
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> setProfile(profile)).create().show();
             return true;
         });
         findPreference(Constants.Key.remotePort).setOnPreferenceChangeListener((preference, value) -> {
@@ -249,9 +253,12 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
             @Override
             public boolean onPreferenceChange(Preference preference, final Object value) {
                 if ("self".equals(value)) {
-                    final EditText AclUrlEditText = new EditText(activity);
+                    LayoutInflater li = LayoutInflater.from(activity);
+                    final View myView = li.inflate(R.layout.layout_edittext, null);
+                    final EditText AclUrlEditText = myView.findViewById(R.id.editTextInput);
                     AclUrlEditText.setText(getPreferenceManager().getSharedPreferences().getString(Constants.Key.aclurl, ""));
                     new AlertDialog.Builder(activity)
+                            .setView(myView)
                             .setTitle(getString(R.string.acl_file))
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
@@ -271,7 +278,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                                     setProfile(profile);
                                 }
                             })
-                            .setView(AclUrlEditText).create().show();
+                            .create().show();
                 } else {
                     ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.route, (String) value);
                 }
@@ -446,7 +453,9 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 ShadowsocksApplication.app.track(TAG, "logcat");
-                EditText et_logcat = new EditText(activity);
+                LayoutInflater li = LayoutInflater.from(activity);
+                final View myView = li.inflate(R.layout.layout_edittext, null);
+                EditText et_logcat = myView.findViewById(R.id.editTextInput);
                 try {
                     Process logcat = Runtime.getRuntime().exec("logcat -d");
                     BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
@@ -464,9 +473,9 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                 }
 
                 new AlertDialog.Builder(activity)
+                        .setView(myView)
                         .setTitle("Logcat")
                         .setNegativeButton(getString(android.R.string.ok), null)
-                        .setView(et_logcat)
                         .create()
                         .show();
                 return true;

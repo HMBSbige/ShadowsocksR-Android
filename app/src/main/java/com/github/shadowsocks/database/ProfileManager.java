@@ -359,14 +359,14 @@ public class ProfileManager {
      */
     public Profile createDefault() {
         Profile profile = new Profile();
-        profile.name = "Android SSR Default";
+        profile.name = "ShadowsocksR";
         profile.host = "1.1.1.1";
         profile.remotePort = 80;
         profile.password = "androidssr";
         profile.protocol = "auth_chain_a";
         profile.obfs = "http_simple";
         profile.method = "none";
-        profile.url_group = "FreeSSR-public";
+        profile.url_group = "ShadowsocksR";
         return createProfile(profile);
     }
 
