@@ -27,6 +27,6 @@ public class ShadowsocksBackupAgent extends BackupAgentHelper {
         super.onCreate();
         SharedPreferencesBackupHelper helper = new SharedPreferencesBackupHelper(this, PREFS_DISPLAY);
         addHelper(MY_PREFS_BACKUP_KEY, helper);
-        addHelper(DATABASE, new FileBackupHelper(this, "../databases/" + DBHelper.PROFILE));
+        addHelper(DATABASE, new FileBackupHelper(this, "../databases/" + DBHelper.Companion.getPROFILE()));
     }
 }

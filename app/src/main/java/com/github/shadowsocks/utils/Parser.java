@@ -86,16 +86,16 @@ public class Parser {
                 Matcher ss = decodedPattern.matcher(new String(Base64.decode(m.group(1), Base64.NO_PADDING), StandardCharsets.UTF_8));
                 if (ss.find()) {
                     Profile profile = new Profile();
-                    profile.method = ss.group(2).toLowerCase();
+                    profile.setMethod(ss.group(2).toLowerCase());
                     if (ss.group(3) != null) {
-                        profile.protocol = "verify_sha1";
+                        profile.setProtocol("verify_sha1");
                     }
-                    profile.password = ss.group(4);
-                    profile.name = ss.group(5);
-                    profile.host = profile.name;
-                    profile.remotePort = Integer.parseInt(ss.group(6));
+                    profile.setPassword(ss.group(4));
+                    profile.setName(ss.group(5));
+                    profile.setHost(profile.getName());
+                    profile.setRemotePort(Integer.parseInt(ss.group(6)));
                     if (m.group(2) != null) {
-                        profile.name = URLDecoder.decode(m.group(3), "utf-8");
+                        profile.setName(URLDecoder.decode(m.group(3), "utf-8"));
                     }
                     list.add(profile);
                 }
@@ -132,35 +132,35 @@ public class Parser {
                 Matcher ss = decodedPattern_ssr.matcher(uri);
                 if (ss.find()) {
                     Profile profile = new Profile();
-                    profile.host = ss.group(2).toLowerCase();
-                    profile.remotePort = Integer.parseInt(ss.group(3));
-                    profile.protocol = ss.group(4).toLowerCase();
-                    profile.method = ss.group(5).toLowerCase();
-                    profile.obfs = ss.group(6).toLowerCase();
-                    profile.password = new String(Base64.decode(ss.group(7).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                    profile.setHost(ss.group(2).toLowerCase());
+                    profile.setRemotePort(Integer.parseInt(ss.group(3)));
+                    profile.setProtocol(ss.group(4).toLowerCase());
+                    profile.setMethod(ss.group(5).toLowerCase());
+                    profile.setObfs(ss.group(6).toLowerCase());
+                    profile.setPassword(new String(Base64.decode(ss.group(7).replaceAll("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8));
 
                     Matcher param = null;
 
                     param = decodedPattern_ssr_obfsparam.matcher(uri);
                     if (param.find()) {
-                        profile.obfs_param = new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                        profile.setObfs_param(new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8));
                     }
 
                     param = decodedPattern_ssr_protocolparam.matcher(uri);
                     if (param.find()) {
-                        profile.protocol_param = new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                        profile.setProtocol_param(new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8));
                     }
 
                     param = decodedPattern_ssr_remarks.matcher(uri);
                     if (param.find()) {
-                        profile.name = new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                        profile.setName(new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8));
                     } else {
-                        profile.name = ss.group(2).toLowerCase();
+                        profile.setName(ss.group(2).toLowerCase());
                     }
 
                     param = decodedPattern_ssr_groupparam.matcher(uri);
                     if (param.find()) {
-                        profile.url_group = new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8);
+                        profile.setUrl_group(new String(Base64.decode(param.group(1).replace('/', '_').replace('+', '-').replace("=", ""), Base64.URL_SAFE), StandardCharsets.UTF_8));
                     }
 
                     // add to list

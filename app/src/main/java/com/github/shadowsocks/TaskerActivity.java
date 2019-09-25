@@ -63,7 +63,7 @@ public class TaskerActivity extends AppCompatActivity {
             List<Profile> profiles = profilesAdapter.profiles;
             for (int i = 0; i < profiles.size(); i++) {
                 Profile profile = profiles.get(i);
-                if (profile.id == taskerOption.profileId) {
+                if (profile.getId() == taskerOption.profileId) {
                     position = i + 1;
                     break;
                 }
@@ -95,14 +95,14 @@ public class TaskerActivity extends AppCompatActivity {
 
         public void bind(Profile item) {
             this.item = item;
-            text.setText(item.name);
-            text.setChecked(taskerOption.profileId == item.id);
+            text.setText(item.getName());
+            text.setChecked(taskerOption.profileId == item.getId());
         }
 
         @Override
         public void onClick(View v) {
             taskerOption.switchOn = mSwitch.isChecked();
-            taskerOption.profileId = item == null ? -1 : item.id;
+            taskerOption.profileId = item == null ? -1 : item.getId();
             setResult(RESULT_OK, taskerOption.toIntent(TaskerActivity.this));
             finish();
         }

@@ -522,7 +522,7 @@ public class Shadowsocks extends AppCompatActivity {
 
     private boolean updateCurrentProfile() {
         // Check if current profile changed
-        if (preferences.profile == null || ShadowsocksApplication.app.profileId() != preferences.profile.id) {
+        if (preferences.profile == null || ShadowsocksApplication.app.profileId() != preferences.profile.getId()) {
             // updated
             Profile profile = ShadowsocksApplication.app.currentProfile();
             if (profile == null) {
@@ -530,9 +530,9 @@ public class Shadowsocks extends AppCompatActivity {
                 Profile first = ShadowsocksApplication.app.profileManager.getFirstProfile();
                 int id;
                 if (first != null) {
-                    id = first.id;
+                    id = first.getId();
                 } else {
-                    id = ShadowsocksApplication.app.profileManager.createDefault().id;
+                    id = ShadowsocksApplication.app.profileManager.createDefault().getId();
                 }
 
                 profile = ShadowsocksApplication.app.switchProfile(id);

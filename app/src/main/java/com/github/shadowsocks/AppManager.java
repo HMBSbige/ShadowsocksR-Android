@@ -61,7 +61,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
     private Profile profile = ShadowsocksApplication.app.currentProfile();
 
     private void initProxiedApps() {
-        initProxiedApps(profile.individual);
+        initProxiedApps(profile.getIndividual());
     }
 
     private void initProxiedApps(String str) {
@@ -89,13 +89,13 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
             case R.id.action_apply_all:
                 List<Profile> profiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
                 if (profiles != null) {
-                    proxiedAppString = profile.individual;
-                    boolean in_proxyapp = profile.proxyApps;
-                    boolean in_bypass = profile.bypass;
+                    proxiedAppString = profile.getIndividual();
+                    boolean in_proxyapp = profile.getProxyApps();
+                    boolean in_bypass = profile.getBypass();
                     for (Profile p : profiles) {
-                        p.individual = proxiedAppString;
-                        p.bypass = in_bypass;
-                        p.proxyApps = in_proxyapp;
+                        p.setIndividual(proxiedAppString);
+                        p.setBypass(in_bypass);
+                        p.setProxyApps(in_proxyapp);
                         ShadowsocksApplication.app.profileManager.updateProfile(p);
                     }
                     ToastUtils.showShort(R.string.action_apply_all);
@@ -104,8 +104,8 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
                 }
                 return true;
             case R.id.action_export:
-                boolean bypass = profile.bypass;
-                proxiedAppString = profile.individual;
+                boolean bypass = profile.getBypass();
+                proxiedAppString = profile.getIndividual();
                 ClipData clip = ClipData.newPlainText(Constants.Key.individual, bypass + "\n" + proxiedAppString);
                 if (clipboard != null) {
                     clipboard.setPrimaryClip(clip);
@@ -131,7 +131,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
                                 }
 
                                 bypassSwitch.setChecked(Boolean.parseBoolean(enabled));
-                                profile.individual = apps;
+                                profile.setIndividual(apps);
                                 ShadowsocksApplication.app.profileManager.updateProfile(profile);
                                 ToastUtils.showShort(R.string.action_import_msg);
                                 appListView.setVisibility(View.GONE);
@@ -180,24 +180,24 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
         toolbar.inflateMenu(R.menu.app_manager_menu);
         toolbar.setOnMenuItemClickListener(this);
 
-        if (!profile.proxyApps) {
-            profile.proxyApps = true;
+        if (!profile.getProxyApps()) {
+            profile.setProxyApps(true);
             ShadowsocksApplication.app.profileManager.updateProfile(profile);
         }
 
         ((Switch) findViewById(R.id.onSwitch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean checked) {
-                profile.proxyApps = checked;
+                profile.setProxyApps(checked);
                 ShadowsocksApplication.app.profileManager.updateProfile(profile);
                 finish();
             }
         });
 
         bypassSwitch = findViewById(R.id.bypassSwitch);
-        bypassSwitch.setChecked(profile.bypass);
+        bypassSwitch.setChecked(profile.getBypass());
         bypassSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            profile.bypass = isChecked;
+            profile.setBypass(isChecked);
             ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
         initProxiedApps();
@@ -346,7 +346,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
                 check.setChecked(true);
             }
             if (!appsLoading.get()) {
-                profile.individual = Utils.makeString(proxiedApps, "\n");
+                profile.setIndividual(Utils.makeString(proxiedApps, "\n"));
                 ShadowsocksApplication.app.profileManager.updateProfile(profile);
             }
         }

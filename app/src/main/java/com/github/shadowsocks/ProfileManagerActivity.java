@@ -294,7 +294,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         List<Profile> profiles = profilesAdapter.profiles;
         for (int i = 0; i < profiles.size(); i++) {
             Profile profile = profiles.get(i);
-            if (profile.id == ShadowsocksApplication.app.profileId()) {
+            if (profile.getId() == ShadowsocksApplication.app.profileId()) {
                 position = i;
             }
         }
@@ -376,7 +376,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 menu.toggle(true);
                 Profile profile = ShadowsocksApplication.app.profileManager.createProfile();
                 ShadowsocksApplication.app.profileManager.updateProfile(profile);
-                ShadowsocksApplication.app.switchProfile(profile.id);
+                ShadowsocksApplication.app.switchProfile(profile.getId());
                 finish();
                 break;
             case R.id.fab_qrcode_add:
@@ -542,22 +542,22 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 .setTitle(getString(R.string.ssrsub_remove_tip_title))
                 .setPositiveButton(R.string.ssrsub_remove_tip_direct, (dialog, which) -> {
                     ssrsubAdapter.remove(index);
-                    ShadowsocksApplication.app.ssrsubManager.delSSRSub(((SSRSubViewHolder) viewHolder).item.id);
+                    ShadowsocksApplication.app.ssrsubManager.delSSRSub(((SSRSubViewHolder) viewHolder).item.getId());
                 })
                 .setNegativeButton(android.R.string.no, (dialog, which) -> ssrsubAdapter.notifyDataSetChanged())
                 .setNeutralButton(R.string.ssrsub_remove_tip_delete, (dialog, which) -> {
-                    String group = ((SSRSubViewHolder) viewHolder).item.url_group;
+                    String group = ((SSRSubViewHolder) viewHolder).item.getUrl_group();
                     List<Profile> deleteProfiles = ShadowsocksApplication.app.profileManager.getAllProfilesByGroup(group);
 
                     for (Profile profile : deleteProfiles) {
-                        if (profile.id != ShadowsocksApplication.app.profileId()) {
-                            ShadowsocksApplication.app.profileManager.delProfile(profile.id);
+                        if (profile.getId() != ShadowsocksApplication.app.profileId()) {
+                            ShadowsocksApplication.app.profileManager.delProfile(profile.getId());
                         }
                     }
 
                     int index1 = viewHolder.getAdapterPosition();
                     ssrsubAdapter.remove(index1);
-                    ShadowsocksApplication.app.ssrsubManager.delSSRSub(((SSRSubViewHolder) viewHolder).item.id);
+                    ShadowsocksApplication.app.ssrsubManager.delSSRSub(((SSRSubViewHolder) viewHolder).item.getId());
 
                     finish();
                     startActivity(new Intent(getIntent()));
@@ -886,15 +886,15 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
                     @Override
                     public void onSuccess(Profile profile, long elapsed) {
-                        profile.elapsed = elapsed;
+                        profile.setElapsed(elapsed);
                         ShadowsocksApplication.app.profileManager.updateProfile(profile);
                         // set progress message
-                        setProgressMessage(profile.name + " " + getResultMsg());
+                        setProgressMessage(profile.getName() + " " + getResultMsg());
                     }
 
                     @Override
                     public void onFailed(Profile profile) {
-                        profile.elapsed = -1;
+                        profile.setElapsed(-1);
                         ShadowsocksApplication.app.profileManager.updateProfile(profile);
 
                         // set progress message
@@ -924,15 +924,15 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
                     @Override
                     public void onSuccess(Profile profile, long tcpdelay) {
-                        profile.tcpdelay = tcpdelay;
+                        profile.setTcpdelay(tcpdelay);
                         ShadowsocksApplication.app.profileManager.updateProfile(profile);
                         // set progress message
-                        setProgressMessage(profile.name + " " + getResultMsg());
+                        setProgressMessage(profile.getName() + " " + getResultMsg());
                     }
 
                     @Override
                     public void onFailed(Profile profile) {
-                        profile.elapsed = -1;
+                        profile.setElapsed(-1);
                         ShadowsocksApplication.app.profileManager.updateProfile(profile);
 
                         // set progress message
@@ -1034,19 +1034,19 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         private void initPingBtn() {
             final ImageView pingBtn = itemView.findViewById(R.id.ping_single);
             pingBtn.setOnClickListener(v -> {
-                item.elapsed = 0;
+                item.setElapsed(0);
                 final ProgressDialog singleTestProgressDialog = ProgressDialog.show(ProfileManagerActivity.this, getString(R.string.tips_testing), getString(R.string.tips_testing), false, true);
                 PingHelper.Companion.instance().ping(ProfileManagerActivity.this, item, new PingCallback() {
                     @Override
                     public void onSuccess(@NotNull Profile profile, long elapsed) {
-                        if (profile.elapsed == 0) {
-                            profile.elapsed = elapsed;
-                        } else if (profile.elapsed > elapsed) {
-                            profile.elapsed = elapsed;
+                        if (profile.getElapsed() == 0) {
+                            profile.setElapsed(elapsed);
+                        } else if (profile.getElapsed() > elapsed) {
+                            profile.setElapsed(elapsed);
                         }
 
                         ShadowsocksApplication.app.profileManager.updateProfile(profile);
-                        updateText(profile.tx, profile.rx, elapsed, profile.tcpdelay);
+                        updateText(profile.getTx(), profile.getRx(), elapsed, profile.getTcpdelay());
                     }
 
                     @Override
@@ -1079,19 +1079,19 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         private void initTcpPingBtn() {
             final ImageView pingBtn = itemView.findViewById(R.id.tcp_ping_single);
             pingBtn.setOnClickListener(v -> {
-                item.elapsed = 0;
+                item.setElapsed(0);
                 final ProgressDialog singleTestProgressDialog = ProgressDialog.show(ProfileManagerActivity.this, getString(R.string.tips_testing), getString(R.string.tips_testing), false, true);
                 PingHelper.Companion.instance().tcpPing(ProfileManagerActivity.this, item, new PingCallback() {
                     @Override
                     public void onSuccess(@NotNull Profile profile, long tcpdelay) {
-                        if (profile.tcpdelay == 0) {
-                            profile.tcpdelay = tcpdelay;
-                        } else if (profile.tcpdelay > tcpdelay) {
-                            profile.tcpdelay = tcpdelay;
+                        if (profile.getTcpdelay() == 0) {
+                            profile.setTcpdelay(tcpdelay);
+                        } else if (profile.getTcpdelay() > tcpdelay) {
+                            profile.setTcpdelay(tcpdelay);
                         }
 
                         ShadowsocksApplication.app.profileManager.updateProfile(profile);
-                        updateText(profile.tx, profile.rx, profile.elapsed, tcpdelay);
+                        updateText(profile.getTx(), profile.getRx(), profile.getElapsed(), tcpdelay);
                     }
 
                     @Override
@@ -1129,18 +1129,18 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public void updateText(long txTotal, long rxTotal, long elapsedInput, long tcpdelayInput) {
             final SpannableStringBuilder builder = new SpannableStringBuilder();
-            long tx = item.tx + txTotal;
-            long rx = item.rx + rxTotal;
-            long elapsed = item.elapsed;
-            long tcpdelay = item.tcpdelay;
+            long tx = item.getTx() + txTotal;
+            long rx = item.getRx() + rxTotal;
+            long elapsed = item.getElapsed();
+            long tcpdelay = item.getTcpdelay();
             if (elapsedInput != -1) {
                 elapsed = elapsedInput;
             }
             if (tcpdelayInput != -1) {
                 tcpdelay = tcpdelayInput;
             }
-            builder.append(item.name);
-            if (tx != 0 || rx != 0 || elapsed != 0 || item.url_group != "") {
+            builder.append(item.getName());
+            if (tx != 0 || rx != 0 || elapsed != 0 || item.getUrl_group() != "") {
                 int start = builder.length();
                 builder.append(getString(R.string.stat_profiles,
                         TrafficMonitor.formatTraffic(tx), TrafficMonitor.formatTraffic(rx), String.valueOf(tcpdelay), String.valueOf(elapsed)));
@@ -1154,7 +1154,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         public void bind(Profile item) {
             this.item = item;
             updateText();
-            if (item.id == ShadowsocksApplication.app.profileId()) {
+            if (item.getId() == ShadowsocksApplication.app.profileId()) {
                 text.setChecked(true);
                 selectedItem = this;
             } else {
@@ -1167,7 +1167,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         @Override
         public void onClick(View v) {
-            ShadowsocksApplication.app.switchProfile(item.id);
+            ShadowsocksApplication.app.switchProfile(item.getId());
             finish();
         }
 
@@ -1268,16 +1268,16 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             undoManager.flush();
             int step = from < to ? 1 : -1;
             Profile first = profiles.get(from);
-            long previousOrder = profiles.get(from).userOrder;
+            long previousOrder = profiles.get(from).getUserOrder();
             for (int i = from; i < to; i += step) {
                 Profile next = profiles.get(i + step);
-                long order = next.userOrder;
-                next.userOrder = previousOrder;
+                long order = next.getUserOrder();
+                next.setUserOrder(previousOrder);
                 previousOrder = order;
                 profiles.set(i, next);
                 ShadowsocksApplication.app.profileManager.updateProfile(next);
             }
-            first.userOrder = previousOrder;
+            first.setUserOrder(previousOrder);
             profiles.set(to, first);
             ShadowsocksApplication.app.profileManager.updateProfile(first);
             notifyItemMoved(from, to);
@@ -1285,7 +1285,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public void remove(int pos) {
             Profile remove = profiles.remove(pos);
-            ShadowsocksApplication.app.profileManager.delProfile(remove.id);
+            ShadowsocksApplication.app.profileManager.delProfile(remove.getId());
             notifyItemRemoved(pos);
 
         }
@@ -1304,8 +1304,8 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             for (int index = 0; index < actions.size(); index++) {
                 Profile item = actions.get(index);
                 if (item != null) {
-                    ShadowsocksApplication.app.profileManager.delProfile(item.id);
-                    if (item.id == ShadowsocksApplication.app.profileId()) {
+                    ShadowsocksApplication.app.profileManager.delProfile(item.getId());
+                    if (item.getId() == ShadowsocksApplication.app.profileId()) {
                         ShadowsocksApplication.app.profileId(-1);
                     }
                 }
@@ -1331,10 +1331,10 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public void updateText(boolean isShowUrl) {
             final SpannableStringBuilder builder = new SpannableStringBuilder();
-            builder.append(this.item.url_group).append("\n");
+            builder.append(this.item.getUrl_group()).append("\n");
             if (isShowUrl) {
                 int start = builder.length();
-                builder.append(this.item.url);
+                builder.append(this.item.getUrl());
                 builder.setSpan(new TextAppearanceSpan(ProfileManagerActivity.this, android.R.style.TextAppearance_Small),
                         start,
                         builder.length(),

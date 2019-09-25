@@ -114,7 +114,7 @@ public abstract class BaseVpnService extends VpnService {
             if (profile == null) {
                 return null;
             } else {
-                return profile.name;
+                return profile.getName();
             }
         }
 
@@ -171,7 +171,7 @@ public abstract class BaseVpnService extends VpnService {
                             }
                             break;
                         case Constants.State.CONNECTED:
-                            if (profileId != BaseVpnService.this.profile.id && checkProfile(profile)) {
+                            if (profileId != BaseVpnService.this.profile.getId() && checkProfile(profile)) {
                                 stopRunner(false);
                                 startRunner(profile);
                             }
@@ -195,7 +195,7 @@ public abstract class BaseVpnService extends VpnService {
     }
 
     private boolean checkProfile(Profile profile) {
-        if (TextUtils.isEmpty(profile.host) || TextUtils.isEmpty(profile.password)) {
+        if (TextUtils.isEmpty(profile.getHost()) || TextUtils.isEmpty(profile.getPassword())) {
             stopRunner(true, getString(R.string.proxy_empty));
             return false;
         } else {
@@ -204,7 +204,7 @@ public abstract class BaseVpnService extends VpnService {
     }
 
     public void connect() throws NameNotResolvedException, KcpcliParseException, NullConnectionException {
-        if ("198.199.101.152".equals(profile.host)) {
+        if ("198.199.101.152".equals(profile.getHost())) {
             ContainerHolder holder = ShadowsocksApplication.app.containerHolder;
             Container container = holder.getContainer();
             String url = container.getString("proxy_url");
@@ -245,10 +245,10 @@ public abstract class BaseVpnService extends VpnService {
                 List<String> proxies = Arrays.asList(list.split("|"));
                 Collections.shuffle(proxies);
                 String[] proxy = proxies.get(0).split(":");
-                profile.host = proxy[0].trim();
-                profile.remotePort = Integer.parseInt(proxy[1].trim());
-                profile.password = proxy[2].trim();
-                profile.method = proxy[3].trim();
+                profile.setHost(proxy[0].trim());
+                profile.setRemotePort(Integer.parseInt(proxy[1].trim()));
+                profile.setPassword(proxy[2].trim());
+                profile.setMethod(proxy[3].trim());
             } catch (Exception e) {
                 VayLog.e(TAG, "connect", e);
                 ShadowsocksApplication.app.track(e);
@@ -339,11 +339,11 @@ public abstract class BaseVpnService extends VpnService {
         // avoid race conditions without locking
         Profile profile = this.profile;
         if (profile != null) {
-            Profile p = ShadowsocksApplication.app.profileManager.getProfile(profile.id);
+            Profile p = ShadowsocksApplication.app.profileManager.getProfile(profile.getId());
             if (p != null) {
                 // default profile may have host, etc. modified
-                p.tx += tx;
-                p.rx += rx;
+                p.setTx(p.getTx() + tx);
+                p.setRx(p.getRx() + rx);
                 ShadowsocksApplication.app.profileManager.updateProfile(p);
             }
         }

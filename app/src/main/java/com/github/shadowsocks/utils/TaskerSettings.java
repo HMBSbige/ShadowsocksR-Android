@@ -82,7 +82,7 @@ public class TaskerSettings {
         Profile p = ShadowsocksApplication.app.profileManager.getProfile(profileId);
         if (p != null) {
             int strId = switchOn ? R.string.start_service : R.string.stop_service;
-            value = context.getString(strId, p.name);
+            value = context.getString(strId, p.getName());
         } else {
             int strId = switchOn ? R.string.start_service_default : R.string.stop;
             value = context.getString(strId);

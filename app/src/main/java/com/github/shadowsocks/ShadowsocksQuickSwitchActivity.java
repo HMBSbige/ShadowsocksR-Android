@@ -87,7 +87,7 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
             List<Profile> profiles = profilesAdapter.profiles;
             for (int i = 0; i < profiles.size(); i++) {
                 Profile profile = profiles.get(i);
-                if (profile.id == ShadowsocksApplication.app.profileId()) {
+                if (profile.getId() == ShadowsocksApplication.app.profileId()) {
                     position = i + 1;
                     break;
                 }
@@ -119,13 +119,13 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
 
         public void bind(Profile item) {
             this.item = item;
-            text.setText(item.name);
-            text.setChecked(item.id == ShadowsocksApplication.app.profileId());
+            text.setText(item.getName());
+            text.setChecked(item.getId() == ShadowsocksApplication.app.profileId());
         }
 
         @Override
         public void onClick(View v) {
-            ShadowsocksApplication.app.switchProfile(item.id);
+            ShadowsocksApplication.app.switchProfile(item.getId());
             Utils.startSsService(ShadowsocksQuickSwitchActivity.this);
             finish();
         }
