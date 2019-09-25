@@ -257,16 +257,14 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 profile.host,
                 profile.remotePort,
                 profile.localPort,
-                Constants.ConfigUtils.EscapedJson(profile.password),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.password),
                 profile.method,
                 600,
                 profile.protocol,
                 profile.obfs,
-                Constants.ConfigUtils.EscapedJson(profile.obfs_param),
-                Constants.ConfigUtils.EscapedJson(profile.protocol_param));
-
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.obfs_param),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.protocol_param));
         Utils.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-udp-vpn.conf"), conf);
-
         //val old_ld = Os.getenv("LD_PRELOAD")
 
         //Os.setenv("LD_PRELOAD", getApplicationInfo().dataDir + "/lib/libproxychains4.so", true)
@@ -304,10 +302,10 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 profile.host,
                 profile.remotePort,
                 profile.localPort,
-                Constants.ConfigUtils.EscapedJson(profile.password),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.password),
                 profile.method, 600, profile.protocol, profile.obfs,
-                Constants.ConfigUtils.EscapedJson(profile.obfs_param),
-                Constants.ConfigUtils.EscapedJson(profile.protocol_param));
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.obfs_param),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.protocol_param));
 
         Utils.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-vpn.conf"), conf);
 
@@ -362,13 +360,13 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 profile.host,
                 profile.remotePort,
                 profile.localPort + 63,
-                Constants.ConfigUtils.EscapedJson(profile.password),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.password),
                 profile.method,
                 600,
                 profile.protocol,
                 profile.obfs,
-                Constants.ConfigUtils.EscapedJson(profile.obfs_param),
-                Constants.ConfigUtils.EscapedJson(profile.protocol_param));
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.obfs_param),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.protocol_param));
         Utils.printToFile(new File(getApplicationInfo().dataDir + "/ss-tunnel-vpn.conf"), conf);
 
         //val old_ld = Os.getenv("LD_PRELOAD")
