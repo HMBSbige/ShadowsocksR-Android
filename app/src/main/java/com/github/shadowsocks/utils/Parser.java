@@ -103,7 +103,7 @@ public class Parser {
             return list;
         } catch (Exception e) {
             // Ignore
-            VayLog.e(TAG, "findAll", e);
+            VayLog.INSTANCE.e(TAG, "findAll", e);
             ShadowsocksApplication.app.track(e);
             return null;
         }
@@ -170,7 +170,7 @@ public class Parser {
             return list;
         } catch (Exception e) {
             // Ignore
-            VayLog.e(TAG, "findAll", e);
+            VayLog.INSTANCE.e(TAG, "findAll", e);
             ShadowsocksApplication.app.track(e);
             return null;
         }

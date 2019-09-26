@@ -112,7 +112,7 @@ public class ShadowsocksRunnerService extends ServiceBoundService {
         try {
             bgService.use(ShadowsocksApplication.app.profileId());
         } catch (RemoteException e) {
-            VayLog.e(TAG, "startBackgroundService", e);
+            VayLog.INSTANCE.e(TAG, "startBackgroundService", e);
             ShadowsocksApplication.app.track(e);
         }
     }

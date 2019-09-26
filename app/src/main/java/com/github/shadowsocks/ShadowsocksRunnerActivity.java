@@ -143,7 +143,7 @@ public class ShadowsocksRunnerActivity extends Activity {
                 }
             }
         } else {
-            VayLog.e(TAG, "Failed to start VpnService");
+            VayLog.INSTANCE.e(TAG, "Failed to start VpnService");
         }
         finish();
     }

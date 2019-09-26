@@ -97,7 +97,7 @@ public class TrafficMonitorThread extends Thread {
     @Override
     public void run() {
         boolean deleteResult = new File(PATH).delete();
-        VayLog.d(TAG, "run() delete file = " + deleteResult);
+        VayLog.INSTANCE.d(TAG, "run() delete file = " + deleteResult);
 
         if (!initServerSocket()) {
             return;
@@ -109,7 +109,7 @@ public class TrafficMonitorThread extends Thread {
                 // handle socket
                 handleLocalSocket(socket);
             } catch (Exception e) {
-                VayLog.e(TAG, "Error when accept socket", e);
+                VayLog.INSTANCE.e(TAG, "Error when accept socket", e);
                 ShadowsocksApplication.app.track(e);
 
                 initServerSocket();
@@ -145,7 +145,7 @@ public class TrafficMonitorThread extends Thread {
                     IOUtils.INSTANCE.close(input);
                     IOUtils.INSTANCE.close(output);
                 } catch (Exception e) {
-                    VayLog.e(TAG, "handleLocalSocket() Error when recv traffic stat", e);
+                    VayLog.INSTANCE.e(TAG, "handleLocalSocket() Error when recv traffic stat", e);
                     ShadowsocksApplication.app.track(e);
                 } finally {
                     // close socket
@@ -178,7 +178,7 @@ public class TrafficMonitorThread extends Thread {
             serverSocket = new LocalServerSocket(localSocket.getFileDescriptor());
             return true;
         } catch (IOException e) {
-            VayLog.e(TAG, "unable to bind", e);
+            VayLog.INSTANCE.e(TAG, "unable to bind", e);
             return false;
         }
     }

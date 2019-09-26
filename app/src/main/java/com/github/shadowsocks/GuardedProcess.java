@@ -40,7 +40,7 @@ public class GuardedProcess {
                 try {
                     RestartCallback callback = null;
                     while (!isDestroyed) {
-                        VayLog.i(TAG, "start process: " + cmd);
+                        VayLog.INSTANCE.i(TAG, "start process: " + cmd);
                         long startTime = System.currentTimeMillis();
 
                         process = new ProcessBuilder(cmd).redirectErrorStream(true).start();
@@ -70,7 +70,7 @@ public class GuardedProcess {
 
                     }
                 } catch (Exception ignored) {
-                    VayLog.i(TAG, "thread interrupt, destroy process: " + cmd);
+                    VayLog.INSTANCE.i(TAG, "thread interrupt, destroy process: " + cmd);
                     if (process != null) {
                         process.destroy();
                     }
@@ -140,7 +140,7 @@ public class GuardedProcess {
                 bufferedReader = new BufferedReader(new InputStreamReader(is));
                 String temp = null;
                 while ((temp = bufferedReader.readLine()) != null) {
-                    VayLog.e(tag, temp);
+                    VayLog.INSTANCE.e(tag, temp);
                 }
             } catch (Exception e) {
                 int i = 0;

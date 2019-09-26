@@ -149,7 +149,7 @@ public abstract class BaseVpnService extends VpnService {
                 try {
                     cb.trafficUpdated(TrafficMonitor.txRate, TrafficMonitor.rxRate, TrafficMonitor.txTotal, TrafficMonitor.rxTotal);
                 } catch (RemoteException e) {
-                    VayLog.e(TAG, "registerCallback", e);
+                    VayLog.INSTANCE.e(TAG, "registerCallback", e);
                     ShadowsocksApplication.app.track(e);
                 }
             }
@@ -177,7 +177,7 @@ public abstract class BaseVpnService extends VpnService {
                             }
                             break;
                         default:
-                            VayLog.w(TAG, "Illegal state when invoking use: " + state);
+                            VayLog.INSTANCE.w(TAG, "Illegal state when invoking use: " + state);
                             break;
                     }
                 }
@@ -250,7 +250,7 @@ public abstract class BaseVpnService extends VpnService {
                 profile.setPassword(proxy[2].trim());
                 profile.setMethod(proxy[3].trim());
             } catch (Exception e) {
-                VayLog.e(TAG, "connect", e);
+                VayLog.INSTANCE.e(TAG, "connect", e);
                 ShadowsocksApplication.app.track(e);
                 stopRunner(true, e.getMessage());
             }

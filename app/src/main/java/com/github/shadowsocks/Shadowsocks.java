@@ -161,7 +161,7 @@ public class Shadowsocks extends AppCompatActivity {
                                 Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
                                         String.format(Locale.ENGLISH, getString(R.string.vpn_error), m), Snackbar.LENGTH_LONG);
                                 snackbar.show();
-                                VayLog.e(TAG, "Error to start VPN service: " + m);
+                                VayLog.INSTANCE.e(TAG, "Error to start VPN service: " + m);
                             }
                             preferences.setEnabled(true);
                             stat.setVisibility(View.GONE);
@@ -654,7 +654,7 @@ public class Shadowsocks extends AppCompatActivity {
             serviceLoad();
         } else {
             cancelStart();
-            VayLog.e(TAG, "Failed to start VpnService");
+            VayLog.INSTANCE.e(TAG, "Failed to start VpnService");
         }
     }
 

@@ -62,7 +62,7 @@ public class ShadowsocksVpnThread extends Thread {
     @Override
     public void run() {
         boolean deleteFlag = new File(PATH).delete();
-        VayLog.d(TAG, "run() delete file = " + deleteFlag);
+        VayLog.INSTANCE.d(TAG, "run() delete file = " + deleteFlag);
 
         if (!initServerSocket()) {
             return;
@@ -74,7 +74,7 @@ public class ShadowsocksVpnThread extends Thread {
                 // handle local socket
                 handleLocalSocket(socket);
             } catch (IOException e) {
-                VayLog.e(TAG, "Error when accept socket", e);
+                VayLog.INSTANCE.e(TAG, "Error when accept socket", e);
                 ShadowsocksApplication.app.track(e);
 
                 initServerSocket();
@@ -99,7 +99,7 @@ public class ShadowsocksVpnThread extends Thread {
 
                     // check read state
                     int state = input.read();
-                    VayLog.d(TAG, "handleLocalSocket() read state = " + state);
+                    VayLog.INSTANCE.d(TAG, "handleLocalSocket() read state = " + state);
 
                     FileDescriptor[] fds = socket.getAncillaryFileDescriptors();
 
@@ -125,7 +125,7 @@ public class ShadowsocksVpnThread extends Thread {
                     IOUtils.INSTANCE.close(input);
                     IOUtils.INSTANCE.close(output);
                 } catch (Exception e) {
-                    VayLog.e(TAG, "handleLocalSocket() Error when protect socket", e);
+                    VayLog.INSTANCE.e(TAG, "handleLocalSocket() Error when protect socket", e);
                     ShadowsocksApplication.app.track(e);
                 } finally {
                     // close socket
@@ -156,7 +156,7 @@ public class ShadowsocksVpnThread extends Thread {
             serverSocket = new LocalServerSocket(localSocket.getFileDescriptor());
             return true;
         } catch (IOException e) {
-            VayLog.e(TAG, "unable to bind", e);
+            VayLog.INSTANCE.e(TAG, "unable to bind", e);
             ShadowsocksApplication.app.track(e);
             return false;
         }

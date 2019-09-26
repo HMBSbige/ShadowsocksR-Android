@@ -56,7 +56,7 @@ public class Typefaces {
                 try {
                     cache.put(assetPath, Typeface.createFromAsset(c.getAssets(), assetPath));
                 } catch (Exception e) {
-                    VayLog.e(TAG, "Could not get typeface '" + assetPath + "' because " + e.getMessage());
+                    VayLog.INSTANCE.e(TAG, "Could not get typeface '" + assetPath + "' because " + e.getMessage());
                     ShadowsocksApplication.app.track(e);
                     return null;
                 }

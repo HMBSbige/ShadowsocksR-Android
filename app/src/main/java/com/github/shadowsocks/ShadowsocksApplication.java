@@ -196,13 +196,13 @@ public class ShadowsocksApplication extends Application {
                 } else if ("Hant".equals(script)) {
                     return TRADITIONAL_CHINESE;
                 } else {
-                    VayLog.w(TAG, String.format("Unknown zh locale script: %s. Falling back to trying countries...", script));
+                    VayLog.INSTANCE.w(TAG, String.format("Unknown zh locale script: %s. Falling back to trying countries...", script));
                     if ("SG".equals(country)) {
                         return SIMPLIFIED_CHINESE;
                     } else if ("HK".equals(country) || "MO".equals(country)) {
                         return TRADITIONAL_CHINESE;
                     } else {
-                        VayLog.w(TAG, String.format("Unknown zh locale: %s. Falling back to zh-Hans-CN...", locale.toLanguageTag()));
+                        VayLog.INSTANCE.w(TAG, String.format("Unknown zh locale: %s. Falling back to zh-Hans-CN...", locale.toLanguageTag()));
                         return SIMPLIFIED_CHINESE;
                     }
                 }
@@ -321,7 +321,7 @@ public class ShadowsocksApplication extends Application {
         try {
             files = assetManager.list(path);
         } catch (Exception e) {
-            VayLog.e(TAG, e.getMessage());
+            VayLog.INSTANCE.e(TAG, e.getMessage());
             app.track(e);
         }
 
@@ -338,14 +338,14 @@ public class ShadowsocksApplication extends Application {
                     fos = new FileOutputStream(getApplicationInfo().dataDir + '/' + file);
                     IOUtils.INSTANCE.copy(in, fos);
                 } catch (IOException e) {
-                    VayLog.e(TAG, "copyAssets", e);
+                    VayLog.INSTANCE.e(TAG, "copyAssets", e);
                 } finally {
                     try {
                         if (in != null) {
                             in.close();
                         }
                     } catch (Exception e) {
-                        VayLog.e(TAG, "copyAssets", e);
+                        VayLog.INSTANCE.e(TAG, "copyAssets", e);
                     }
 
                     try {
@@ -353,7 +353,7 @@ public class ShadowsocksApplication extends Application {
                             fos.close();
                         }
                     } catch (Exception e) {
-                        VayLog.e(TAG, "copyAssets", e);
+                        VayLog.INSTANCE.e(TAG, "copyAssets", e);
                     }
                 }
             }

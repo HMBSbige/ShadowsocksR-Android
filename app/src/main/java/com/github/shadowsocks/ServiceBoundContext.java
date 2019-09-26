@@ -76,7 +76,7 @@ public class ServiceBoundContext extends ContextWrapper implements IBinder.Death
                 bgService.registerCallback(callback);
                 callbackRegistered = true;
             } catch (Exception e) {
-                VayLog.e(TAG, "registerCallback", e);
+                VayLog.INSTANCE.e(TAG, "registerCallback", e);
             }
         }
     }
@@ -89,7 +89,7 @@ public class ServiceBoundContext extends ContextWrapper implements IBinder.Death
             try {
                 bgService.unregisterCallback(callback);
             } catch (Exception e) {
-                VayLog.e(TAG, "unregisterCallback", e);
+                VayLog.INSTANCE.e(TAG, "unregisterCallback", e);
             }
             callbackRegistered = false;
         }
@@ -133,7 +133,7 @@ public class ServiceBoundContext extends ContextWrapper implements IBinder.Death
             try {
                 unbindService(connection);
             } catch (Exception e) {
-                VayLog.e(TAG, "detachService", e);
+                VayLog.INSTANCE.e(TAG, "detachService", e);
             }
             connection = null;
         }
@@ -156,7 +156,7 @@ public class ServiceBoundContext extends ContextWrapper implements IBinder.Death
                 registerCallback();
                 ServiceBoundContext.this.onServiceConnected();
             } catch (RemoteException e) {
-                VayLog.e(TAG, "onServiceConnected", e);
+                VayLog.INSTANCE.e(TAG, "onServiceConnected", e);
             }
         }
 

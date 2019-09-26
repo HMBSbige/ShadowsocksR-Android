@@ -529,7 +529,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                             prefs_edit.putInt("frontproxy_enable", 0);
                             if (new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").exists()) {
                                 boolean deleteFlag = new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").delete();
-                                VayLog.d(TAG, "delete proxychains.conf = " + deleteFlag);
+                                VayLog.INSTANCE.d(TAG, "delete proxychains.conf = " + deleteFlag);
                             }
                         }
                         prefs_edit.apply();

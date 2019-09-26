@@ -284,7 +284,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.addFirst("env");
         }
 
-        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
+        VayLog.INSTANCE.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             sstunnelProcess = new GuardedProcess(cmds).start();
@@ -343,7 +343,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.addFirst("env");
         }
 
-        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
+        VayLog.INSTANCE.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             sslocalProcess = new GuardedProcess(cmds).start();
@@ -398,7 +398,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.addFirst("env");
         }
 
-        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
+        VayLog.INSTANCE.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             sstunnelProcess = new GuardedProcess(cmds).start();
@@ -504,7 +504,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
         String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libpdnsd.so", "-c", getApplicationInfo().dataDir + "/libpdnsd.so-vpn.conf"};
         List<String> cmds = new ArrayList<>(Arrays.asList(cmd));
 
-        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
+        VayLog.INSTANCE.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             pdnsdProcess = new GuardedProcess(cmds).start();
@@ -540,7 +540,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
                             builder.addDisallowedApplication(pkg);
                         }
                     } catch (PackageManager.NameNotFoundException e) {
-                        VayLog.e(TAG, "Invalid package name", e);
+                        VayLog.INSTANCE.e(TAG, "Invalid package name", e);
                     }
                 }
             }
@@ -592,7 +592,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.add(String.format(Locale.ENGLISH, "%s:%d", String.format(Locale.ENGLISH, PRIVATE_VLAN, "1"), profile.getLocalPort() + 53));
         }
 
-        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
+        VayLog.INSTANCE.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             tun2socksProcess = new GuardedProcess(cmds).start(() -> sendFd(fd));

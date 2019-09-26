@@ -1,6 +1,7 @@
 package com.github.shadowsocks.utils
 
 import android.animation.*
+import android.annotation.*
 import android.content.*
 import android.content.pm.*
 import android.graphics.*
@@ -124,6 +125,8 @@ object Utils
 		return String(hexChars)
 	}
 
+	@Suppress("DEPRECATION")
+	@SuppressLint("PackageManagerGetSignatures")
 	fun getApplicationSignature(context: Context): List<String>
 	{
 		val signatureList: List<String>
