@@ -1349,7 +1349,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         }
 
         public void copyText() {
-            String subUrl = this.item.url;
+            String subUrl = this.item.getUrl();
             if (!"".equals(subUrl)) {
                 clipboard.setPrimaryClip(ClipData.newPlainText(null, subUrl));
                 ToastUtils.showShort(R.string.action_export_msg);
