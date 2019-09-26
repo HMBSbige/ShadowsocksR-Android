@@ -208,13 +208,13 @@ public abstract class BaseVpnService extends VpnService {
             ContainerHolder holder = ShadowsocksApplication.app.containerHolder;
             Container container = holder.getContainer();
             String url = container.getString("proxy_url");
-            String sig = Utils.getSignature(this);
+            String sig = Utils.INSTANCE.getSignature(this);
 
             OkHttpClient client = new OkHttpClient.Builder()
                     .dns(new Dns() {
                         @Override
                         public List<InetAddress> lookup(String hostname) throws UnknownHostException {
-                            String ip = Utils.resolve(hostname, false);
+                            String ip = Utils.INSTANCE.resolve(hostname, false);
                             if (ip != null) {
                                 List<InetAddress> list = new ArrayList<>();
                                 list.add(InetAddress.getByName(ip));

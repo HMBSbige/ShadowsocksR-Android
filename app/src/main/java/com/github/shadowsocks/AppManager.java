@@ -232,7 +232,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
         final AppsAdapter adapter = tempAdapter;
         handler.post(() -> {
             appListView.setAdapter(adapter);
-            Utils.crossFade(AppManager.this, loadingView, appListView);
+            Utils.INSTANCE.crossFade(AppManager.this, loadingView, appListView);
         });
     }
 
@@ -346,7 +346,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
                 check.setChecked(true);
             }
             if (!appsLoading.get()) {
-                profile.setIndividual(Utils.makeString(proxiedApps, "\n"));
+                profile.setIndividual(Utils.INSTANCE.makeString(proxiedApps, "\n"));
                 ShadowsocksApplication.app.profileManager.updateProfile(profile);
             }
         }

@@ -149,10 +149,10 @@ public class ShadowsocksTileService extends TileService {
                 int state = mServiceBoundContext.bgService.getState();
                 switch (state) {
                     case Constants.State.STOPPED:
-                        Utils.startSsService(this);
+                        Utils.INSTANCE.startSsService(this);
                         break;
                     case Constants.State.CONNECTED:
-                        Utils.stopSsService(this);
+                        Utils.INSTANCE.stopSsService(this);
                         break;
                     default:
                         // ignore

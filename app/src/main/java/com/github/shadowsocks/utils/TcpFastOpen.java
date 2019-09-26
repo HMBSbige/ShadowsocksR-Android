@@ -79,7 +79,7 @@ public class TcpFastOpen {
 
     public static boolean sendEnabled() {
         File file = new File("/proc/sys/net/ipv4/tcp_fastopen");
-        return file.canRead() && (Integer.parseInt(Utils.readAllLines(file)) & 1) > 0;
+        return file.canRead() && (Integer.parseInt(Utils.INSTANCE.readAllLines(file)) & 1) > 0;
     }
 
     public static String enabled(boolean value) {
@@ -96,7 +96,7 @@ public class TcpFastOpen {
 
                 List<String> res = Shell.run("su", cmds, null, true);
                 if (res != null && !res.isEmpty()) {
-                    return Utils.makeString(res, "\n");
+                    return Utils.INSTANCE.makeString(res, "\n");
                 }
             }
         }

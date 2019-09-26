@@ -206,8 +206,8 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         // Resolve the server address
         host_arg = profile.getHost();
-        if (!Utils.isNumeric(profile.getHost())) {
-            String addr = Utils.resolve(profile.getHost(), profile.getIpv6());
+        if (!Utils.INSTANCE.isNumeric(profile.getHost())) {
+            String addr = Utils.INSTANCE.resolve(profile.getHost(), profile.getIpv6());
             if (TextUtils.isEmpty(addr)) {
                 throw new NameNotResolvedException();
             } else {
@@ -264,7 +264,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 profile.getObfs(),
                 Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getObfs_param()),
                 Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getProtocol_param()));
-        Utils.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-udp-vpn.conf"), conf);
+        Utils.INSTANCE.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-udp-vpn.conf"), conf);
         //val old_ld = Os.getenv("LD_PRELOAD")
 
         //Os.setenv("LD_PRELOAD", getApplicationInfo().dataDir + "/lib/libproxychains4.so", true)
@@ -284,7 +284,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.addFirst("env");
         }
 
-        VayLog.d(TAG, Utils.makeString(cmds, " "));
+        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             sstunnelProcess = new GuardedProcess(cmds).start();
@@ -307,7 +307,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getObfs_param()),
                 Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getProtocol_param()));
 
-        Utils.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-vpn.conf"), conf);
+        Utils.INSTANCE.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-vpn.conf"), conf);
 
         //val old_ld = Os.getenv("LD_PRELOAD")
 
@@ -343,7 +343,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.addFirst("env");
         }
 
-        VayLog.d(TAG, Utils.makeString(cmds, " "));
+        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             sslocalProcess = new GuardedProcess(cmds).start();
@@ -367,7 +367,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 profile.getObfs(),
                 Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getObfs_param()),
                 Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getProtocol_param()));
-        Utils.printToFile(new File(getApplicationInfo().dataDir + "/ss-tunnel-vpn.conf"), conf);
+        Utils.INSTANCE.printToFile(new File(getApplicationInfo().dataDir + "/ss-tunnel-vpn.conf"), conf);
 
         //val old_ld = Os.getenv("LD_PRELOAD")
 
@@ -398,7 +398,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.addFirst("env");
         }
 
-        VayLog.d(TAG, Utils.makeString(cmds, " "));
+        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             sstunnelProcess = new GuardedProcess(cmds).start();
@@ -419,7 +419,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         if (Constants.Route.ACL.equals(profile.getRoute())) {
             //decide acl route
-            List<String> total_lines = Utils.getLinesByFile(new File(getApplicationInfo().dataDir + '/' + profile.getRoute() + ".acl"));
+            List<String> total_lines = Utils.INSTANCE.getLinesByFile(new File(getApplicationInfo().dataDir + '/' + profile.getRoute() + ".acl"));
             for (String line : total_lines) {
                 if ("[remote_dns]".equals(line)) {
                     remote_dns = true;
@@ -500,11 +500,11 @@ public class ShadowsocksVpnService extends BaseVpnService {
                     reject);
         }
 
-        Utils.printToFile(new File(getApplicationInfo().dataDir + "/libpdnsd.so-vpn.conf"), conf);
+        Utils.INSTANCE.printToFile(new File(getApplicationInfo().dataDir + "/libpdnsd.so-vpn.conf"), conf);
         String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libpdnsd.so", "-c", getApplicationInfo().dataDir + "/libpdnsd.so-vpn.conf"};
         List<String> cmds = new ArrayList<>(Arrays.asList(cmd));
 
-        VayLog.d(TAG, Utils.makeString(cmds, " "));
+        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             pdnsdProcess = new GuardedProcess(cmds).start();
@@ -530,7 +530,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             builder.addRoute("::", 0);
         }
 
-        if (Utils.isLollipopOrAbove()) {
+        if (Utils.INSTANCE.isLollipopOrAbove()) {
             if (profile.getProxyApps()) {
                 for (String pkg : profile.getIndividual().split("\n")) {
                     try {
@@ -592,7 +592,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.add(String.format(Locale.ENGLISH, "%s:%d", String.format(Locale.ENGLISH, PRIVATE_VLAN, "1"), profile.getLocalPort() + 53));
         }
 
-        VayLog.d(TAG, Utils.makeString(cmds, " "));
+        VayLog.d(TAG, Utils.INSTANCE.makeString(cmds, " "));
 
         try {
             tun2socksProcess = new GuardedProcess(cmds).start(() -> sendFd(fd));

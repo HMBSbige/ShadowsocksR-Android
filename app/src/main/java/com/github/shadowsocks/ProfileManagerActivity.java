@@ -690,7 +690,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             return;
         }
 
-        final List<Profile> profiles = Utils.mergeList(Parser.findAll(sharedStr), Parser.findAll_ssr(sharedStr));
+        final List<Profile> profiles = Utils.INSTANCE.mergeList(Parser.findAll(sharedStr), Parser.findAll_ssr(sharedStr));
 
         if (profiles.isEmpty()) {
             finish();
@@ -734,7 +734,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 if (TextUtils.isEmpty(contents)) {
                     return;
                 }
-                final List<Profile> profiles = Utils.mergeList(Parser.findAll(contents), Parser.findAll_ssr(contents));
+                final List<Profile> profiles = Utils.INSTANCE.mergeList(Parser.findAll(contents), Parser.findAll_ssr(contents));
                 if (profiles.isEmpty()) {
                     finish();
                     return;
@@ -993,7 +993,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     ImageView image = new ImageView(ProfileManagerActivity.this);
                     image.setLayoutParams(new LinearLayout.LayoutParams(-1, -1));
                     Bitmap qrcode = ((QRCode) QRCode.from(url)
-                            .withSize(Utils.dpToPx(ProfileManagerActivity.this, 250), Utils.dpToPx(ProfileManagerActivity.this, 250)))
+                            .withSize(Utils.INSTANCE.dpToPx(ProfileManagerActivity.this, 250), Utils.INSTANCE.dpToPx(ProfileManagerActivity.this, 250)))
                             .bitmap();
                     image.setImageBitmap(qrcode);
 
@@ -1022,8 +1022,8 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 }
             });
             shareBtn.setOnLongClickListener(v -> {
-                Utils.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.share, Toast.LENGTH_SHORT), shareBtn,
-                        getWindow(), 0, Utils.dpToPx(ProfileManagerActivity.this, 8)).show();
+                Utils.INSTANCE.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.share, Toast.LENGTH_SHORT), shareBtn,
+                        getWindow(), 0, Utils.INSTANCE.dpToPx(ProfileManagerActivity.this, 8)).show();
                 return true;
             });
         }
@@ -1063,11 +1063,11 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             });
 
             pingBtn.setOnLongClickListener(v -> {
-                Utils.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.ping, Toast.LENGTH_SHORT),
+                Utils.INSTANCE.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.ping, Toast.LENGTH_SHORT),
                         pingBtn,
                         getWindow(),
                         0,
-                        Utils.dpToPx(ProfileManagerActivity.this, 8))
+                        Utils.INSTANCE.dpToPx(ProfileManagerActivity.this, 8))
                         .show();
                 return true;
             });
@@ -1108,11 +1108,11 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             });
 
             pingBtn.setOnLongClickListener(v -> {
-                Utils.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.tcp_ping, Toast.LENGTH_SHORT),
+                Utils.INSTANCE.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.tcp_ping, Toast.LENGTH_SHORT),
                         pingBtn,
                         getWindow(),
                         0,
-                        Utils.dpToPx(ProfileManagerActivity.this, 8))
+                        Utils.INSTANCE.dpToPx(ProfileManagerActivity.this, 8))
                         .show();
                 return true;
             });

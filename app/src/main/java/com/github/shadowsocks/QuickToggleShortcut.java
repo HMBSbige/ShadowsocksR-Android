@@ -33,10 +33,10 @@ public class QuickToggleShortcut extends Activity {
                     switch (state) {
                         case Constants.State.STOPPED:
                             ToastUtils.showShort(R.string.loading);
-                            Utils.startSsService(this);
+                            Utils.INSTANCE.startSsService(this);
                             break;
                         case Constants.State.CONNECTED:
-                            Utils.stopSsService(this);
+                            Utils.INSTANCE.stopSsService(this);
                             break;
                         default:
                             // ignore

@@ -4,7 +4,6 @@ package com.github.shadowsocks.network.ping
 import android.app.*
 import android.content.pm.*
 import android.os.*
-import android.text.*
 import android.util.*
 import com.github.shadowsocks.GuardedProcess
 import com.github.shadowsocks.R
@@ -179,7 +178,8 @@ private constructor()
 		if (!Utils.isNumeric(host))
 		{
 			val addr = Utils.resolve(host, profile.ipv6)
-			if (!TextUtils.isEmpty(addr))
+
+			if (!addr.isNullOrBlank())
 			{
 				host = addr
 			}

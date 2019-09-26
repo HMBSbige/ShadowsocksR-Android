@@ -145,11 +145,11 @@ public class ShadowsocksNotification {
     private void update(String action, boolean forceShow) {
         if (forceShow || getServiceState() == Constants.State.CONNECTED) {
             if (Intent.ACTION_SCREEN_OFF.equals(action)) {
-                setVisible(visible && !Utils.isLollipopOrAbove(), forceShow);
+                setVisible(visible && !Utils.INSTANCE.isLollipopOrAbove(), forceShow);
                 // unregister callback to save battery
                 unregisterCallback();
             } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
-                setVisible(visible && Utils.isLollipopOrAbove() && !keyGuard.inKeyguardRestrictedInputMode(), forceShow);
+                setVisible(visible && Utils.INSTANCE.isLollipopOrAbove() && !keyGuard.inKeyguardRestrictedInputMode(), forceShow);
                 try {
                     registerServiceCallback(callback);
                 } catch (RemoteException e) {
@@ -206,7 +206,7 @@ public class ShadowsocksNotification {
         IntentFilter screenFilter = new IntentFilter();
         screenFilter.addAction(Intent.ACTION_SCREEN_ON);
         screenFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        if (visible && Utils.isLollipopOrAbove()) {
+        if (visible && Utils.INSTANCE.isLollipopOrAbove()) {
             screenFilter.addAction(Intent.ACTION_USER_PRESENT);
         }
         service.registerReceiver(lockReceiver, screenFilter);

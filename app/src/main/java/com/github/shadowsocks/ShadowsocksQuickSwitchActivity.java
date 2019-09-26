@@ -126,7 +126,7 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             ShadowsocksApplication.app.switchProfile(item.getId());
-            Utils.startSsService(ShadowsocksQuickSwitchActivity.this);
+            Utils.INSTANCE.startSsService(ShadowsocksQuickSwitchActivity.this);
             finish();
         }
     }

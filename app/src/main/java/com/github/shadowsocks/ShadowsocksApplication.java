@@ -280,7 +280,7 @@ public class ShadowsocksApplication extends Application {
                     @Override
                     public Object getValue(String functionName, Map<String, Object> parameters) {
                         if (SIG_FUNC.equals(functionName)) {
-                            return Utils.getSignature(getApplicationContext());
+                            return Utils.INSTANCE.getSignature(getApplicationContext());
                         } else {
                             return null;
                         }

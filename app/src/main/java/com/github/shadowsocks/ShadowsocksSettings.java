@@ -523,7 +523,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                                         prefs.getString("frontproxy_port", ""),
                                         prefs.getString("frontproxy_username", ""),
                                         prefs.getString("frontproxy_password", ""));
-                                Utils.printToFile(new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf"), proxychains_conf, true);
+                                Utils.INSTANCE.printToFile(new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf"), proxychains_conf, true);
                             }
                         } else {
                             prefs_edit.putInt("frontproxy_enable", 0);
@@ -558,7 +558,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                                             , prefs.getString("frontproxy_port", "")
                                             , prefs.getString("frontproxy_username", "")
                                             , prefs.getString("frontproxy_password", ""));
-                                    Utils.printToFile(new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf"), proxychains_conf, true);
+                                    Utils.INSTANCE.printToFile(new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf"), proxychains_conf, true);
                                 }
                             }
                         })
@@ -646,7 +646,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
         for (String name : list) {
             Preference pref = findPreference(name);
             if (pref != null) {
-                pref.setEnabled(enabled && (!Constants.Key.proxyApps.equals(name) || Utils.isLollipopOrAbove()));
+                pref.setEnabled(enabled && (!Constants.Key.proxyApps.equals(name) || Utils.INSTANCE.isLollipopOrAbove()));
             }
         }
     }

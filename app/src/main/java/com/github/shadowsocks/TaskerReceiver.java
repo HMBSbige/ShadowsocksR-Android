@@ -23,9 +23,9 @@ public class TaskerReceiver extends BroadcastReceiver {
         }
 
         if (settings.switchOn) {
-            Utils.startSsService(context);
+            Utils.INSTANCE.startSsService(context);
         } else {
-            Utils.stopSsService(context);
+            Utils.INSTANCE.stopSsService(context);
         }
     }
 }

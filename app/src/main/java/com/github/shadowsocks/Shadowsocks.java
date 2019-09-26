@@ -333,12 +333,12 @@ public class Shadowsocks extends AppCompatActivity {
             @Override
             public boolean onLongClick(View v) {
                 int strId = serviceStarted ? R.string.stop : R.string.connect;
-                Utils.positionToast(
+                Utils.INSTANCE.positionToast(
                         Toast.makeText(Shadowsocks.this, strId, Toast.LENGTH_SHORT),
                         fab,
                         getWindow(),
                         0,
-                        Utils.dpToPx(Shadowsocks.this, 8))
+                        Utils.INSTANCE.dpToPx(Shadowsocks.this, 8))
                         .show();
                 return true;
             }
