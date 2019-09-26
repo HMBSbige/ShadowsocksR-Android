@@ -8,7 +8,7 @@ class DonaldTrump : JobCreator
 
 	override fun create(tag: String): Job?
 	{
-		val parts = tag.split(":".toRegex())
+		val parts = tag.split(":")
 			.dropLastWhile { it.isEmpty() }
 			.toTypedArray()
 

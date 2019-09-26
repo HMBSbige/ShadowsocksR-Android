@@ -142,8 +142,8 @@ public class TrafficMonitorThread extends Thread {
                     output.flush();
 
                     // close stream
-                    IOUtils.close(input);
-                    IOUtils.close(output);
+                    IOUtils.INSTANCE.close(input);
+                    IOUtils.INSTANCE.close(output);
                 } catch (Exception e) {
                     VayLog.e(TAG, "handleLocalSocket() Error when recv traffic stat", e);
                     ShadowsocksApplication.app.track(e);

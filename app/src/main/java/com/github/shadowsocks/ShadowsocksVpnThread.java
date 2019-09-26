@@ -122,8 +122,8 @@ public class ShadowsocksVpnThread extends Thread {
                     }
 
                     // close stream
-                    IOUtils.close(input);
-                    IOUtils.close(output);
+                    IOUtils.INSTANCE.close(input);
+                    IOUtils.INSTANCE.close(output);
                 } catch (Exception e) {
                     VayLog.e(TAG, "handleLocalSocket() Error when protect socket", e);
                     ShadowsocksApplication.app.track(e);

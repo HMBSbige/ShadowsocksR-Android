@@ -336,7 +336,7 @@ public class ShadowsocksApplication extends Application {
                         in = assetManager.open(file);
                     }
                     fos = new FileOutputStream(getApplicationInfo().dataDir + '/' + file);
-                    IOUtils.copy(in, fos);
+                    IOUtils.INSTANCE.copy(in, fos);
                 } catch (IOException e) {
                     VayLog.e(TAG, "copyAssets", e);
                 } finally {
