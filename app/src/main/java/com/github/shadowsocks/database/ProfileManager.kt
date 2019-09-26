@@ -1,11 +1,9 @@
 package com.github.shadowsocks.database
 
-
-import com.github.shadowsocks.ShadowsocksApplication
-import com.github.shadowsocks.utils.VayLog
-
-import java.sql.SQLException
-import java.util.ArrayList
+import com.github.shadowsocks.*
+import com.github.shadowsocks.utils.*
+import java.sql.*
+import java.util.*
 
 class ProfileManager(private val dbHelper: DBHelper)
 {
@@ -21,10 +19,10 @@ class ProfileManager(private val dbHelper: DBHelper)
 	val firstProfile: Profile?
 		get()
 		{
-			try
+			return try
 			{
 				val result = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().limit(1L).prepare())
-				return if (result != null && !result.isEmpty())
+				if (result != null && !result.isEmpty())
 				{
 					result[0]
 				}
@@ -34,7 +32,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 			{
 				VayLog.e(TAG, "getFirstProfile", e)
 				ShadowsocksApplication.app.track(e)
-				return null
+				null
 			}
 
 		}
@@ -47,15 +45,15 @@ class ProfileManager(private val dbHelper: DBHelper)
 	val allProfiles: List<Profile>?
 		get()
 		{
-			try
+			return try
 			{
-				return dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("url_group", true).orderBy("name", true).prepare())
+				dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("url_group", true).orderBy("name", true).prepare())
 			}
 			catch (e: Exception)
 			{
 				VayLog.e(TAG, "getAllProfiles", e)
 				ShadowsocksApplication.app.track(e)
-				return null
+				null
 			}
 
 		}
@@ -69,20 +67,20 @@ class ProfileManager(private val dbHelper: DBHelper)
 	val allProfilesByElapsed: List<Profile>?
 		get()
 		{
-			try
+			return try
 			{
 				val notlist = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("elapsed", true).where().not().eq("elapsed", 0).prepare())
 				val eqList = dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("elapsed", true).where().eq("elapsed", 0).prepare())
 				val result = ArrayList<Profile>()
 				result.addAll(notlist)
 				result.addAll(eqList)
-				return result
+				result
 			}
 			catch (e: Exception)
 			{
 				VayLog.e(TAG, "getAllProfilesByElapsed", e)
 				ShadowsocksApplication.app.track(e)
-				return null
+				null
 			}
 
 		}
@@ -120,15 +118,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 	@JvmOverloads
 	fun createProfile(p: Profile? = null): Profile
 	{
-		val profile: Profile
-		if (p == null)
-		{
-			profile = Profile()
-		}
-		else
-		{
-			profile = p
-		}
+		val profile: Profile = p ?: Profile()
 		profile.id = 0
 		val oldProfile = ShadowsocksApplication.app.currentProfile()
 		if (oldProfile != null)
@@ -170,15 +160,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 */
 	fun createProfileDr(p: Profile?): Profile
 	{
-		val profile: Profile
-		if (p == null)
-		{
-			profile = Profile()
-		}
-		else
-		{
-			profile = p
-		}
+		val profile: Profile = p ?: Profile()
 		profile.id = 0
 		val oldProfile = ShadowsocksApplication.app.currentProfile()
 		if (oldProfile != null)
@@ -247,15 +229,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 */
 	fun createProfileSub(p: Profile?): Int
 	{
-		val profile: Profile
-		if (p == null)
-		{
-			profile = Profile()
-		}
-		else
-		{
-			profile = p
-		}
+		val profile: Profile = p ?: Profile()
 		profile.id = 0
 		val oldProfile = ShadowsocksApplication.app.currentProfile()
 		if (oldProfile != null)
@@ -302,14 +276,14 @@ class ProfileManager(private val dbHelper: DBHelper)
 				.and()
 				.eq("method", profile.method)
 				.queryForFirst()
-			if (last_exist == null)
+			return if (last_exist == null)
 			{
 				dbHelper.profileDao.createOrUpdate(profile)
-				return 0
+				0
 			}
 			else
 			{
-				return last_exist.id
+				last_exist.id
 			}
 		}
 		catch (e: SQLException)
@@ -326,16 +300,16 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 */
 	fun updateProfile(profile: Profile): Boolean
 	{
-		try
+		return try
 		{
 			dbHelper.profileDao.update(profile)
-			return true
+			true
 		}
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "updateProfile", e)
 			ShadowsocksApplication.app.track(e)
-			return false
+			false
 		}
 
 	}
@@ -349,16 +323,16 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 */
 	fun updateAllProfileByString(key: String, value: String): Boolean
 	{
-		try
+		return try
 		{
 			dbHelper.profileDao.executeRawNoArgs("UPDATE `profile` SET $key = '$value';")
-			return true
+			true
 		}
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "updateAllProfileByString", e)
 			ShadowsocksApplication.app.track(e)
-			return false
+			false
 		}
 
 	}
@@ -400,17 +374,16 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 */
 	fun getProfile(id: Int): Profile?
 	{
-		try
+		return try
 		{
-			return dbHelper.profileDao.queryForId(id)
+			dbHelper.profileDao.queryForId(id)
 		}
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "getProfile", e)
 			ShadowsocksApplication.app.track(e)
-			return null
+			null
 		}
-
 	}
 
 	/**
@@ -421,16 +394,16 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 */
 	fun delProfile(id: Int): Boolean
 	{
-		try
+		return try
 		{
 			dbHelper.profileDao.deleteById(id)
-			return true
+			true
 		}
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "delProfile", e)
 			ShadowsocksApplication.app.track(e)
-			return false
+			false
 		}
 
 	}
@@ -443,15 +416,15 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 */
 	fun getAllProfilesByGroup(group: String): MutableList<Profile>?
 	{
-		try
+		return try
 		{
-			return dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("name", true).where().like("url_group", "$group%").prepare())
+			dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("name", true).where().like("url_group", "$group%").prepare())
 		}
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "getAllProfilesByGroup", e)
 			ShadowsocksApplication.app.track(e)
-			return null
+			null
 		}
 
 	}
@@ -555,7 +528,6 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 */
 	interface ProfileAddedListener
 	{
-
 		/**
 		 * profile added
 		 *
@@ -566,12 +538,6 @@ class ProfileManager(private val dbHelper: DBHelper)
 
 	companion object
 	{
-
-		private val TAG = ProfileManager::class.java.simpleName
+		private const val TAG = "ProfileManager"
 	}
-
-
 }
-/**
- * create profile
- */

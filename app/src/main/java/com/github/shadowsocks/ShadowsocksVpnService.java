@@ -223,7 +223,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
         changeState(Constants.State.CONNECTED);
 
         if (!Constants.Route.ALL.equals(profile.getRoute())) {
-            AclSyncJob.schedule(profile.getRoute());
+            AclSyncJob.Companion.schedule(profile.getRoute());
         }
 
         notification = new ShadowsocksNotification(this, profile.getName());

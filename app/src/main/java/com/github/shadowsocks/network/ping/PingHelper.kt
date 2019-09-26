@@ -358,8 +358,7 @@ private constructor()
 
 	companion object
 	{
-
-		private val TAG = PingHelper::class.java.simpleName
+		private const val TAG = "PingHelper"
 
 		private var sInstance: PingHelper? = null
 

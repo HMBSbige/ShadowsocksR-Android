@@ -1,10 +1,8 @@
 package com.github.shadowsocks.database
 
-
-import com.github.shadowsocks.ShadowsocksApplication
-import com.github.shadowsocks.utils.VayLog
-
-import java.util.ArrayList
+import com.github.shadowsocks.*
+import com.github.shadowsocks.utils.*
+import java.util.*
 
 class SSRSubManager(private val dbHelper: DBHelper)
 {
@@ -16,7 +14,7 @@ class SSRSubManager(private val dbHelper: DBHelper)
 			try
 			{
 				val result = dbHelper.ssrsubDao.query(dbHelper.ssrsubDao.queryBuilder().limit(1L).prepare())
-				return if (result != null && !result.isEmpty())
+				return if (result != null && result.isNotEmpty())
 				{
 					result[0]
 				}
@@ -37,15 +35,15 @@ class SSRSubManager(private val dbHelper: DBHelper)
 	val allSSRSubs: List<SSRSub>?
 		get()
 		{
-			try
+			return try
 			{
-				return dbHelper.ssrsubDao.query(dbHelper.ssrsubDao.queryBuilder().prepare())
+				dbHelper.ssrsubDao.query(dbHelper.ssrsubDao.queryBuilder().prepare())
 			}
 			catch (e: Exception)
 			{
 				VayLog.e(TAG, "getAllSSRSubs", e)
 				ShadowsocksApplication.app.track(e)
-				return null
+				null
 			}
 
 		}
@@ -193,7 +191,6 @@ class SSRSubManager(private val dbHelper: DBHelper)
 
 	interface SSRSubAddedListener
 	{
-
 		/**
 		 * ssr sub added
 		 *
@@ -204,7 +201,6 @@ class SSRSubManager(private val dbHelper: DBHelper)
 
 	companion object
 	{
-
-		private val TAG = SSRSubManager::class.java.simpleName
+		private const val TAG = "SSRSubManager"
 	}
 }

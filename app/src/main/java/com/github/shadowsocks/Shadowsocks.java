@@ -351,7 +351,7 @@ public class Shadowsocks extends AppCompatActivity {
 //        if (first == null) {
 //            ShadowsocksApplication.app.ssrsubManager.createDefault();
 //        }
-        SSRSubUpdateJob.schedule();
+        SSRSubUpdateJob.Companion.schedule();
 
 
         // attach service

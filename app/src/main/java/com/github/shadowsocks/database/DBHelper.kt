@@ -1,22 +1,19 @@
 package com.github.shadowsocks.database
 
+import android.content.*
+import android.content.pm.*
+import android.database.sqlite.*
+import android.text.*
+import com.github.shadowsocks.*
+import com.github.shadowsocks.utils.*
+import com.j256.ormlite.android.apptools.*
+import com.j256.ormlite.dao.*
+import com.j256.ormlite.support.*
+import com.j256.ormlite.table.*
+import java.sql.*
+import java.util.*
 
-import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.database.sqlite.SQLiteDatabase
-import android.text.TextUtils
-
-import com.github.shadowsocks.ShadowsocksApplication
-import com.github.shadowsocks.utils.VayLog
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
-import com.j256.ormlite.dao.Dao
-import com.j256.ormlite.support.ConnectionSource
-import com.j256.ormlite.table.TableUtils
-
-import java.sql.SQLException
-import java.util.ArrayList
-
-class DBHelper(private val context: Context) : OrmLiteSqliteOpenHelper(context, DBHelper.PROFILE, null, VERSION)
+class DBHelper(private val context: Context) : OrmLiteSqliteOpenHelper(context, PROFILE, null, VERSION)
 {
 	internal lateinit var profileDao: Dao<Profile, Int>
 	internal lateinit var ssrsubDao: Dao<SSRSub, Int>
@@ -76,7 +73,7 @@ class DBHelper(private val context: Context) : OrmLiteSqliteOpenHelper(context, 
 		}
 
 		val uidSet = ArrayList<Int>()
-		val split = old.split("|".toRegex())
+		val split = old.split("|")
 			.dropLastWhile { it.isEmpty() }
 			.toTypedArray()
 		for (item in split)
@@ -249,9 +246,8 @@ class DBHelper(private val context: Context) : OrmLiteSqliteOpenHelper(context, 
 
 	companion object
 	{
-
-		val PROFILE = "profile.db"
-		private val TAG = DBHelper::class.java.simpleName
-		private val VERSION = 25
+		const val PROFILE = "profile.db"
+		private const val TAG = "DBHelper"
+		private const val VERSION = 25
 	}
 }
