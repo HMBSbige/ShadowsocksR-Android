@@ -1313,7 +1313,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         }
     }
 
-    private class SSRSubViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnKeyListener {
+    private class SSRSubViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnKeyListener, View.OnLongClickListener {
 
         private SSRSub item;
         private TextView text;
@@ -1322,6 +1322,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             super(view);
             text = itemView.findViewById(android.R.id.text2);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         public void updateText() {
@@ -1347,6 +1348,16 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             });
         }
 
+        public void copyText() {
+            String subUrl = this.item.url;
+            if (!"".equals(subUrl)) {
+                clipboard.setPrimaryClip(ClipData.newPlainText(null, subUrl));
+                ToastUtils.showShort(R.string.action_export_msg);
+            } else {
+                ToastUtils.showShort(R.string.action_export_err);
+            }
+        }
+
         public void bind(SSRSub item) {
             this.item = item;
             updateText();
@@ -1355,6 +1366,12 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         @Override
         public void onClick(View v) {
             updateText(true);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            copyText();
+            return false;
         }
 
         @Override
