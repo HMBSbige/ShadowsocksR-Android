@@ -1,6 +1,5 @@
 package com.github.shadowsocks.job
 
-import android.util.*
 import com.evernote.android.job.*
 import com.github.shadowsocks.*
 import com.github.shadowsocks.R
@@ -22,7 +21,6 @@ class SSRSubUpdateJob : Job()
 					{
 						VayLog.d(TAG, "onRunJob() update sub success!")
 						ToastUtils.showShort(context.getString(R.string.sub_autoupdate_success, subName))
-						Log.i("sub", subName)
 					}
 
 					override fun onFailed()

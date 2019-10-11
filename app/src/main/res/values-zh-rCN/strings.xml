@@ -203,8 +203,6 @@
     <!-- status -->
     <string name="sent">发送:</string>
     <string name="received">接收:</string>
-    <string name="tcp_ping">TCP 延迟</string>
-    <string name="action_tcp_ping_full_test">完整TCP延迟测试</string>
     <string name="allgroups">全部群组</string>
     <string name="sub_autoupdate_success">%s:订阅更新成功</string>
 

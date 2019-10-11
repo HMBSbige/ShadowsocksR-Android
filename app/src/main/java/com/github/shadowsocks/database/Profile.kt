@@ -31,7 +31,7 @@ class Profile
 	@DatabaseField
 	var method = "aes-256-cfb"
 	@DatabaseField
-	var route = "all"
+	var route = "bypass-lan-china"
 	@DatabaseField
 	var proxyApps = false
 	@DatabaseField
@@ -54,8 +54,6 @@ class Profile
 	var rx: Long = 0
 	@DatabaseField
 	var elapsed: Long = 0
-	@DatabaseField
-	var tcpdelay: Long = 0
 	@DatabaseField
 	var userOrder: Long = 0
 

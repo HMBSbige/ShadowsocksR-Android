@@ -207,8 +207,6 @@
     <string name="kcp_port">KCP ポート</string>
     <string name="kcp_port_summary">%d（リモート KCPTUN サーバーのポート番号）</string>
     <string name="kcpcli">KCP パラメータ</string>
-    <string name="tcp_ping">TCP 延迟</string>
-    <string name="action_tcp_ping_full_test">完整TCP延迟测试</string>
     <string name="allgroups">All Groups</string>
     <string name="sub_autoupdate_success">%s: autoupdate success</string>
 

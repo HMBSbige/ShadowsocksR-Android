@@ -27,7 +27,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -182,7 +181,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         }
 
         if (action != null && action.equals(Constants.Action.SORT)) {
-            Log.i("ShadowsocksR Sort:", "TRUE");
             is_sort = true;
         }
 
@@ -610,7 +608,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                         EditText editText1 = myView.findViewById(R.id.editTextInput);
                         // add ssr sub by url
                         String subUrl = editText1.getText().toString();
-                        Log.i("SubURL: ", subUrl);
                         addSSRSubByUrl(subUrl);
                     }
                 })
@@ -839,10 +836,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 startActivity(new Intent(Constants.Action.SORT));
                 return true;
             case R.id.action_full_test:
-                pingAll(1);
-                return true;
-            case R.id.action_tcp_ping_full_test:
-                pingAll(2);
+                pingAll();
                 return true;
             default:
                 break;
@@ -850,7 +844,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         return false;
     }
 
-    private void pingAll(int pingtype) {
+    private void pingAll() {
         // reject repeat operation
         if (isTesting) {
             return;
@@ -877,88 +871,46 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     }
                 });
 
-        // get current profile list
+        // get profile list
         List<Profile> profiles = profilesAdapter.profiles;
         // start test
-        switch (pingtype) {
-            case 1:
-                PingHelper.Companion.instance().pingAll(this, profiles, new PingCallback() {
+        PingHelper.Companion.instance().pingAll(this, profiles, new PingCallback() {
 
-                    @Override
-                    public void onSuccess(Profile profile, long elapsed) {
-                        profile.setElapsed(elapsed);
-                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
-                        // set progress message
-                        setProgressMessage(profile.getName() + " " + getResultMsg());
-                    }
+            @Override
+            public void onSuccess(Profile profile, long elapsed) {
+                profile.setElapsed(elapsed);
+                ShadowsocksApplication.app.profileManager.updateProfile(profile);
 
-                    @Override
-                    public void onFailed(Profile profile) {
-                        profile.setElapsed(-1);
-                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
+                // set progress message
+                setProgressMessage(profile.getName() + "\n" + getResultMsg());
+            }
 
-                        // set progress message
-                        setProgressMessage(getResultMsg());
-                    }
+            @Override
+            public void onFailed(Profile profile) {
+                profile.setElapsed(-1);
+                ShadowsocksApplication.app.profileManager.updateProfile(profile);
 
-                    /**
-                     * set progress message
-                     *
-                     * @param message tips message
-                     */
-                    private void setProgressMessage(String message) {
-                        if (testProgressDialog != null) {
-                            testProgressDialog.setMessage(message);
-                        }
-                    }
+                // set progress message
+                setProgressMessage(getResultMsg());
+            }
 
-                    @Override
-                    public void onFinished(Profile profile) {
-                        mProgressHandler.sendEmptyMessageDelayed(MSG_FULL_TEST_FINISH, 2000);
-                        PingHelper.Companion.instance().releaseTempActivity();
-                    }
-                }, 1);
-                break;
-            case 2:
-                PingHelper.Companion.instance().pingAll(this, profiles, new PingCallback() {
+            /**
+             * set progress message
+             *
+             * @param message tips message
+             */
+            private void setProgressMessage(String message) {
+                if (testProgressDialog != null) {
+                    testProgressDialog.setMessage(message);
+                }
+            }
 
-                    @Override
-                    public void onSuccess(Profile profile, long tcpdelay) {
-                        profile.setTcpdelay(tcpdelay);
-                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
-                        // set progress message
-                        setProgressMessage(profile.getName() + " " + getResultMsg());
-                    }
-
-                    @Override
-                    public void onFailed(Profile profile) {
-                        profile.setElapsed(-1);
-                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
-
-                        // set progress message
-                        setProgressMessage(getResultMsg());
-                    }
-
-                    /**
-                     * set progress message
-                     *
-                     * @param message tips message
-                     */
-                    private void setProgressMessage(String message) {
-                        if (testProgressDialog != null) {
-                            testProgressDialog.setMessage(message);
-                        }
-                    }
-
-                    @Override
-                    public void onFinished(Profile profile) {
-                        mProgressHandler.sendEmptyMessageDelayed(MSG_FULL_TEST_FINISH, 2000);
-                        PingHelper.Companion.instance().releaseTempActivity();
-                    }
-                }, 2);
-                break;
-        }
-
+            @Override
+            public void onFinished(Profile profile) {
+                mProgressHandler.sendEmptyMessageDelayed(MSG_FULL_TEST_FINISH, 2000);
+                PingHelper.Companion.instance().releaseTempActivity();
+            }
+        });
     }
 
     private class ProfileViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnKeyListener {
@@ -973,7 +925,6 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             itemView.setOnKeyListener(this);
 
             initShareBtn();
-            initTcpPingBtn();
             initPingBtn();
         }
 
@@ -1021,6 +972,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                     dialog.show();
                 }
             });
+
             shareBtn.setOnLongClickListener(v -> {
                 Utils.INSTANCE.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.share, Toast.LENGTH_SHORT), shareBtn,
                         getWindow(), 0, Utils.INSTANCE.dpToPx(ProfileManagerActivity.this, 8)).show();
@@ -1046,7 +998,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                         }
 
                         ShadowsocksApplication.app.profileManager.updateProfile(profile);
-                        updateText(profile.getTx(), profile.getRx(), elapsed, profile.getTcpdelay());
+                        updateText(profile.getTx(), profile.getRx(), elapsed);
                     }
 
                     @Override
@@ -1073,77 +1025,27 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             });
         }
 
-        /**
-         * init tcp ping btn
-         */
-        private void initTcpPingBtn() {
-            final ImageView pingBtn = itemView.findViewById(R.id.tcp_ping_single);
-            pingBtn.setOnClickListener(v -> {
-                item.setElapsed(0);
-                final ProgressDialog singleTestProgressDialog = ProgressDialog.show(ProfileManagerActivity.this, getString(R.string.tips_testing), getString(R.string.tips_testing), false, true);
-                PingHelper.Companion.instance().tcpPing(ProfileManagerActivity.this, item, new PingCallback() {
-                    @Override
-                    public void onSuccess(@NotNull Profile profile, long tcpdelay) {
-                        if (profile.getTcpdelay() == 0) {
-                            profile.setTcpdelay(tcpdelay);
-                        } else if (profile.getTcpdelay() > tcpdelay) {
-                            profile.setTcpdelay(tcpdelay);
-                        }
-
-                        ShadowsocksApplication.app.profileManager.updateProfile(profile);
-                        updateText(profile.getTx(), profile.getRx(), profile.getElapsed(), tcpdelay);
-                    }
-
-                    @Override
-                    public void onFailed(Profile profile) {
-                    }
-
-                    @Override
-                    public void onFinished(Profile profile) {
-                        Snackbar.make(findViewById(android.R.id.content), getResultMsg(), Snackbar.LENGTH_LONG).show();
-                        singleTestProgressDialog.dismiss();
-                        PingHelper.Companion.instance().releaseTempActivity();
-                    }
-                });
-            });
-
-            pingBtn.setOnLongClickListener(v -> {
-                Utils.INSTANCE.positionToast(Toast.makeText(ProfileManagerActivity.this, R.string.tcp_ping, Toast.LENGTH_SHORT),
-                        pingBtn,
-                        getWindow(),
-                        0,
-                        Utils.INSTANCE.dpToPx(ProfileManagerActivity.this, 8))
-                        .show();
-                return true;
-            });
-        }
-
-
         public void updateText() {
             updateText(0, 0);
         }
 
         public void updateText(long txTotal, long rxTotal) {
-            updateText(txTotal, rxTotal, -1, -1);
+            updateText(txTotal, rxTotal, -1);
         }
 
-        public void updateText(long txTotal, long rxTotal, long elapsedInput, long tcpdelayInput) {
+        public void updateText(long txTotal, long rxTotal, long elapsedInput) {
             final SpannableStringBuilder builder = new SpannableStringBuilder();
             long tx = item.getTx() + txTotal;
             long rx = item.getRx() + rxTotal;
             long elapsed = item.getElapsed();
-            long tcpdelay = item.getTcpdelay();
             if (elapsedInput != -1) {
                 elapsed = elapsedInput;
-            }
-            if (tcpdelayInput != -1) {
-                tcpdelay = tcpdelayInput;
             }
             builder.append(item.getName());
             if (tx != 0 || rx != 0 || elapsed != 0 || item.getUrl_group() != "") {
                 int start = builder.length();
                 builder.append(getString(R.string.stat_profiles,
-                        TrafficMonitor.formatTraffic(tx), TrafficMonitor.formatTraffic(rx), String.valueOf(tcpdelay), String.valueOf(elapsed)));
+                        TrafficMonitor.formatTraffic(tx), TrafficMonitor.formatTraffic(rx), String.valueOf(elapsed), item.getUrl_group()));
                 builder.setSpan(new TextAppearanceSpan(ProfileManagerActivity.this, android.R.style.TextAppearance_Small),
                         start + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
@@ -1340,12 +1242,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                         builder.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    text.setText(builder);
-                }
-            });
+            handler.post(() -> text.setText(builder));
         }
 
         public void copyText() {
@@ -1371,7 +1268,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         @Override
         public boolean onLongClick(View v) {
             copyText();
-            return false;
+            return true;
         }
 
         @Override

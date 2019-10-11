@@ -22,7 +22,7 @@
     <string name="remote_dns_summary">用于远程分析的DNS（默认名称服务器8.8.8.8）</string>
     <string name="stat">Network Traffic</string>
     <string name="stat_summary">Sent: \t\t\t\t\t%3$s\t↑\t%1$s/s\nReceived: \t%4$s\t↓\t%2$s/s</string>
-    <string name="stat_profiles">\n%1$s↑\t%2$s↓\n%3$sms - %4$sms</string>
+    <string name="stat_profiles">\n%1$s↑\t%2$s↓\t%3$sms\n%4$s</string>
     <string name="traffic_summary">%1$s/s↑\t%2$s/s↓</string>
     <string name="connection_test_pending">Check Connectivity</string>
     <string name="connection_test_testing">Testing…</string>
@@ -159,10 +159,8 @@
 
     <string name="tips_sorting">Sorting...</string>
     <string name="action_full_test">Full HTTP latency test</string>
-    <string name="action_tcp_ping_full_test">Full TCP ping test</string>
     <string name="action_sort">Auto sort by latency</string>
     <string name="ping">Ping</string>
-    <string name="tcp_ping">TCP Ping</string>
     <string name="frontproxy_enable">Enable</string>
 
     <string name="frontproxy_addr">Address</string>
