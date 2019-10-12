@@ -441,7 +441,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 return;
             }
         }
-        ToastUtils.showShort(R.string.action_import_err);
+        ToastUtils.INSTANCE.showShort(R.string.action_import_err);
     }
 
     /**
@@ -581,7 +581,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         SubUpdateHelper.Companion.instance().updateSub(subs, 0, new SubUpdateCallback() {
             @Override
             public void onFailed() {
-                ToastUtils.showShort(R.string.ssrsub_error);
+                ToastUtils.INSTANCE.showShort(R.string.ssrsub_error);
             }
 
             @Override
@@ -640,7 +640,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
                 @Override
                 public void onFailed(int code, String msg) {
-                    ToastUtils.showShort(getString(R.string.ssrsub_error));
+                    ToastUtils.INSTANCE.showShort(getString(R.string.ssrsub_error));
                 }
 
                 @Override
@@ -826,9 +826,9 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 List<Profile> allProfiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
                 if (allProfiles != null && !allProfiles.isEmpty()) {
                     clipboard.setPrimaryClip(ClipData.newPlainText(null, makeString(allProfiles, "\n")));
-                    ToastUtils.showShort(R.string.action_export_msg);
+                    ToastUtils.INSTANCE.showShort(R.string.action_export_msg);
                 } else {
-                    ToastUtils.showShort(R.string.action_export_err);
+                    ToastUtils.INSTANCE.showShort(R.string.action_export_err);
                 }
                 return true;
             case R.id.action_sort:
@@ -1249,9 +1249,9 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             String subUrl = this.item.getUrl();
             if (!"".equals(subUrl)) {
                 clipboard.setPrimaryClip(ClipData.newPlainText(null, subUrl));
-                ToastUtils.showShort(R.string.action_export_msg);
+                ToastUtils.INSTANCE.showShort(R.string.action_export_msg);
             } else {
-                ToastUtils.showShort(R.string.action_export_err);
+                ToastUtils.INSTANCE.showShort(R.string.action_export_err);
             }
         }
 

@@ -24,7 +24,6 @@ import com.github.shadowsocks.job.DonaldTrump;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.IOUtils;
 import com.github.shadowsocks.utils.TcpFastOpen;
-import com.github.shadowsocks.utils.ToastUtils;
 import com.github.shadowsocks.utils.Utils;
 import com.github.shadowsocks.utils.VayLog;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -257,8 +256,6 @@ public class ShadowsocksApplication extends Application {
     public void onCreate() {
         super.onCreate();
         app = this;
-        // init toast utils
-        ToastUtils.init(getApplicationContext());
         initVariable();
 
         if (!BuildConfig.DEBUG) {

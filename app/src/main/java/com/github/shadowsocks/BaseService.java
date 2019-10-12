@@ -95,7 +95,7 @@ public abstract class BaseService extends Service {
     private BroadcastReceiver closeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ToastUtils.showShort(R.string.stopping);
+            ToastUtils.INSTANCE.showShort(R.string.stopping);
             stopRunner(true);
         }
     };
@@ -278,7 +278,7 @@ public abstract class BaseService extends Service {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    ToastUtils.showLong(R.string.method_unsafe);
+                    ToastUtils.INSTANCE.showLong(R.string.method_unsafe);
                 }
             });
         }

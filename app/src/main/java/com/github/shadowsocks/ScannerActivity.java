@@ -77,7 +77,7 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
                 scannerView.setResultHandler(this);
                 scannerView.startCamera();
             } else {
-                ToastUtils.showShort(R.string.add_profile_scanner_permission_required);
+                ToastUtils.INSTANCE.showShort(R.string.add_profile_scanner_permission_required);
                 finish();
             }
         }

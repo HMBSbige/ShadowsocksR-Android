@@ -98,9 +98,9 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
                         p.setProxyApps(in_proxyapp);
                         ShadowsocksApplication.app.profileManager.updateProfile(p);
                     }
-                    ToastUtils.showShort(R.string.action_apply_all);
+                    ToastUtils.INSTANCE.showShort(R.string.action_apply_all);
                 } else {
-                    ToastUtils.showShort(R.string.action_export_err);
+                    ToastUtils.INSTANCE.showShort(R.string.action_export_err);
                 }
                 return true;
             case R.id.action_export:
@@ -109,7 +109,7 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
                 ClipData clip = ClipData.newPlainText(Constants.Key.individual, bypass + "\n" + proxiedAppString);
                 if (clipboard != null) {
                     clipboard.setPrimaryClip(clip);
-                    ToastUtils.showShort(R.string.action_export_msg);
+                    ToastUtils.INSTANCE.showShort(R.string.action_export_msg);
                 }
                 return true;
             case R.id.action_import:
@@ -133,19 +133,19 @@ public class AppManager extends AppCompatActivity implements Toolbar.OnMenuItemC
                                 bypassSwitch.setChecked(Boolean.parseBoolean(enabled));
                                 profile.setIndividual(apps);
                                 ShadowsocksApplication.app.profileManager.updateProfile(profile);
-                                ToastUtils.showShort(R.string.action_import_msg);
+                                ToastUtils.INSTANCE.showShort(R.string.action_import_msg);
                                 appListView.setVisibility(View.GONE);
                                 loadingView.setVisibility(View.VISIBLE);
                                 initProxiedApps(apps);
                                 reloadApps();
                                 return true;
                             } catch (Exception e) {
-                                ToastUtils.showShort(R.string.action_import_err);
+                                ToastUtils.INSTANCE.showShort(R.string.action_import_err);
                             }
                         }
                     }
                 }
-                ToastUtils.showShort(R.string.action_import_err);
+                ToastUtils.INSTANCE.showShort(R.string.action_import_err);
                 return false;
             default:
                 break;

@@ -99,7 +99,7 @@ public abstract class BaseVpnService extends VpnService {
     private BroadcastReceiver closeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ToastUtils.showShort(R.string.stopping);
+            ToastUtils.INSTANCE.showShort(R.string.stopping);
             stopRunner(true);
         }
     };
@@ -282,7 +282,7 @@ public abstract class BaseVpnService extends VpnService {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    ToastUtils.showLong(R.string.method_unsafe);
+                    ToastUtils.INSTANCE.showLong(R.string.method_unsafe);
                 }
             });
         }

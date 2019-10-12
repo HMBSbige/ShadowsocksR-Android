@@ -589,16 +589,16 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                     IOUtils.INSTANCE.writeString(ShadowsocksApplication.app.getApplicationInfo().dataDir + '/' + "self.acl", IOUtils.INSTANCE.readString(inputStream));
 
                     progressDialog.dismiss();
-                    ToastUtils.showShort(R.string.aclupdate_successfully);
+                    ToastUtils.INSTANCE.showShort(R.string.aclupdate_successfully);
                 } catch (IOException e) {
                     e.printStackTrace();
                     progressDialog.dismiss();
-                    ToastUtils.showShort(R.string.aclupdate_failed);
+                    ToastUtils.INSTANCE.showShort(R.string.aclupdate_failed);
                 } catch (Exception e) {
                     // unknown failures, probably shouldn't retry
                     e.printStackTrace();
                     progressDialog.dismiss();
-                    ToastUtils.showShort(R.string.aclupdate_failed);
+                    ToastUtils.INSTANCE.showShort(R.string.aclupdate_failed);
                 } finally {
                     IOUtils.INSTANCE.close(inputStream);
                     IOUtils.INSTANCE.disconnect(conn);
