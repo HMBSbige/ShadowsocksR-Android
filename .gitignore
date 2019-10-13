@@ -84,7 +84,8 @@ lint/tmp/
 # NDK
   
 .gradle
-.idea
+.idea/*
+!.idea/codeStyles/
 **/*.iml
 local.properties
 build
