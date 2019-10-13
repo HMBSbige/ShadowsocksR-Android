@@ -360,7 +360,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                     @Override
                     public void run() {
                         boolean value = (boolean) v;
-                        final String result = TcpFastOpen.enabled(value);
+                        final String result = TcpFastOpen.INSTANCE.enabled(value);
                         if (result != null && !"Success.".equals(result)) {
                             activity.handler.post(new Runnable() {
                                 @Override
@@ -375,7 +375,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
             }
         });
 
-        if (!TcpFastOpen.supported()) {
+        if (!TcpFastOpen.INSTANCE.supported()) {
             tfo.setEnabled(false);
             tfo.setSummary(getString(R.string.tcp_fastopen_summary_unsupported, java.lang.System.getProperty("os.version")));
         }
