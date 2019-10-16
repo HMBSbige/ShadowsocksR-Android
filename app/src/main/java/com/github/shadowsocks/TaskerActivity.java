@@ -49,21 +49,21 @@ public class TaskerActivity extends AppCompatActivity {
             }
         });
 
-        taskerOption = TaskerSettings.fromIntent(getIntent());
+        taskerOption = TaskerSettings.Companion.fromIntent(getIntent());
         mSwitch = findViewById(R.id.serviceSwitch);
-        mSwitch.setChecked(taskerOption.switchOn);
+        mSwitch.setChecked(taskerOption.getSwitchOn());
         RecyclerView profilesList = findViewById(R.id.profilesList);
         LinearLayoutManager lm = new LinearLayoutManager(this);
         profilesList.setLayoutManager(lm);
         profilesList.setItemAnimator(new DefaultItemAnimator());
         profilesList.setAdapter(profilesAdapter);
 
-        if (taskerOption.profileId >= 0) {
+        if (taskerOption.getProfileId() >= 0) {
             int position = 0;
             List<Profile> profiles = profilesAdapter.profiles;
             for (int i = 0; i < profiles.size(); i++) {
                 Profile profile = profiles.get(i);
-                if (profile.getId() == taskerOption.profileId) {
+                if (profile.getId() == taskerOption.getProfileId()) {
                     position = i + 1;
                     break;
                 }
@@ -90,19 +90,19 @@ public class TaskerActivity extends AppCompatActivity {
         public void bindDefault() {
             item = null;
             text.setText(R.string.profile_default);
-            text.setChecked(taskerOption.profileId < 0);
+            text.setChecked(taskerOption.getProfileId() < 0);
         }
 
         public void bind(Profile item) {
             this.item = item;
             text.setText(item.getName());
-            text.setChecked(taskerOption.profileId == item.getId());
+            text.setChecked(taskerOption.getProfileId() == item.getId());
         }
 
         @Override
         public void onClick(View v) {
-            taskerOption.switchOn = mSwitch.isChecked();
-            taskerOption.profileId = item == null ? -1 : item.getId();
+            taskerOption.setSwitchOn(mSwitch.isChecked());
+            taskerOption.setProfileId(item == null ? -1 : item.getId());
             setResult(RESULT_OK, taskerOption.toIntent(TaskerActivity.this));
             finish();
         }

@@ -15,14 +15,14 @@ import com.github.shadowsocks.utils.Utils;
 public class TaskerReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        TaskerSettings settings = TaskerSettings.fromIntent(intent);
-        Profile profile = ShadowsocksApplication.app.profileManager.getProfile(settings.profileId);
+        TaskerSettings settings = TaskerSettings.Companion.fromIntent(intent);
+        Profile profile = ShadowsocksApplication.app.profileManager.getProfile(settings.getProfileId());
 
         if (profile != null) {
-            ShadowsocksApplication.app.switchProfile(settings.profileId);
+            ShadowsocksApplication.app.switchProfile(settings.getProfileId());
         }
 
-        if (settings.switchOn) {
+        if (settings.getSwitchOn()) {
             Utils.INSTANCE.startSsService(context);
         } else {
             Utils.INSTANCE.stopSsService(context);
