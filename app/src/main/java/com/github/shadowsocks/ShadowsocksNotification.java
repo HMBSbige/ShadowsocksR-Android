@@ -88,16 +88,16 @@ public class ShadowsocksNotification {
 
         @Override
         public void trafficUpdated(long txRate, long rxRate, long txTotal, long rxTotal) throws RemoteException {
-            String txr = TrafficMonitor.formatTraffic(txRate);
-            String rxr = TrafficMonitor.formatTraffic(rxRate);
+            String txr = TrafficMonitor.INSTANCE.formatTraffic(txRate);
+            String rxr = TrafficMonitor.INSTANCE.formatTraffic(rxRate);
             builder.setContentText(String.format(Locale.ENGLISH, service.getString(R.string.traffic_summary), txr, rxr));
 
             style.bigText(String.format(Locale.ENGLISH,
                     service.getString(R.string.stat_summary),
                     txr,
                     rxr,
-                    TrafficMonitor.formatTraffic(txTotal),
-                    TrafficMonitor.formatTraffic(rxTotal)));
+                    TrafficMonitor.INSTANCE.formatTraffic(txTotal),
+                    TrafficMonitor.INSTANCE.formatTraffic(rxTotal)));
             show();
         }
     };

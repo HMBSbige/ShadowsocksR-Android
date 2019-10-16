@@ -137,7 +137,7 @@ public abstract class BaseVpnService extends VpnService {
                     TimerTask task = new TimerTask() {
                         @Override
                         public void run() {
-                            if (TrafficMonitor.updateRate()) {
+                            if (TrafficMonitor.INSTANCE.updateRate()) {
                                 updateTrafficRate();
                             }
                         }
@@ -145,9 +145,9 @@ public abstract class BaseVpnService extends VpnService {
                     timer = new Timer(true);
                     timer.schedule(task, 1000, 1000);
                 }
-                TrafficMonitor.updateRate();
+                TrafficMonitor.INSTANCE.updateRate();
                 try {
-                    cb.trafficUpdated(TrafficMonitor.txRate, TrafficMonitor.rxRate, TrafficMonitor.txTotal, TrafficMonitor.rxTotal);
+                    cb.trafficUpdated(TrafficMonitor.INSTANCE.getTxRate(), TrafficMonitor.INSTANCE.getRxRate(), TrafficMonitor.INSTANCE.getTxTotal(), TrafficMonitor.INSTANCE.getRxTotal());
                 } catch (RemoteException e) {
                     VayLog.INSTANCE.e(TAG, "registerCallback", e);
                     ShadowsocksApplication.app.track(e);
@@ -261,7 +261,7 @@ public abstract class BaseVpnService extends VpnService {
         this.profile = profile;
 
         startService(new Intent(this, getClass()));
-        TrafficMonitor.reset();
+        TrafficMonitor.INSTANCE.reset();
         trafficMonitorThread = new TrafficMonitorThread(getApplicationContext());
         trafficMonitorThread.start();
 
@@ -315,9 +315,9 @@ public abstract class BaseVpnService extends VpnService {
         }
 
         // Make sure update total traffic when stopping the runner
-        updateTrafficTotal(TrafficMonitor.txTotal, TrafficMonitor.rxTotal);
+        updateTrafficTotal(TrafficMonitor.INSTANCE.getTxTotal(), TrafficMonitor.INSTANCE.getRxTotal());
 
-        TrafficMonitor.reset();
+        TrafficMonitor.INSTANCE.reset();
         if (trafficMonitorThread != null) {
             trafficMonitorThread.stopThread();
             trafficMonitorThread = null;
@@ -358,10 +358,10 @@ public abstract class BaseVpnService extends VpnService {
             @Override
             public void run() {
                 if (callbacksCount > 0) {
-                    long txRate = TrafficMonitor.txRate;
-                    long rxRate = TrafficMonitor.rxRate;
-                    long txTotal = TrafficMonitor.txTotal;
-                    long rxTotal = TrafficMonitor.rxTotal;
+                    long txRate = TrafficMonitor.INSTANCE.getTxRate();
+                    long rxRate = TrafficMonitor.INSTANCE.getRxRate();
+                    long txTotal = TrafficMonitor.INSTANCE.getTxTotal();
+                    long rxTotal = TrafficMonitor.INSTANCE.getRxTotal();
                     int n = callbacks.beginBroadcast();
                     for (int i = 0; i < n; i++) {
                         try {

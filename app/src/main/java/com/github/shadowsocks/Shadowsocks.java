@@ -228,10 +228,10 @@ public class Shadowsocks extends AppCompatActivity {
     }
 
     public void updateTraffic(long txRate, long rxRate, long txTotal, long rxTotal) {
-        txText.setText(TrafficMonitor.formatTraffic(txTotal));
-        rxText.setText(TrafficMonitor.formatTraffic(rxTotal));
-        txRateText.setText(TrafficMonitor.formatTraffic(txRate) + "/s");
-        rxRateText.setText(TrafficMonitor.formatTraffic(rxRate) + "/s");
+        txText.setText(TrafficMonitor.INSTANCE.formatTraffic(txTotal));
+        rxText.setText(TrafficMonitor.INSTANCE.formatTraffic(rxTotal));
+        txRateText.setText(TrafficMonitor.INSTANCE.formatTraffic(txRate) + "/s");
+        rxRateText.setText(TrafficMonitor.INSTANCE.formatTraffic(rxRate) + "/s");
     }
 
     public void attachService() {

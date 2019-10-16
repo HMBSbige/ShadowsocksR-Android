@@ -1045,7 +1045,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             if (tx != 0 || rx != 0 || elapsed != 0 || item.getUrl_group() != "") {
                 int start = builder.length();
                 builder.append(getString(R.string.stat_profiles,
-                        TrafficMonitor.formatTraffic(tx), TrafficMonitor.formatTraffic(rx), String.valueOf(elapsed), item.getUrl_group()));
+                        TrafficMonitor.INSTANCE.formatTraffic(tx), TrafficMonitor.INSTANCE.formatTraffic(rx), String.valueOf(elapsed), item.getUrl_group()));
                 builder.setSpan(new TextAppearanceSpan(ProfileManagerActivity.this, android.R.style.TextAppearance_Small),
                         start + 1, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
