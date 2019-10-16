@@ -111,7 +111,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     private GuardedProcess ssTestProcess;
 
     private int REQUEST_QRCODE = 1;
-    private boolean is_sort = false;
+    private boolean isSort = false;
 
     private ServiceBoundContext mServiceBoundContext;
     /**
@@ -176,12 +176,12 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 
         String action = getIntent().getAction();
-        if (action != null && action.equals(Constants.Action.SCAN)) {
+        if (Constants.Action.SCAN.equals(action)) {
             qrcodeScan();
         }
 
-        if (action != null && action.equals(Constants.Action.SORT)) {
-            is_sort = true;
+        if (Constants.Action.SORT.equals(action)) {
+            isSort = true;
         }
 
         setContentView(R.layout.layout_profiles);
@@ -206,7 +206,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         undoManager = new UndoSnackbarManager<>(profilesList, undo -> profilesAdapter.undo(undo), commit -> profilesAdapter.commit(commit));
 
-        if (!is_sort) {
+        if (!isSort) {
             new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
                     ItemTouchHelper.START | ItemTouchHelper.END) {
                 @Override
@@ -249,12 +249,12 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     }
 
     private void initGroupSpinner() {
-        Spinner spinner = findViewById(R.id.group_choose_spinner);
-        List<String> groups_name = ShadowsocksApplication.app.profileManager.getGroupNames();
-        groups_name.add(0, getString(R.string.allgroups));
-        ArrayAdapter<String> _Adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, groups_name);
-        spinner.setAdapter(_Adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Spinner groupSpinner = findViewById(R.id.group_choose_spinner);
+        List<String> groupNames = ShadowsocksApplication.app.profileManager.getGroupNames();
+        groupNames.add(0, getString(R.string.allgroups));
+        ArrayAdapter<String> groupAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, groupNames);
+        groupSpinner.setAdapter(groupAdapter);
+        groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
@@ -605,10 +605,12 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        EditText editText1 = myView.findViewById(R.id.editTextInput);
+                        EditText editText = myView.findViewById(R.id.editTextInput);
                         // add ssr sub by url
-                        String subUrl = editText1.getText().toString();
-                        addSSRSubByUrl(subUrl);
+                        String subUrl = editText.getText().toString();
+                        if (!TextUtils.isEmpty(subUrl)) {
+                            addSSRSubByUrl(subUrl.trim());
+                        }
                     }
                 })
                 .setNegativeButton(android.R.string.no, (dialog, which) -> ssrsubDialog());
@@ -1097,49 +1099,45 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
     private class ProfilesAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
 
+        private List<Profile> list;
         private List<Profile> profiles;
 
         public ProfilesAdapter() {
-            if (is_sort) {
-                List<Profile> list = ShadowsocksApplication.app.profileManager.getAllProfilesByElapsed();
-                if (list != null && !list.isEmpty()) {
-                    profiles = list;
-                }
+            if (isSort) {
+                list = ShadowsocksApplication.app.profileManager.getAllProfilesByElapsed();
             } else {
-                List<Profile> list = ShadowsocksApplication.app.profileManager.getAllProfiles();
-                if (list != null && !list.isEmpty()) {
-                    profiles = list;
-                }
+                list = ShadowsocksApplication.app.profileManager.getAllProfiles();
             }
 
-            if (profiles == null) {
+            if (list == null || list.isEmpty()) {
                 profiles = new ArrayList<>();
+            } else {
+                profiles = list;
             }
         }
 
 
-        public void onGroupChange(String groupname) {
-            List<Profile> list;
-            if (groupname.equals("All Groups") || groupname.equals("全部群组")) {
-                if (is_sort) {
+        public void onGroupChange(String groupName) {
+            if (getString(R.string.allgroups).equals(groupName)) {
+                if (isSort) {
                     list = ShadowsocksApplication.app.profileManager.getAllProfilesByElapsed();
                 } else {
                     list = ShadowsocksApplication.app.profileManager.getAllProfiles();
                 }
             } else {
-                if (is_sort) {
-                    list = ShadowsocksApplication.app.profileManager.getAllProfilesByGroupOrderbyElapse(groupname);
-
+                if (isSort) {
+                    list = ShadowsocksApplication.app.profileManager.getAllProfilesByGroupOrderbyElapse(groupName);
                 } else {
-                    list = ShadowsocksApplication.app.profileManager.getAllProfilesByGroup(groupname);
+                    list = ShadowsocksApplication.app.profileManager.getAllProfilesByGroup(groupName);
                 }
             }
-            if (list != null && !list.isEmpty()) {
+
+            if (list == null || list.isEmpty()) {
+                profiles = new ArrayList<>();
+            } else {
                 profiles = list;
             }
-            if (profiles == null) {
-                profiles = new ArrayList<>();
-            }
+
             notifyDataSetChanged();
         }
 
@@ -1219,6 +1217,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         private SSRSub item;
         private TextView text;
+        private boolean showUrlFlag = true;
 
         public SSRSubViewHolder(View view) {
             super(view);
@@ -1233,9 +1232,10 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public void updateText(boolean isShowUrl) {
             final SpannableStringBuilder builder = new SpannableStringBuilder();
-            builder.append(this.item.getUrl_group()).append("\n");
+            builder.append(this.item.getUrl_group());
             if (isShowUrl) {
                 int start = builder.length();
+                builder.append("\n");
                 builder.append(this.item.getUrl());
                 builder.setSpan(new TextAppearanceSpan(ProfileManagerActivity.this, android.R.style.TextAppearance_Small),
                         start,
@@ -1247,7 +1247,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         public void copyText() {
             String subUrl = this.item.getUrl();
-            if (!"".equals(subUrl)) {
+            if (!TextUtils.isEmpty(subUrl)) {
                 clipboard.setPrimaryClip(ClipData.newPlainText(null, subUrl));
                 ToastUtils.INSTANCE.showShort(R.string.action_export_msg);
             } else {
@@ -1262,7 +1262,8 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
 
         @Override
         public void onClick(View v) {
-            updateText(true);
+            updateText(showUrlFlag);
+            this.showUrlFlag = !showUrlFlag;
         }
 
         @Override
