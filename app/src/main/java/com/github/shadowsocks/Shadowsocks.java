@@ -382,7 +382,7 @@ public class Shadowsocks extends AppCompatActivity {
             TypedArray typedArray = obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
             title.setBackgroundResource(typedArray.getResourceId(0, 0));
             typedArray.recycle();
-            Typeface tf = Typefaces.get(this, "fonts/Iceland.ttf");
+            Typeface tf = Typefaces.INSTANCE.get(this, "fonts/Iceland.ttf");
             if (tf != null) {
                 title.setTypeface(tf);
             }
