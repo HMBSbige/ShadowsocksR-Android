@@ -142,15 +142,15 @@ public class ScannerActivity extends AppCompatActivity implements ZXingScannerVi
     public void handleResult(Result rawResult) {
         String uri = rawResult.getText();
         if (!TextUtils.isEmpty(uri)) {
-            List<Profile> all = Parser.findAll(uri);
-            if (all != null && !all.isEmpty()) {
+            List<Profile> all = Parser.INSTANCE.findAllSs(uri);
+            if (!all.isEmpty()) {
                 for (Profile p : all) {
                     ShadowsocksApplication.app.profileManager.createProfile(p);
                 }
             }
 
-            List<Profile> allSSR = Parser.findAll_ssr(uri);
-            if (allSSR != null && !allSSR.isEmpty()) {
+            List<Profile> allSSR = Parser.INSTANCE.findAllSsr(uri);
+            if (!allSSR.isEmpty()) {
                 for (Profile p : allSSR) {
                     ShadowsocksApplication.app.profileManager.createProfile(p);
                 }

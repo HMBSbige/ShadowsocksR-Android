@@ -17,19 +17,19 @@ object TcpFastOpen
 		val m = p.find(System.getProperty("os.version")!!)
 		if (m != null)
 		{
-			val kernel = Integer.parseInt(m.groups[1]!!.value)
+			val kernel = Integer.parseInt(m.groupValues[1])
 			return when
 			{
 				kernel < 3 -> false
 				kernel > 3 -> true
 				else ->
 				{
-					val major = Integer.parseInt(m.groups[2]!!.value)
+					val major = Integer.parseInt(m.groupValues[2])
 					when
 					{
 						major < 7 -> false
 						major > 7 -> true
-						else -> Integer.parseInt(m.groups[3]!!.value) >= 1
+						else -> Integer.parseInt(m.groupValues[3]) >= 1
 					}
 				}
 			}

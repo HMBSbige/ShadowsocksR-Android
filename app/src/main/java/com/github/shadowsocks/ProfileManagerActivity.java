@@ -426,13 +426,13 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
     private void clipboardImportAdd() {
         menu.toggle(true);
         if (clipboard.hasPrimaryClip()) {
-            List<Profile> profiles_normal = Parser.findAll(clipboard.getPrimaryClip().getItemAt(0).getText());
-            List<Profile> profiles_ssr = Parser.findAll_ssr(clipboard.getPrimaryClip().getItemAt(0).getText());
+            List<Profile> profiles_normal = Parser.INSTANCE.findAllSs(clipboard.getPrimaryClip().getItemAt(0).getText());
+            List<Profile> profiles_ssr = Parser.INSTANCE.findAllSsr(clipboard.getPrimaryClip().getItemAt(0).getText());
             final List<Profile> profiles = new ArrayList<>();
-            if (profiles_normal != null && !profiles_normal.isEmpty()) {
+            if (!profiles_normal.isEmpty()) {
                 profiles.addAll(profiles_normal);
             }
-            if (profiles_ssr != null && !profiles_ssr.isEmpty()) {
+            if (!profiles_ssr.isEmpty()) {
                 profiles.addAll(profiles_ssr);
             }
 
@@ -687,7 +687,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
             return;
         }
 
-        final List<Profile> profiles = Utils.INSTANCE.mergeList(Parser.findAll(sharedStr), Parser.findAll_ssr(sharedStr));
+        final List<Profile> profiles = Utils.INSTANCE.mergeList(Parser.INSTANCE.findAllSs(sharedStr), Parser.INSTANCE.findAllSsr(sharedStr));
 
         if (profiles.isEmpty()) {
             finish();
@@ -731,7 +731,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
                 if (TextUtils.isEmpty(contents)) {
                     return;
                 }
-                final List<Profile> profiles = Utils.INSTANCE.mergeList(Parser.findAll(contents), Parser.findAll_ssr(contents));
+                final List<Profile> profiles = Utils.INSTANCE.mergeList(Parser.INSTANCE.findAllSs(contents), Parser.INSTANCE.findAllSsr(contents));
                 if (profiles.isEmpty()) {
                     finish();
                     return;

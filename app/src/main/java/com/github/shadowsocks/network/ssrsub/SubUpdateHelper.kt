@@ -1,19 +1,16 @@
 package com.github.shadowsocks.network.ssrsub
 
-
 import android.os.*
 import android.text.*
-import android.util.Base64
 import com.github.shadowsocks.*
 import com.github.shadowsocks.database.*
 import com.github.shadowsocks.network.request.*
 import com.github.shadowsocks.utils.*
+import com.github.shadowsocks.utils.Base64
 import java.util.*
 import java.util.concurrent.*
 
-/**
- * Created by vay on 2018/07/19
- */
+@ExperimentalUnsignedTypes
 class SubUpdateHelper private constructor()
 {
 	private val mThreadPool: ScheduledThreadPoolExecutor
@@ -114,16 +111,9 @@ class SubUpdateHelper private constructor()
 	private fun handleResponse(sub: SSRSub, response: String, callback: SubUpdateCallback)
 	{
 		val deleteProfiles = ShadowsocksApplication.app.profileManager.getAllProfilesByGroup(sub.url_group)
-		val responseString = String(Base64.decode(response, Base64.URL_SAFE))
-		var profiles = Parser.findAll_ssr(responseString)
-		if (profiles == null)
-		{
-			profiles = ArrayList()
-		}
-		else
-		{
-			profiles.shuffle()
-		}
+		val responseString = Base64.decodeUrlSafe(response)
+		val profiles = Parser.findAllSsr(responseString)
+		profiles.shuffle()
 
 		for (profile in profiles)
 		{
@@ -189,8 +179,8 @@ class SubUpdateHelper private constructor()
 		 */
 		fun parseSSRSub(subUrl: String, base64text: String): SSRSub?
 		{
-			val profilesSSR = Parser.findAll_ssr(String(Base64.decode(base64text, Base64.URL_SAFE)))
-			if (profilesSSR != null && profilesSSR.isNotEmpty())
+			val profilesSSR = Parser.findAllSsr(Base64.decodeUrlSafe(base64text))
+			if (profilesSSR.isNotEmpty())
 			{
 				if (!TextUtils.isEmpty(profilesSSR[0].url_group))
 				{

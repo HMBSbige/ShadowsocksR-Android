@@ -17,6 +17,7 @@ class Profile
 	@DatabaseField
 	var localPort = 1080
 	@DatabaseField
+	//TODO:UShort
 	var remotePort = 8388
 	@DatabaseField
 	var password = ""
@@ -39,7 +40,7 @@ class Profile
 	@DatabaseField
 	var udpdns = false
 	@DatabaseField
-	var url_group = "ShadowsocksR"
+	var url_group = "Default Group"
 	@DatabaseField
 	var dns = "8.8.8.8:53"
 	@DatabaseField
@@ -65,6 +66,7 @@ class Profile
 
 	override fun toString(): String
 	{
+		//TODO
 		val result = Base64.encodeToString(String.format(Locale.ENGLISH, "%s:%d:%s:%s:%s:%s/?obfsparam=%s&protoparam=%s&remarks=%s&group=%s", host, remotePort, protocol, method, obfs, Base64.encodeToString(String.format(Locale.ENGLISH, "%s", password).toByteArray(), Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP), Base64.encodeToString(String.format(Locale.ENGLISH, "%s", obfs_param).toByteArray(), Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP), Base64.encodeToString(String.format(Locale.ENGLISH, "%s", protocol_param).toByteArray(), Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP), Base64.encodeToString(String.format(Locale.ENGLISH, "%s", name).toByteArray(), Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP), Base64.encodeToString(String.format(Locale.ENGLISH, "%s", url_group).toByteArray(), Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP)).toByteArray(), Base64.NO_PADDING or Base64.URL_SAFE or Base64.NO_WRAP)
 		return "ssr://$result"
 	}
