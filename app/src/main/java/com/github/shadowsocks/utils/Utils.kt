@@ -18,6 +18,8 @@ import java.security.*
 import java.util.*
 import kotlin.math.*
 
+val Throwable.readableMessage get() = localizedMessage ?: javaClass.name
+
 object Utils
 {
 	private const val TAG = "Shadowsocks"
@@ -184,6 +186,7 @@ object Utils
 			val mdg = MessageDigest.getInstance("SHA-1")
 			mdg.update(info.signatures[0].toByteArray())
 			return String(Base64.encode(mdg.digest(), 0))*/
+			//TODO
 			return getApplicationSignature(context).first()
 		}
 		catch (e: Exception)
@@ -239,27 +242,6 @@ object Utils
 								 from.visibility = View.GONE
 							 }
 						 })
-	}
-
-	fun readAllLines(f: File): String?
-	{
-		var scanner: Scanner? = null
-		try
-		{
-			scanner = Scanner(f)
-			scanner.useDelimiter("\\Z")
-			return scanner.next()
-		}
-		catch (e: Exception)
-		{
-			VayLog.e(TAG, "readAllLines", e)
-			ShadowsocksApplication.app.track(e)
-			return null
-		}
-		finally
-		{
-			scanner?.close()
-		}
 	}
 
 	/**

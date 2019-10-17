@@ -174,7 +174,7 @@ private constructor()
 
 		val cmds = ArrayList(Arrays.asList(*cmd))
 
-		if (TcpFastOpen.sendEnabled())
+		if (TcpFastOpen.sendEnabled)
 		{
 			cmds.add("--fast-open")
 		}

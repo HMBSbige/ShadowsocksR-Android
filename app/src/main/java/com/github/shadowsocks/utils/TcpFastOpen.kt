@@ -1,66 +1,54 @@
 package com.github.shadowsocks.utils
 
-import eu.chainfire.libsuperuser.*
 import java.io.*
 
 object TcpFastOpen
 {
-	private val p = Regex("^(\\d+)\\.(\\d+)\\.(\\d+)")
-
-	const val path = "/proc/sys/net/ipv4/tcp_fastopen"
+	private const val path = "/proc/sys/net/ipv4/tcp_fastopen"
 
 	/**
 	 * Is kernel version >= 3.7.1.
 	 */
-	fun supported(): Boolean
-	{
-		val m = p.find(System.getProperty("os.version")!!)
-		if (m != null)
+	val supported by lazy {
+		if (File(path).canRead()) return@lazy true
+		val match = """^(\d+)\.(\d+)\.(\d+)""".toRegex()
+			.find(System.getProperty("os.version") ?: "")
+		if (match == null) false
+		else when (match.groupValues[1].toInt())
 		{
-			val kernel = Integer.parseInt(m.groupValues[1])
-			return when
+			in Int.MIN_VALUE..2 -> false
+			3 -> when (match.groupValues[2].toInt())
 			{
-				kernel < 3 -> false
-				kernel > 3 -> true
-				else ->
-				{
-					val major = Integer.parseInt(m.groupValues[2])
-					when
-					{
-						major < 7 -> false
-						major > 7 -> true
-						else -> Integer.parseInt(m.groupValues[3]) >= 1
-					}
-				}
+				in Int.MIN_VALUE..6 -> false
+				7 -> match.groupValues[3].toInt() >= 1
+				else -> true
 			}
+			else -> true
 		}
-		return false
 	}
 
-	fun sendEnabled(): Boolean
-	{
-		val file = File(path)
-		return file.canRead() && Integer.parseInt(Utils.readAllLines(file)!!) and 1 > 0
-	}
-
-	fun enabled(value: Boolean): String?
-	{
-		if (sendEnabled() != value)
+	val sendEnabled: Boolean
+		get()
 		{
-			val suAvailable = Shell.SU.available()
-			if (suAvailable)
-			{
-				val valueFlag = if (value) 3 else 0
-				val cmds = arrayOf("if echo $valueFlag > /proc/sys/net/ipv4/tcp_fastopen; then", "  echo Success.", "else", "  echo Failed.")
-
-				val res = Shell.run("su", cmds, null, true)
-				if (res != null && res.isNotEmpty())
-				{
-					return Utils.makeString(res, "\n")
-				}
-			}
+			val file = File(path)
+			// File.readText doesn't work since this special file will return length 0
+			// on Android containers like Chrome OS, this file does not exist so we simply judge by the kernel version
+			return if (file.canRead()) file.bufferedReader().use { it.readText() }.trim().toInt() and 1 > 0 else supported
 		}
 
-		return null
+	fun enabled(value: Boolean): String
+	{
+		val valueFlag = if (value) 3 else 0
+		return try
+		{
+			ProcessBuilder("su", "-c", "echo $valueFlag > $path").redirectErrorStream(true)
+				.start()
+				.inputStream.bufferedReader()
+				.readText()
+		}
+		catch (e: IOException)
+		{
+			e.readableMessage
+		}
 	}
 }

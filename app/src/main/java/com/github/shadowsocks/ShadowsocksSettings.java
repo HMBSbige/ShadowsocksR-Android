@@ -39,7 +39,6 @@ package com.github.shadowsocks;
  */
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -53,7 +52,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -200,149 +198,86 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
             profile.setRemotePort((int) value);
             return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
-        findPreference(Constants.Key.localPort).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                profile.setLocalPort((int) value);
-                return ShadowsocksApplication.app.profileManager.updateProfile(profile);
-            }
+        findPreference(Constants.Key.localPort).setOnPreferenceChangeListener((preference, value) -> {
+            profile.setLocalPort((int) value);
+            return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
-        findPreference(Constants.Key.password).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                profile.setPassword((String) value);
-                return ShadowsocksApplication.app.profileManager.updateProfile(profile);
-            }
+        findPreference(Constants.Key.password).setOnPreferenceChangeListener((preference, value) -> {
+            profile.setPassword((String) value);
+            return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
-        findPreference(Constants.Key.method).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                profile.setMethod((String) value);
-                return ShadowsocksApplication.app.profileManager.updateProfile(profile);
-            }
+        findPreference(Constants.Key.method).setOnPreferenceChangeListener((preference, value) -> {
+            profile.setMethod((String) value);
+            return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
-        findPreference(Constants.Key.protocol).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                profile.setProtocol((String) value);
-                return ShadowsocksApplication.app.profileManager.updateProfile(profile);
-            }
+        findPreference(Constants.Key.protocol).setOnPreferenceChangeListener((preference, value) -> {
+            profile.setProtocol((String) value);
+            return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
-        findPreference(Constants.Key.protocol_param).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                profile.setProtocol_param((String) value);
-                return ShadowsocksApplication.app.profileManager.updateProfile(profile);
-            }
+        findPreference(Constants.Key.protocol_param).setOnPreferenceChangeListener((preference, value) -> {
+            profile.setProtocol_param((String) value);
+            return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
-        findPreference(Constants.Key.obfs).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                profile.setObfs((String) value);
-                return ShadowsocksApplication.app.profileManager.updateProfile(profile);
-            }
+        findPreference(Constants.Key.obfs).setOnPreferenceChangeListener((preference, value) -> {
+            profile.setObfs((String) value);
+            return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
-        findPreference(Constants.Key.obfs_param).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                profile.setObfs_param((String) value);
-                return ShadowsocksApplication.app.profileManager.updateProfile(profile);
-            }
+        findPreference(Constants.Key.obfs_param).setOnPreferenceChangeListener((preference, value) -> {
+            profile.setObfs_param((String) value);
+            return ShadowsocksApplication.app.profileManager.updateProfile(profile);
         });
 
-        findPreference(Constants.Key.route).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, final Object value) {
-                if ("self".equals(value)) {
-                    LayoutInflater li = LayoutInflater.from(activity);
-                    final View myView = li.inflate(R.layout.layout_edittext, null);
-                    final EditText AclUrlEditText = myView.findViewById(R.id.editTextInput);
-                    AclUrlEditText.setText(getPreferenceManager().getSharedPreferences().getString(Constants.Key.aclurl, ""));
-                    new AlertDialog.Builder(activity)
-                            .setView(myView)
-                            .setTitle(getString(R.string.acl_file))
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (TextUtils.isEmpty(AclUrlEditText.getText().toString())) {
-                                        setProfile(profile);
-                                    } else {
-                                        getPreferenceManager().getSharedPreferences().edit().putString(Constants.Key.aclurl, AclUrlEditText.getText().toString()).apply();
-                                        downloadAcl(AclUrlEditText.getText().toString());
-                                        ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.route, (String) value);
-                                    }
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    setProfile(profile);
-                                }
-                            })
-                            .create().show();
-                } else {
-                    ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.route, (String) value);
-                }
-                return true;
+        findPreference(Constants.Key.route).setOnPreferenceChangeListener((preference, value) -> {
+            if ("self".equals(value)) {
+                LayoutInflater li = LayoutInflater.from(activity);
+                final View myView = li.inflate(R.layout.layout_edittext, null);
+                final EditText AclUrlEditText = myView.findViewById(R.id.editTextInput);
+                AclUrlEditText.setText(getPreferenceManager().getSharedPreferences().getString(Constants.Key.aclurl, ""));
+                new AlertDialog.Builder(activity)
+                        .setView(myView)
+                        .setTitle(getString(R.string.acl_file))
+                        .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                            if (TextUtils.isEmpty(AclUrlEditText.getText().toString())) {
+                                setProfile(profile);
+                            } else {
+                                getPreferenceManager().getSharedPreferences().edit().putString(Constants.Key.aclurl, AclUrlEditText.getText().toString()).apply();
+                                downloadAcl(AclUrlEditText.getText().toString());
+                                ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.route, (String) value);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, (dialog, which) -> setProfile(profile))
+                        .create().show();
+            } else {
+                ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.route, (String) value);
             }
+            return true;
         });
 
         isProxyApps = (SwitchPreference) findPreference(Constants.Key.proxyApps);
-        isProxyApps.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(activity, AppManager.class));
-                isProxyApps.setChecked(true);
-                return false;
-            }
+        isProxyApps.setOnPreferenceClickListener(preference -> {
+            startActivity(new Intent(activity, AppManager.class));
+            isProxyApps.setChecked(true);
+            return false;
         });
 
-        isProxyApps.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                return ShadowsocksApplication.app.profileManager.updateAllProfileByBoolean("proxyApps", (boolean) value);
-            }
-        });
+        isProxyApps.setOnPreferenceChangeListener((preference, value) -> ShadowsocksApplication.app.profileManager.updateAllProfileByBoolean("proxyApps", (boolean) value));
 
-        findPreference(Constants.Key.udpdns).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                return ShadowsocksApplication.app.profileManager.updateAllProfileByBoolean("udpdns", (boolean) value);
-            }
-        });
+        findPreference(Constants.Key.udpdns).setOnPreferenceChangeListener((preference, value) -> ShadowsocksApplication.app.profileManager.updateAllProfileByBoolean("udpdns", (boolean) value));
 
         findPreference(Constants.Key.dns).
 
-                setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object value) {
-                        return ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.dns, (String) value);
-                    }
-                });
+                setOnPreferenceChangeListener((preference, value) -> ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.dns, (String) value));
 
         findPreference(Constants.Key.china_dns).
 
-                setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                    @Override
-                    public boolean onPreferenceChange(Preference preference, Object value) {
-                        return ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.china_dns, (String) value);
-                    }
-                });
+                setOnPreferenceChangeListener((preference, value) -> ShadowsocksApplication.app.profileManager.updateAllProfileByString(Constants.Key.china_dns, (String) value));
 
-        findPreference(Constants.Key.ipv6).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                return ShadowsocksApplication.app.profileManager.updateAllProfileByBoolean("ipv6", (boolean) value);
-            }
-        });
+        findPreference(Constants.Key.ipv6).setOnPreferenceChangeListener((preference, value) -> ShadowsocksApplication.app.profileManager.updateAllProfileByBoolean("ipv6", (boolean) value));
 
         SwitchPreference switchPre = (SwitchPreference) findPreference(Constants.Key.isAutoConnect);
-        switchPre.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object value) {
-                BootReceiver.setEnabled(activity, (boolean) value);
-                return true;
-            }
+        switchPre.setOnPreferenceChangeListener((preference, value) -> {
+            BootReceiver.setEnabled(activity, (boolean) value);
+            return true;
         });
 
         if (getPreferenceManager().getSharedPreferences().getBoolean(Constants.Key.isAutoConnect, false)) {
@@ -353,68 +288,52 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
         switchPre.setChecked(BootReceiver.getEnabled(activity));
 
         SwitchPreference tfo = (SwitchPreference) findPreference(Constants.Key.tfo);
-        tfo.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, final Object v) {
-                ShadowsocksApplication.app.mThreadPool.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        boolean value = (boolean) v;
-                        final String result = TcpFastOpen.INSTANCE.enabled(value);
-                        if (result != null && !"Success.".equals(result)) {
-                            activity.handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Snackbar.make(activity.findViewById(android.R.id.content), result, Snackbar.LENGTH_LONG).show();
-                                }
-                            });
-                        }
+        tfo.setOnPreferenceChangeListener((preference, v) -> {
+            ShadowsocksApplication.app.mThreadPool.execute(() -> {
+                boolean value = (boolean) v;
+                final String result = TcpFastOpen.INSTANCE.enabled(value).trim();
+                if (!TcpFastOpen.INSTANCE.getSendEnabled()) {
+                    if (TextUtils.isEmpty(result)) {
+                        activity.handler.post(() -> Snackbar.make(activity.findViewById(android.R.id.content), getText(R.string.tcp_fastopen_summary_unsupported).toString(), Snackbar.LENGTH_LONG).show());
+                    } else {
+                        activity.handler.post(() -> Snackbar.make(activity.findViewById(android.R.id.content), result, Snackbar.LENGTH_LONG).show());
                     }
-                });
-                return true;
-            }
+                }
+            });
+            return true;
         });
 
-        if (!TcpFastOpen.INSTANCE.supported()) {
+        if (!TcpFastOpen.INSTANCE.getSupported()) {
             tfo.setEnabled(false);
             tfo.setSummary(getString(R.string.tcp_fastopen_summary_unsupported, java.lang.System.getProperty("os.version")));
         }
 
-        findPreference("recovery").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                ShadowsocksApplication.app.track(TAG, "reset");
-                activity.recovery();
-                return true;
-            }
+        findPreference("recovery").setOnPreferenceClickListener(preference -> {
+            ShadowsocksApplication.app.track(TAG, "reset");
+            activity.recovery();
+            return true;
         });
 
-        findPreference("ignore_battery_optimization").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                ShadowsocksApplication.app.track(TAG, "ignore_battery_optimization");
-                activity.ignoreBatteryOptimization();
-                return true;
-            }
+        findPreference("ignore_battery_optimization").setOnPreferenceClickListener(preference -> {
+            ShadowsocksApplication.app.track(TAG, "ignore_battery_optimization");
+            activity.ignoreBatteryOptimization();
+            return true;
         });
 
-        findPreference("aclupdate").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                ShadowsocksApplication.app.track(TAG, "aclupdate");
-                String url = getPreferenceManager().getSharedPreferences().getString(Constants.Key.aclurl, "");
-                if ("".equals(url)) {
-                    new AlertDialog.Builder(activity)
-                            .setTitle(getString(R.string.aclupdate))
-                            .setNegativeButton(getString(android.R.string.ok), null)
-                            .setMessage(R.string.aclupdate_url_notset)
-                            .create()
-                            .show();
-                } else {
-                    downloadAcl(url);
-                }
-                return true;
+        findPreference("aclupdate").setOnPreferenceClickListener(preference -> {
+            ShadowsocksApplication.app.track(TAG, "aclupdate");
+            String url = getPreferenceManager().getSharedPreferences().getString(Constants.Key.aclurl, "");
+            if ("".equals(url)) {
+                new AlertDialog.Builder(activity)
+                        .setTitle(getString(R.string.aclupdate))
+                        .setNegativeButton(getString(android.R.string.ok), null)
+                        .setMessage(R.string.aclupdate_url_notset)
+                        .create()
+                        .show();
+            } else {
+                downloadAcl(url);
             }
+            return true;
         });
 
         if (!new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + '/' + "self.acl").exists() &&
@@ -422,152 +341,137 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
             downloadAcl(getPreferenceManager().getSharedPreferences().getString(Constants.Key.aclurl, ""));
         }
 
-        findPreference("about").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                ShadowsocksApplication.app.track(TAG, "about");
-                WebView web = new WebView(activity);
-                web.loadUrl("file:///android_asset/pages/about.html");
-                web.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        try {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                        } catch (Exception e) {
-                            // Ignore
-                        }
-                        return true;
+        findPreference("about").setOnPreferenceClickListener(preference -> {
+            ShadowsocksApplication.app.track(TAG, "about");
+            WebView web = new WebView(activity);
+            web.loadUrl("file:///android_asset/pages/about.html");
+            web.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    } catch (Exception e) {
+                        // Ignore
                     }
-                });
+                    return true;
+                }
+            });
 
-                new AlertDialog.Builder(activity)
-                        .setTitle(String.format(Locale.ENGLISH, getString(R.string.about_title), BuildConfig.VERSION_NAME))
-                        .setNegativeButton(getString(android.R.string.ok), null)
-                        .setView(web)
-                        .create()
-                        .show();
-                return true;
-            }
+            new AlertDialog.Builder(activity)
+                    .setTitle(String.format(Locale.ENGLISH, getString(R.string.about_title), BuildConfig.VERSION_NAME))
+                    .setNegativeButton(getString(android.R.string.ok), null)
+                    .setView(web)
+                    .create()
+                    .show();
+            return true;
         });
 
-        findPreference("logcat").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                ShadowsocksApplication.app.track(TAG, "logcat");
-                LayoutInflater li = LayoutInflater.from(activity);
-                final View myView = li.inflate(R.layout.layout_edittext, null);
-                EditText et_logcat = myView.findViewById(R.id.editTextInput);
-                try {
-                    Process logcat = Runtime.getRuntime().exec("logcat -d");
-                    BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
-                    String line = "";
+        findPreference("logcat").setOnPreferenceClickListener(preference -> {
+            ShadowsocksApplication.app.track(TAG, "logcat");
+            LayoutInflater li = LayoutInflater.from(activity);
+            final View myView = li.inflate(R.layout.layout_edittext, null);
+            EditText et_logcat = myView.findViewById(R.id.editTextInput);
+            try {
+                Process logcat = Runtime.getRuntime().exec("logcat -d");
+                BufferedReader br = new BufferedReader(new InputStreamReader(logcat.getInputStream()));
+                String line = "";
+                line = br.readLine();
+                while (line != null) {
+                    et_logcat.append(line);
+                    et_logcat.append("\n");
                     line = br.readLine();
-                    while (line != null) {
-                        et_logcat.append(line);
-                        et_logcat.append("\n");
-                        line = br.readLine();
-                    }
-                    br.close();
-                } catch (Exception e) {
-                    // unknown failures, probably shouldn't retry
-                    e.printStackTrace();
                 }
-
-                new AlertDialog.Builder(activity)
-                        .setView(myView)
-                        .setTitle("Logcat")
-                        .setNegativeButton(getString(android.R.string.ok), null)
-                        .create()
-                        .show();
-                return true;
+                br.close();
+            } catch (Exception e) {
+                // unknown failures, probably shouldn't retry
+                e.printStackTrace();
             }
+
+            new AlertDialog.Builder(activity)
+                    .setView(myView)
+                    .setTitle("Logcat")
+                    .setNegativeButton(getString(android.R.string.ok), null)
+                    .create()
+                    .show();
+            return true;
         });
 
-        findPreference(Constants.Key.frontproxy).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
+        findPreference(Constants.Key.frontproxy).setOnPreferenceClickListener(preference -> {
+            final SharedPreferences prefs = getPreferenceManager().getSharedPreferences();
 
-                View view = View.inflate(activity, R.layout.layout_front_proxy, null);
-                Switch sw_frontproxy_enable = view.findViewById(R.id.sw_frontproxy_enable);
-                final Spinner sp_frontproxy_type = view.findViewById(R.id.sp_frontproxy_type);
-                final EditText et_frontproxy_addr = view.findViewById(R.id.et_frontproxy_addr);
-                final EditText et_frontproxy_port = view.findViewById(R.id.et_frontproxy_port);
-                final EditText et_frontproxy_username = view.findViewById(R.id.et_frontproxy_username);
-                final EditText et_frontproxy_password = view.findViewById(R.id.et_frontproxy_password);
+            View view = View.inflate(activity, R.layout.layout_front_proxy, null);
+            Switch sw_frontproxy_enable = view.findViewById(R.id.sw_frontproxy_enable);
+            final Spinner sp_frontproxy_type = view.findViewById(R.id.sp_frontproxy_type);
+            final EditText et_frontproxy_addr = view.findViewById(R.id.et_frontproxy_addr);
+            final EditText et_frontproxy_port = view.findViewById(R.id.et_frontproxy_port);
+            final EditText et_frontproxy_username = view.findViewById(R.id.et_frontproxy_username);
+            final EditText et_frontproxy_password = view.findViewById(R.id.et_frontproxy_password);
 
-                List<String> stringArray = Arrays.asList(getResources().getStringArray(R.array.frontproxy_type_entry));
-                int indexOf = stringArray.indexOf(prefs.getString("frontproxy_type", "socks5"));
-                sp_frontproxy_type.setSelection(indexOf);
+            List<String> stringArray = Arrays.asList(getResources().getStringArray(R.array.frontproxy_type_entry));
+            int indexOf = stringArray.indexOf(prefs.getString("frontproxy_type", "socks5"));
+            sp_frontproxy_type.setSelection(indexOf);
 
-                if (prefs.getInt("frontproxy_enable", 0) == 1) {
-                    sw_frontproxy_enable.setChecked(true);
-                }
-
-                et_frontproxy_addr.setText(prefs.getString("frontproxy_addr", ""));
-                et_frontproxy_port.setText(prefs.getString("frontproxy_port", ""));
-                et_frontproxy_username.setText(prefs.getString("frontproxy_username", ""));
-                et_frontproxy_password.setText(prefs.getString("frontproxy_password", ""));
-
-                sw_frontproxy_enable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        SharedPreferences.Editor prefs_edit = prefs.edit();
-                        if (isChecked) {
-                            prefs_edit.putInt("frontproxy_enable", 1);
-                            if (!new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").exists()) {
-                                String proxychains_conf = String.format(Locale.ENGLISH,
-                                        Constants.ConfigUtils.PROXYCHAINS,
-                                        prefs.getString("frontproxy_type", "socks5"),
-                                        prefs.getString("frontproxy_addr", ""),
-                                        prefs.getString("frontproxy_port", ""),
-                                        prefs.getString("frontproxy_username", ""),
-                                        prefs.getString("frontproxy_password", ""));
-                                Utils.INSTANCE.printToFile(new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf"), proxychains_conf, true);
-                            }
-                        } else {
-                            prefs_edit.putInt("frontproxy_enable", 0);
-                            if (new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").exists()) {
-                                boolean deleteFlag = new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").delete();
-                                VayLog.INSTANCE.d(TAG, "delete proxychains.conf = " + deleteFlag);
-                            }
-                        }
-                        prefs_edit.apply();
-                    }
-                });
-
-                new AlertDialog.Builder(activity)
-                        .setTitle(getString(R.string.frontproxy_set))
-                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferences.Editor prefs_edit = prefs.edit();
-                                prefs_edit.putString("frontproxy_type", sp_frontproxy_type.getSelectedItem().toString());
-
-                                prefs_edit.putString("frontproxy_addr", et_frontproxy_addr.getText().toString());
-                                prefs_edit.putString("frontproxy_port", et_frontproxy_port.getText().toString());
-                                prefs_edit.putString("frontproxy_username", et_frontproxy_username.getText().toString());
-                                prefs_edit.putString("frontproxy_password", et_frontproxy_password.getText().toString());
-
-                                prefs_edit.apply();
-
-                                if (new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").exists()) {
-                                    String proxychains_conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.PROXYCHAINS,
-                                            prefs.getString("frontproxy_type", "socks5")
-                                            , prefs.getString("frontproxy_addr", "")
-                                            , prefs.getString("frontproxy_port", "")
-                                            , prefs.getString("frontproxy_username", "")
-                                            , prefs.getString("frontproxy_password", ""));
-                                    Utils.INSTANCE.printToFile(new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf"), proxychains_conf, true);
-                                }
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .setView(view)
-                        .create()
-                        .show();
-                return true;
+            if (prefs.getInt("frontproxy_enable", 0) == 1) {
+                sw_frontproxy_enable.setChecked(true);
             }
+
+            et_frontproxy_addr.setText(prefs.getString("frontproxy_addr", ""));
+            et_frontproxy_port.setText(prefs.getString("frontproxy_port", ""));
+            et_frontproxy_username.setText(prefs.getString("frontproxy_username", ""));
+            et_frontproxy_password.setText(prefs.getString("frontproxy_password", ""));
+
+            sw_frontproxy_enable.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                SharedPreferences.Editor prefs_edit = prefs.edit();
+                if (isChecked) {
+                    prefs_edit.putInt("frontproxy_enable", 1);
+                    if (!new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").exists()) {
+                        String proxychains_conf = String.format(Locale.ENGLISH,
+                                Constants.ConfigUtils.PROXYCHAINS,
+                                prefs.getString("frontproxy_type", "socks5"),
+                                prefs.getString("frontproxy_addr", ""),
+                                prefs.getString("frontproxy_port", ""),
+                                prefs.getString("frontproxy_username", ""),
+                                prefs.getString("frontproxy_password", ""));
+                        Utils.INSTANCE.printToFile(new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf"), proxychains_conf, true);
+                    }
+                } else {
+                    prefs_edit.putInt("frontproxy_enable", 0);
+                    if (new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").exists()) {
+                        boolean deleteFlag = new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").delete();
+                        VayLog.INSTANCE.d(TAG, "delete proxychains.conf = " + deleteFlag);
+                    }
+                }
+                prefs_edit.apply();
+            });
+
+            new AlertDialog.Builder(activity)
+                    .setTitle(getString(R.string.frontproxy_set))
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        SharedPreferences.Editor prefs_edit = prefs.edit();
+                        prefs_edit.putString("frontproxy_type", sp_frontproxy_type.getSelectedItem().toString());
+
+                        prefs_edit.putString("frontproxy_addr", et_frontproxy_addr.getText().toString());
+                        prefs_edit.putString("frontproxy_port", et_frontproxy_port.getText().toString());
+                        prefs_edit.putString("frontproxy_username", et_frontproxy_username.getText().toString());
+                        prefs_edit.putString("frontproxy_password", et_frontproxy_password.getText().toString());
+
+                        prefs_edit.apply();
+
+                        if (new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf").exists()) {
+                            String proxychains_conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.PROXYCHAINS,
+                                    prefs.getString("frontproxy_type", "socks5")
+                                    , prefs.getString("frontproxy_addr", "")
+                                    , prefs.getString("frontproxy_port", "")
+                                    , prefs.getString("frontproxy_username", "")
+                                    , prefs.getString("frontproxy_password", ""));
+                            Utils.INSTANCE.printToFile(new File(ShadowsocksApplication.app.getApplicationInfo().dataDir + "/proxychains.conf"), proxychains_conf, true);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .setView(view)
+                    .create()
+                    .show();
+            return true;
         });
     }
 
@@ -577,34 +481,31 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                 getString(R.string.aclupdate_downloading),
                 false, false);
 
-        ShadowsocksApplication.app.mThreadPool.execute(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                HttpURLConnection conn = null;
-                InputStream inputStream = null;
-                try {
-                    conn = (HttpURLConnection) new URL(url).openConnection();
-                    inputStream = conn.getInputStream();
-                    IOUtils.INSTANCE.writeString(ShadowsocksApplication.app.getApplicationInfo().dataDir + '/' + "self.acl", IOUtils.INSTANCE.readString(inputStream));
+        ShadowsocksApplication.app.mThreadPool.execute(() -> {
+            Looper.prepare();
+            HttpURLConnection conn = null;
+            InputStream inputStream = null;
+            try {
+                conn = (HttpURLConnection) new URL(url).openConnection();
+                inputStream = conn.getInputStream();
+                IOUtils.INSTANCE.writeString(ShadowsocksApplication.app.getApplicationInfo().dataDir + '/' + "self.acl", IOUtils.INSTANCE.readString(inputStream));
 
-                    progressDialog.dismiss();
-                    ToastUtils.INSTANCE.showShort(R.string.aclupdate_successfully);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    progressDialog.dismiss();
-                    ToastUtils.INSTANCE.showShort(R.string.aclupdate_failed);
-                } catch (Exception e) {
-                    // unknown failures, probably shouldn't retry
-                    e.printStackTrace();
-                    progressDialog.dismiss();
-                    ToastUtils.INSTANCE.showShort(R.string.aclupdate_failed);
-                } finally {
-                    IOUtils.INSTANCE.close(inputStream);
-                    IOUtils.INSTANCE.disconnect(conn);
-                }
-                Looper.loop();
+                progressDialog.dismiss();
+                ToastUtils.INSTANCE.showShort(R.string.aclupdate_successfully);
+            } catch (IOException e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+                ToastUtils.INSTANCE.showShort(R.string.aclupdate_failed);
+            } catch (Exception e) {
+                // unknown failures, probably shouldn't retry
+                e.printStackTrace();
+                progressDialog.dismiss();
+                ToastUtils.INSTANCE.showShort(R.string.aclupdate_failed);
+            } finally {
+                IOUtils.INSTANCE.close(inputStream);
+                IOUtils.INSTANCE.disconnect(conn);
             }
+            Looper.loop();
         });
     }
 

@@ -332,7 +332,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             cmds.add(getApplicationInfo().dataDir + '/' + profile.getRoute() + ".acl");
         }
 
-        if (TcpFastOpen.INSTANCE.sendEnabled()) {
+        if (TcpFastOpen.INSTANCE.getSendEnabled()) {
             cmds.add("--fast-open");
         }
 

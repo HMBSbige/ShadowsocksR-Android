@@ -288,13 +288,8 @@ public class ShadowsocksApplication extends Application {
         pending.setResultCallback(callback, 2, TimeUnit.SECONDS);
         JobManager.create(this).addJobCreator(new DonaldTrump());
 
-        if (settings.getBoolean(Constants.Key.tfo, false) && TcpFastOpen.INSTANCE.supported()) {
-            mThreadPool.execute(new Runnable() {
-                @Override
-                public void run() {
-                    TcpFastOpen.INSTANCE.enabled(settings.getBoolean(Constants.Key.tfo, false));
-                }
-            });
+        if (settings.getBoolean(Constants.Key.tfo, false) && TcpFastOpen.INSTANCE.getSupported()) {
+            mThreadPool.execute(() -> TcpFastOpen.INSTANCE.enabled(settings.getBoolean(Constants.Key.tfo, false)));
         }
     }
 
