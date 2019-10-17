@@ -26,6 +26,7 @@ android {
         }
         multiDexEnabled true
         proguardFiles
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

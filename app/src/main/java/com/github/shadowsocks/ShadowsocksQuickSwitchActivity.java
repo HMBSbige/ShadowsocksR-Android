@@ -138,7 +138,7 @@ public class ShadowsocksQuickSwitchActivity extends AppCompatActivity {
 
         public ProfilesAdapter() {
             List<Profile> profiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
-            if (profiles == null || profiles.isEmpty()) {
+            if (profiles.isEmpty()) {
                 this.profiles = new ArrayList<>();
             } else {
                 this.profiles = profiles;

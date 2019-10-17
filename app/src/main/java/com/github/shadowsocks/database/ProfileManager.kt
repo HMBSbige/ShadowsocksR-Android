@@ -37,12 +37,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 
 		}
 
-	/**
-	 * get all profiles
-	 *
-	 * @return get failed return null.
-	 */
-	val allProfiles: List<Profile>?
+	val allProfiles: List<Profile>
 		get()
 		{
 			return try
@@ -53,9 +48,8 @@ class ProfileManager(private val dbHelper: DBHelper)
 			{
 				VayLog.e(TAG, "getAllProfiles", e)
 				ShadowsocksApplication.app.track(e)
-				null
+				emptyList()
 			}
-
 		}
 
 	/**

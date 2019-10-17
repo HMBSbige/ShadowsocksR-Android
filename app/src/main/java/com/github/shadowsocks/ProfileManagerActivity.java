@@ -826,7 +826,7 @@ public class ProfileManagerActivity extends AppCompatActivity implements View.On
         switch (item.getItemId()) {
             case R.id.action_export:
                 List<Profile> allProfiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
-                if (allProfiles != null && !allProfiles.isEmpty()) {
+                if (!allProfiles.isEmpty()) {
                     clipboard.setPrimaryClip(ClipData.newPlainText(null, makeString(allProfiles, "\n")));
                     ToastUtils.INSTANCE.showShort(R.string.action_export_msg);
                 } else {

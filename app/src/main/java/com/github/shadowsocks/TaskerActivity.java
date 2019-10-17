@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.utils.TaskerSettings;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.shadowsocks.ShadowsocksApplication.app;
@@ -115,21 +114,13 @@ public class TaskerActivity extends AppCompatActivity {
 
         public ProfilesAdapter() {
             profiles = app.profileManager.getAllProfiles();
-            if (profiles == null) {
-                profiles = new ArrayList<>();
-            }
 
             String version = Build.VERSION.SDK_INT >= 21 ? "material" : "holo";
             name = "select_dialog_singlechoice_" + version;
         }
 
         public List<Profile> profiles() {
-            List<Profile> allProfiles = app.profileManager.getAllProfiles();
-            if (allProfiles == null) {
-                return new ArrayList<>();
-            } else {
-                return allProfiles;
-            }
+            return app.profileManager.getAllProfiles();
         }
 
         @Override
