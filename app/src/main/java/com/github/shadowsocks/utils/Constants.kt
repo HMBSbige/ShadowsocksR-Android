@@ -2,6 +2,8 @@ package com.github.shadowsocks.utils
 
 object Constants
 {
+	const val DefaultHostName = "198.199.101.152"
+
 	object Executable
 	{
 		const val REDSOCKS = "libredsocks.so"
@@ -35,7 +37,6 @@ object Constants
 
 		const val individual = "Proxyed"
 
-		const val isNAT = "isNAT"
 		const val route = "route"
 		const val aclurl = "aclurl"
 
@@ -76,11 +77,6 @@ object Constants
 		const val CONNECTED = 2
 		const val STOPPING = 3
 		const val STOPPED = 4
-
-		fun isAvailable(state: Int): Boolean
-		{
-			return state != CONNECTED && state != CONNECTING
-		}
 	}
 
 	object Action

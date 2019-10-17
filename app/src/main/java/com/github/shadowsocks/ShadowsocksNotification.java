@@ -252,9 +252,9 @@ public class ShadowsocksNotification {
     private int getServiceState() {
         int state = 0;
         if (service instanceof BaseVpnService) {
-            state = ((BaseVpnService) service).getState();
+            state = ((BaseVpnService) service).getCurrentState();
         } else if (service instanceof BaseService) {
-            state = ((BaseService) service).getState();
+            state = ((BaseService) service).getCurrentState();
         }
         return state;
     }
@@ -263,10 +263,10 @@ public class ShadowsocksNotification {
         IShadowsocksService.Stub binder = null;
         if (service instanceof BaseVpnService) {
             BaseVpnService vpnService = (BaseVpnService) service;
-            binder = vpnService.binder;
+            binder = vpnService.getBinder();
         } else if (service instanceof BaseService) {
             BaseService baseService = (BaseService) service;
-            binder = baseService.binder;
+            binder = baseService.getBinder();
         }
         if (binder != null) {
             binder.registerCallback(callback);
@@ -277,10 +277,10 @@ public class ShadowsocksNotification {
         IShadowsocksService.Stub binder = null;
         if (service instanceof BaseVpnService) {
             BaseVpnService vpnService = (BaseVpnService) service;
-            binder = vpnService.binder;
+            binder = vpnService.getBinder();
         } else if (service instanceof BaseService) {
             BaseService baseService = (BaseService) service;
-            binder = baseService.binder;
+            binder = baseService.getBinder();
         }
         if (binder != null) {
             binder.unregisterCallback(callback);

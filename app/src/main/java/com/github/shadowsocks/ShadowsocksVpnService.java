@@ -88,7 +88,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
         if (SERVICE_INTERFACE.equals(action)) {
             return super.onBind(intent);
         } else if (Constants.Action.SERVICE.equals(action)) {
-            return binder;
+            return getBinder();
         }
         return super.onBind(intent);
     }
@@ -169,7 +169,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
     }
 
     @Override
-    public void connect() throws NameNotResolvedException, KcpcliParseException {
+    public void connect() throws NameNotResolvedException {
         super.connect();
 
         //Os.setenv("PROXYCHAINS_CONF_FILE", getApplicationInfo().dataDir + "/proxychains.conf", true)
@@ -177,14 +177,14 @@ public class ShadowsocksVpnService extends BaseVpnService {
         proxychains_enable = new File(getApplicationInfo().dataDir + "/proxychains.conf").exists();
 
         try {
-            List<String> tempList = new ArrayList<>(Arrays.asList(profile.getDns().split(",")));
+            List<String> tempList = new ArrayList<>(Arrays.asList(getProfile().getDns().split(",")));
             Collections.shuffle(tempList);
             String dns = tempList.get(0);
             dns_address = dns.split(":")[0];
             dns_port = Integer.parseInt(dns.split(":")[1]);
             tempList.clear();
 
-            tempList = Arrays.asList(profile.getChina_dns().split(","));
+            tempList = Arrays.asList(getProfile().getChina_dns().split(","));
             Collections.shuffle(tempList);
             String china_dns = tempList.get(0);
             china_dns_address = china_dns.split(":")[0];
@@ -205,13 +205,13 @@ public class ShadowsocksVpnService extends BaseVpnService {
         killProcesses();
 
         // Resolve the server address
-        host_arg = profile.getHost();
-        if (!Utils.INSTANCE.isNumeric(profile.getHost())) {
-            String addr = Utils.INSTANCE.resolve(profile.getHost(), profile.getIpv6());
+        host_arg = getProfile().getHost();
+        if (!Utils.INSTANCE.isNumeric(getProfile().getHost())) {
+            String addr = Utils.INSTANCE.resolve(getProfile().getHost(), getProfile().getIpv6());
             if (TextUtils.isEmpty(addr)) {
                 throw new NameNotResolvedException();
             } else {
-                profile.setHost(addr);
+                getProfile().setHost(addr);
             }
         }
 
@@ -222,11 +222,11 @@ public class ShadowsocksVpnService extends BaseVpnService {
         }
         changeState(Constants.State.CONNECTED);
 
-        if (!Constants.Route.ALL.equals(profile.getRoute())) {
-            AclSyncJob.Companion.schedule(profile.getRoute());
+        if (!Constants.Route.ALL.equals(getProfile().getRoute())) {
+            AclSyncJob.Companion.schedule(getProfile().getRoute());
         }
 
-        notification = new ShadowsocksNotification(this, profile.getName());
+        notification = new ShadowsocksNotification(this, getProfile().getName());
     }
 
     /**
@@ -241,11 +241,11 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         startShadowsocksDaemon();
 
-        if (profile.getUdpdns()) {
+        if (getProfile().getUdpdns()) {
             startShadowsocksUDPDaemon();
         }
 
-        if (!profile.getUdpdns()) {
+        if (!getProfile().getUdpdns()) {
             startDnsDaemon();
             startDnsTunnel();
         }
@@ -254,16 +254,16 @@ public class ShadowsocksVpnService extends BaseVpnService {
     public void startShadowsocksUDPDaemon() {
         String conf = String.format(Locale.ENGLISH,
                 Constants.ConfigUtils.SHADOWSOCKS,
-                profile.getHost(),
-                profile.getRemotePort(),
-                profile.getLocalPort(),
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getPassword()),
-                profile.getMethod(),
+                getProfile().getHost(),
+                getProfile().getRemotePort(),
+                getProfile().getLocalPort(),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getPassword()),
+                getProfile().getMethod(),
                 600,
-                profile.getProtocol(),
-                profile.getObfs(),
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getObfs_param()),
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getProtocol_param()));
+                getProfile().getProtocol(),
+                getProfile().getObfs(),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getObfs_param()),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getProtocol_param()));
         Utils.INSTANCE.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-udp-vpn.conf"), conf);
         //val old_ld = Os.getenv("LD_PRELOAD")
 
@@ -299,13 +299,13 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         String conf = String.format(Locale.ENGLISH,
                 Constants.ConfigUtils.SHADOWSOCKS,
-                profile.getHost(),
-                profile.getRemotePort(),
-                profile.getLocalPort(),
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getPassword()),
-                profile.getMethod(), 600, profile.getProtocol(), profile.getObfs(),
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getObfs_param()),
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getProtocol_param()));
+                getProfile().getHost(),
+                getProfile().getRemotePort(),
+                getProfile().getLocalPort(),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getPassword()),
+                getProfile().getMethod(), 600, getProfile().getProtocol(), getProfile().getObfs(),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getObfs_param()),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getProtocol_param()));
 
         Utils.INSTANCE.printToFile(new File(getApplicationInfo().dataDir + "/libssr-local.so-vpn.conf"), conf);
 
@@ -323,13 +323,13 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         LinkedList<String> cmds = new LinkedList<>(Arrays.asList(cmd));
 
-        if (profile.getUdpdns()) {
+        if (getProfile().getUdpdns()) {
             cmds.add("-u");
         }
 
-        if (!Constants.Route.ALL.equals(profile.getRoute())) {
+        if (!Constants.Route.ALL.equals(getProfile().getRoute())) {
             cmds.add("--acl");
-            cmds.add(getApplicationInfo().dataDir + '/' + profile.getRoute() + ".acl");
+            cmds.add(getApplicationInfo().dataDir + '/' + getProfile().getRoute() + ".acl");
         }
 
         if (TcpFastOpen.INSTANCE.getSendEnabled()) {
@@ -357,16 +357,16 @@ public class ShadowsocksVpnService extends BaseVpnService {
     public void startDnsTunnel() {
         String conf = String.format(Locale.ENGLISH,
                 Constants.ConfigUtils.SHADOWSOCKS,
-                profile.getHost(),
-                profile.getRemotePort(),
-                profile.getLocalPort() + 63,
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getPassword()),
-                profile.getMethod(),
+                getProfile().getHost(),
+                getProfile().getRemotePort(),
+                getProfile().getLocalPort() + 63,
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getPassword()),
+                getProfile().getMethod(),
                 600,
-                profile.getProtocol(),
-                profile.getObfs(),
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getObfs_param()),
-                Constants.ConfigUtils.INSTANCE.EscapedJson(profile.getProtocol_param()));
+                getProfile().getProtocol(),
+                getProfile().getObfs(),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getObfs_param()),
+                Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getProtocol_param()));
         Utils.INSTANCE.printToFile(new File(getApplicationInfo().dataDir + "/ss-tunnel-vpn.conf"), conf);
 
         //val old_ld = Os.getenv("LD_PRELOAD")
@@ -385,7 +385,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         LinkedList<String> cmds = new LinkedList<>(Arrays.asList(cmd));
         cmds.add("-L");
-        if (Constants.Route.CHINALIST.equals(profile.getRoute())) {
+        if (Constants.Route.CHINALIST.equals(getProfile().getRoute())) {
             cmds.add(china_dns_address + ":" + china_dns_port);
         } else {
             cmds.add(dns_address + ":" + dns_port);
@@ -410,16 +410,16 @@ public class ShadowsocksVpnService extends BaseVpnService {
     }
 
     public void startDnsDaemon() {
-        String reject = profile.getIpv6() ? "224.0.0.0/3" : "224.0.0.0/3, ::/0";
-        String protect = "protect = \"" + protectPath + "\";";
+        String reject = getProfile().getIpv6() ? "224.0.0.0/3" : "224.0.0.0/3, ::/0";
+        String protect = "protect = \"" + Companion.getProtectPath() + "\";";
 
         StringBuilder china_dns_settings = new StringBuilder();
 
         boolean remote_dns = false;
 
-        if (Constants.Route.ACL.equals(profile.getRoute())) {
+        if (Constants.Route.ACL.equals(getProfile().getRoute())) {
             //decide acl route
-            List<String> total_lines = Utils.INSTANCE.getLinesByFile(new File(getApplicationInfo().dataDir + '/' + profile.getRoute() + ".acl"));
+            List<String> total_lines = Utils.INSTANCE.getLinesByFile(new File(getApplicationInfo().dataDir + '/' + getProfile().getRoute() + ".acl"));
             for (String line : total_lines) {
                 if ("[remote_dns]".equals(line)) {
                     remote_dns = true;
@@ -428,9 +428,9 @@ public class ShadowsocksVpnService extends BaseVpnService {
         }
 
         String black_list = "";
-        if (Constants.Route.BYPASS_CHN.equals(profile.getRoute()) || Constants.Route.BYPASS_LAN_CHN.equals(profile.getRoute()) || Constants.Route.GFWLIST.equals(profile.getRoute())) {
+        if (Constants.Route.BYPASS_CHN.equals(getProfile().getRoute()) || Constants.Route.BYPASS_LAN_CHN.equals(getProfile().getRoute()) || Constants.Route.GFWLIST.equals(getProfile().getRoute())) {
             black_list = getBlackList();
-        } else if (Constants.Route.ACL.equals(profile.getRoute())) {
+        } else if (Constants.Route.ACL.equals(getProfile().getRoute())) {
             if (remote_dns) {
                 black_list = "";
             } else {
@@ -438,7 +438,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             }
         }
 
-        for (String china_dns : profile.getChina_dns().split(",")) {
+        for (String china_dns : getProfile().getChina_dns().split(",")) {
             china_dns_settings.append(String.format(Locale.ENGLISH,
                     Constants.ConfigUtils.REMOTE_SERVER,
                     china_dns.split(":")[0],
@@ -448,36 +448,36 @@ public class ShadowsocksVpnService extends BaseVpnService {
         }
 
         String conf = null;
-        if (Constants.Route.BYPASS_CHN.equals(profile.getRoute()) || Constants.Route.BYPASS_LAN_CHN.equals(profile.getRoute()) || Constants.Route.GFWLIST.equals(profile.getRoute())) {
+        if (Constants.Route.BYPASS_CHN.equals(getProfile().getRoute()) || Constants.Route.BYPASS_LAN_CHN.equals(getProfile().getRoute()) || Constants.Route.GFWLIST.equals(getProfile().getRoute())) {
             conf = String.format(Locale.ENGLISH,
                     Constants.ConfigUtils.PDNSD_DIRECT,
                     protect,
                     getApplicationInfo().dataDir,
                     "0.0.0.0",
-                    profile.getLocalPort() + 53,
+                    getProfile().getLocalPort() + 53,
                     china_dns_settings,
-                    profile.getLocalPort() + 63,
+                    getProfile().getLocalPort() + 63,
                     reject);
-        } else if (Constants.Route.CHINALIST.equals(profile.getRoute())) {
+        } else if (Constants.Route.CHINALIST.equals(getProfile().getRoute())) {
             conf = String.format(Locale.ENGLISH,
                     Constants.ConfigUtils.PDNSD_DIRECT,
                     protect,
                     getApplicationInfo().dataDir,
                     "0.0.0.0",
-                    profile.getLocalPort() + 53,
+                    getProfile().getLocalPort() + 53,
                     china_dns_settings,
-                    profile.getLocalPort() + 63,
+                    getProfile().getLocalPort() + 63,
                     reject);
-        } else if (Constants.Route.ACL.equals(profile.getRoute())) {
+        } else if (Constants.Route.ACL.equals(getProfile().getRoute())) {
             if (!remote_dns) {
                 conf = String.format(Locale.ENGLISH,
                         Constants.ConfigUtils.PDNSD_DIRECT,
                         protect,
                         getApplicationInfo().dataDir,
                         "0.0.0.0",
-                        profile.getLocalPort() + 53,
+                        getProfile().getLocalPort() + 53,
                         china_dns_settings,
-                        profile.getLocalPort() + 63,
+                        getProfile().getLocalPort() + 63,
                         reject);
             } else {
                 conf = String.format(Locale.ENGLISH,
@@ -485,8 +485,8 @@ public class ShadowsocksVpnService extends BaseVpnService {
                         protect,
                         getApplicationInfo().dataDir,
                         "0.0.0.0",
-                        profile.getLocalPort() + 53,
-                        profile.getLocalPort() + 63,
+                        getProfile().getLocalPort() + 53,
+                        getProfile().getLocalPort() + 63,
                         reject);
             }
         } else {
@@ -495,8 +495,8 @@ public class ShadowsocksVpnService extends BaseVpnService {
                     protect,
                     getApplicationInfo().dataDir,
                     "0.0.0.0",
-                    profile.getLocalPort() + 53,
-                    profile.getLocalPort() + 63,
+                    getProfile().getLocalPort() + 53,
+                    getProfile().getLocalPort() + 63,
                     reject);
         }
 
@@ -515,26 +515,26 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
     public int startVpn() {
         Builder builder = new Builder();
-        builder.setSession(profile.getName())
+        builder.setSession(getProfile().getName())
                 .setMtu(VPN_MTU)
                 .addAddress(String.format(Locale.ENGLISH, PRIVATE_VLAN, "1"), 24);
 
-        if (Constants.Route.CHINALIST.equals(profile.getRoute())) {
+        if (Constants.Route.CHINALIST.equals(getProfile().getRoute())) {
             builder.addDnsServer(china_dns_address);
         } else {
             builder.addDnsServer(dns_address);
         }
 
-        if (profile.getIpv6()) {
+        if (getProfile().getIpv6()) {
             builder.addAddress(String.format(Locale.ENGLISH, PRIVATE_VLAN6, "1"), 126);
             builder.addRoute("::", 0);
         }
 
         if (Utils.INSTANCE.isLollipopOrAbove()) {
-            if (profile.getProxyApps()) {
-                for (String pkg : profile.getIndividual().split("\n")) {
+            if (getProfile().getProxyApps()) {
+                for (String pkg : getProfile().getIndividual().split("\n")) {
                     try {
-                        if (!profile.getBypass()) {
+                        if (!getProfile().getBypass()) {
                             builder.addAllowedApplication(pkg);
                         } else {
                             builder.addDisallowedApplication(pkg);
@@ -546,7 +546,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             }
         }
 
-        if (Constants.Route.ALL.equals(profile.getRoute()) || Constants.Route.BYPASS_CHN.equals(profile.getRoute())) {
+        if (Constants.Route.ALL.equals(getProfile().getRoute()) || Constants.Route.BYPASS_CHN.equals(getProfile().getRoute())) {
             builder.addRoute("0.0.0.0", 0);
         } else {
             String[] privateList = getResources().getStringArray(R.array.bypass_private_route);
@@ -556,7 +556,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
             }
         }
 
-        if (Constants.Route.CHINALIST.equals(profile.getRoute())) {
+        if (Constants.Route.CHINALIST.equals(getProfile().getRoute())) {
             builder.addRoute(china_dns_address, 32);
         } else {
             builder.addRoute(dns_address, 32);
@@ -572,7 +572,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
         String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libtun2socks.so",
                 "--netif-ipaddr", String.format(Locale.ENGLISH, PRIVATE_VLAN, "2"),
                 "--netif-netmask", "255.255.255.0",
-                "--socks-server-addr", "127.0.0.1:" + profile.getLocalPort(),
+                "--socks-server-addr", "127.0.0.1:" + getProfile().getLocalPort(),
                 "--tunfd", String.valueOf(fd),
                 "--tunmtu", String.valueOf(VPN_MTU),
                 "--sock-path", getApplicationInfo().dataDir + "/sock_path",
@@ -580,16 +580,16 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         List<String> cmds = new ArrayList<>(Arrays.asList(cmd));
 
-        if (profile.getIpv6()) {
+        if (getProfile().getIpv6()) {
             cmds.add("--netif-ip6addr");
             cmds.add(String.format(Locale.ENGLISH, PRIVATE_VLAN6, "2"));
         }
 
-        if (profile.getUdpdns()) {
+        if (getProfile().getUdpdns()) {
             cmds.add("--enable-udprelay");
         } else {
             cmds.add("--dnsgw");
-            cmds.add(String.format(Locale.ENGLISH, "%s:%d", String.format(Locale.ENGLISH, PRIVATE_VLAN, "1"), profile.getLocalPort() + 53));
+            cmds.add(String.format(Locale.ENGLISH, "%s:%d", String.format(Locale.ENGLISH, PRIVATE_VLAN, "1"), getProfile().getLocalPort() + 53));
         }
 
         VayLog.INSTANCE.d(TAG, Utils.INSTANCE.makeString(cmds, " "));

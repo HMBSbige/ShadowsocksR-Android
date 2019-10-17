@@ -1,6 +1,7 @@
 package com.github.shadowsocks.database
 
 import android.util.Base64
+import com.github.shadowsocks.utils.*
 import com.j256.ormlite.field.*
 import java.util.*
 
@@ -13,7 +14,7 @@ class Profile
 	@DatabaseField
 	var name = "ShadowsocksR"
 	@DatabaseField
-	var host = "1.1.1.1"
+	var host = Constants.DefaultHostName
 	@DatabaseField
 	var localPort = 1080
 	@DatabaseField

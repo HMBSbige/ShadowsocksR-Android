@@ -24,7 +24,7 @@ public class ShadowsocksVpnThread extends Thread {
 
     private static final String TAG = ShadowsocksVpnThread.class.getSimpleName();
 
-    private static final String PATH = BaseVpnService.protectPath;
+    private static final String PATH = BaseVpnService.Companion.getProtectPath();
     private final ShadowsocksVpnService vpnService;
 
     private boolean isRunning = true;
