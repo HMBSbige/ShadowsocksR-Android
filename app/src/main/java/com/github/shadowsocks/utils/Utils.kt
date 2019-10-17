@@ -2,6 +2,7 @@ package com.github.shadowsocks.utils
 
 import android.animation.*
 import android.annotation.*
+import android.app.admin.*
 import android.content.*
 import android.content.pm.*
 import android.graphics.*
@@ -10,7 +11,9 @@ import android.text.*
 import android.util.*
 import android.view.*
 import android.widget.*
+import androidx.core.content.*
 import com.github.shadowsocks.*
+import com.github.shadowsocks.ShadowsocksApplication.*
 import org.xbill.DNS.*
 import java.io.*
 import java.net.*
@@ -26,6 +29,10 @@ object Utils
 
 	val isLollipopOrAbove: Boolean
 		get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+
+	val directBootSupported by lazy {
+		Build.VERSION.SDK_INT >= 24 && app.getSystemService<DevicePolicyManager>()?.storageEncryptionStatus == DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE_PER_USER
+	}
 
 	/**
 	 * If there exists a valid IPv6 interface

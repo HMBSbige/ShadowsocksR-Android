@@ -145,9 +145,11 @@
 
         <receiver
             android:name=".BootReceiver"
+            android:directBootAware="true"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
@@ -198,8 +200,8 @@
         <service
             android:name="com.evernote.android.job.gcm.PlatformGcmService"
             android:enabled="true"
-            tools:replace="android:enabled"
-            android:process=":bg" />
+            android:process=":bg"
+            tools:replace="android:enabled" />
     </application>
 
     <uses-feature

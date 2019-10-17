@@ -276,16 +276,16 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
 
         SwitchPreference switchPre = (SwitchPreference) findPreference(Constants.Key.isAutoConnect);
         switchPre.setOnPreferenceChangeListener((preference, value) -> {
-            BootReceiver.setEnabled(activity, (boolean) value);
+            BootReceiver.Companion.setEnabled((boolean) value);
             return true;
         });
 
         if (getPreferenceManager().getSharedPreferences().getBoolean(Constants.Key.isAutoConnect, false)) {
-            BootReceiver.setEnabled(activity, true);
+            BootReceiver.Companion.setEnabled(true);
             getPreferenceManager().getSharedPreferences().edit().remove(Constants.Key.isAutoConnect).apply();
         }
 
-        switchPre.setChecked(BootReceiver.getEnabled(activity));
+        switchPre.setChecked(BootReceiver.Companion.getEnabled());
 
         SwitchPreference tfo = (SwitchPreference) findPreference(Constants.Key.tfo);
         tfo.setOnPreferenceChangeListener((preference, v) -> {
