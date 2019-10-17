@@ -172,7 +172,7 @@ private constructor()
 
 		val cmd = arrayOf(applicationInfo!!.nativeLibraryDir + "/libssr-local.so", "-t", "600", "-L", "www.google.com:80", "-c", applicationInfo!!.dataDir + "/libssr-local.so-test.conf")
 
-		val cmds = ArrayList(Arrays.asList(*cmd))
+		val cmds = cmd.toMutableList()
 
 		if (TcpFastOpen.sendEnabled)
 		{

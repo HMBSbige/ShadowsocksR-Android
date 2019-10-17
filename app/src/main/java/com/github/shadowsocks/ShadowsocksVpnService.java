@@ -272,8 +272,6 @@ public class ShadowsocksVpnService extends BaseVpnService {
 
         String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libssr-local.so", "-V", "-U",
                 "-b", "127.0.0.1",
-                "-t", "600",
-                "--host", host_arg,
                 "-P", getApplicationInfo().dataDir,
                 "-c", getApplicationInfo().dataDir + "/libssr-local.so-udp-vpn.conf"};
         LinkedList<String> cmds = new LinkedList<>(Arrays.asList(cmd));
@@ -314,10 +312,8 @@ public class ShadowsocksVpnService extends BaseVpnService {
         //Os.setenv("LD_PRELOAD", getApplicationInfo().dataDir + "/lib/libproxychains4.so", true)
         //Os.setenv("PROXYCHAINS_CONF_FILE", getApplicationInfo().dataDir + "/proxychains.conf", true)
 
-        String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libssr-local.so", "-V", "-x",
+        String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libssr-local.so", "-V",
                 "-b", "127.0.0.1",
-                "-t", "600",
-                "--host", host_arg,
                 "-P", getApplicationInfo().dataDir,
                 "-c", getApplicationInfo().dataDir + "/libssr-local.so-vpn.conf"};
 
@@ -362,7 +358,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 getProfile().getLocalPort() + 63,
                 Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getPassword()),
                 getProfile().getMethod(),
-                600,
+                60,
                 getProfile().getProtocol(),
                 getProfile().getObfs(),
                 Constants.ConfigUtils.INSTANCE.EscapedJson(getProfile().getObfs_param()),
@@ -377,8 +373,6 @@ public class ShadowsocksVpnService extends BaseVpnService {
         String[] cmd = {getApplicationInfo().nativeLibraryDir + "/libssr-local.so",
                 "-V",
                 "-u",
-                "-t", "60",
-                "--host", host_arg,
                 "-b", "127.0.0.1",
                 "-P", getApplicationInfo().dataDir,
                 "-c", getApplicationInfo().dataDir + "/ss-tunnel-vpn.conf"};
