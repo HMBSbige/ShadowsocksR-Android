@@ -44,7 +44,7 @@ object Parser
 						{
 							return@forEach
 						}
-						profile.method = ss.groupValues[2].toLowerCase(Locale.getDefault())
+						profile.method = ss.groupValues[2].toLowerCase(Locale.ENGLISH)
 						if (ss.groups[3] != null)
 						{
 							profile.protocol = "verify_sha1"
@@ -94,10 +94,10 @@ object Parser
 						{
 							return@forEach
 						}
-						profile.host = ss.groupValues[2].toLowerCase(Locale.getDefault())
-						profile.protocol = ss.groupValues[4].toLowerCase(Locale.getDefault())
-						profile.method = ss.groupValues[5].toLowerCase(Locale.getDefault())
-						profile.obfs = ss.groupValues[6].toLowerCase(Locale.getDefault())
+						profile.host = ss.groupValues[2].toLowerCase(Locale.ENGLISH)
+						profile.protocol = ss.groupValues[4].toLowerCase(Locale.ENGLISH)
+						profile.method = ss.groupValues[5].toLowerCase(Locale.ENGLISH)
+						profile.obfs = ss.groupValues[6].toLowerCase(Locale.ENGLISH)
 						profile.password = Base64.decodeUrlSafe(ss.groupValues[7])
 
 						var param = Regex(decodedPattern_ssr_obfsparam_regex).find(uri)
