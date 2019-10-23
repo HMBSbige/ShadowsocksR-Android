@@ -17,7 +17,7 @@
 #define LOGI(...) do { __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__); } while(0)
 #define LOGE(...) do { __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__); } while(0)
 
-jstring Java_com_github_shadowsocks_system_getabi(JNIEnv *env) {
+jstring Java_com_github_shadowsocks_system_getabi(JNIEnv *env, jobject thiz) {
     AndroidCpuFamily family = android_getCpuFamily();
     const char *abi;
     switch (family) {
@@ -40,12 +40,12 @@ jstring Java_com_github_shadowsocks_system_getabi(JNIEnv *env) {
     return env->NewStringUTF(abi);
 }
 
-void Java_com_github_shadowsocks_system_jniclose(jint fd) {
+void Java_com_github_shadowsocks_system_jniclose(JNIEnv *env, jobject thiz, jint fd) {
     close(fd);
 }
 
 jint
-Java_com_github_shadowsocks_system_sendfd(JNIEnv *env, jint tun_fd, jstring path) {
+Java_com_github_shadowsocks_system_sendfd(JNIEnv *env, jobject thiz, jint tun_fd, jstring path) {
     int fd;
     struct sockaddr_un addr{};
     const char *sock_str = env->GetStringUTFChars(path, nullptr);
