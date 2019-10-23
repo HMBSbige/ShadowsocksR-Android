@@ -3,11 +3,10 @@
 #include "jni.h"
 #include "cpufeatures/cpu-features.h"
 #include <android/log.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <unistd.h>
-#include <errno.h>
-//#include <cpu-features.h>
+#include <cerrno>
 
 #include <sys/un.h>
 #include <sys/stat.h>
@@ -16,64 +15,40 @@
 #include <ancillary.h>
 
 #define LOGI(...) do { __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__); } while(0)
-#define LOGW(...) do { __android_log_print(ANDROID_LOG_WARN, LOG_TAG, __VA_ARGS__); } while(0)
 #define LOGE(...) do { __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__); } while(0)
 
-jstring Java_com_github_shadowsocks_system_getabi(JNIEnv *env, jobject thiz) {
+jstring Java_com_github_shadowsocks_system_getabi(JNIEnv *env) {
     AndroidCpuFamily family = android_getCpuFamily();
-    uint64_t features = android_getCpuFeatures();
     const char *abi;
-
-    if (family == ANDROID_CPU_FAMILY_X86) {
-        abi = "x86";
-    } else if (family == ANDROID_CPU_FAMILY_ARM64) {
-        abi = "arm64-v8a";
-    } else if (family == ANDROID_CPU_FAMILY_MIPS) {
-        abi = "mips";
-    } else if (family == ANDROID_CPU_FAMILY_ARM) {
-        // if (features & ANDROID_CPU_ARM_FEATURE_ARMv7) {
-        abi = "armeabi-v7a";
-        // } else {
-        //   abi = "armeabi";
-        // }
-    } else {
-        abi = "";
+    switch (family) {
+        case ANDROID_CPU_FAMILY_ARM:
+            abi = "armeabi-v7a";
+            break;
+        case ANDROID_CPU_FAMILY_X86:
+            abi = "x86";
+            break;
+        case ANDROID_CPU_FAMILY_ARM64:
+            abi = "arm64-v8a";
+            break;
+        case ANDROID_CPU_FAMILY_X86_64:
+            abi = "x86_64";
+            break;
+        default:
+            abi = "";
     }
+
     return env->NewStringUTF(abi);
 }
 
-jint Java_com_github_shadowsocks_system_exec(JNIEnv *env, jobject thiz, jstring cmd) {
-    const char *cmd_str = env->GetStringUTFChars(cmd, 0);
-
-    pid_t pid;
-
-    /*  Fork off the parent process */
-    pid = fork();
-    if (pid < 0) {
-        env->ReleaseStringUTFChars(cmd, cmd_str);
-        return -1;
-    }
-
-    if (pid > 0) {
-        env->ReleaseStringUTFChars(cmd, cmd_str);
-        return pid;
-    }
-
-    execl("/system/bin/sh", "sh", "-c", cmd_str, NULL);
-    env->ReleaseStringUTFChars(cmd, cmd_str);
-
-    return 1;
-}
-
-void Java_com_github_shadowsocks_system_jniclose(JNIEnv *env, jobject thiz, jint fd) {
+void Java_com_github_shadowsocks_system_jniclose(jint fd) {
     close(fd);
 }
 
 jint
-Java_com_github_shadowsocks_system_sendfd(JNIEnv *env, jobject thiz, jint tun_fd, jstring path) {
+Java_com_github_shadowsocks_system_sendfd(JNIEnv *env, jint tun_fd, jstring path) {
     int fd;
-    struct sockaddr_un addr;
-    const char *sock_str = env->GetStringUTFChars(path, 0);
+    struct sockaddr_un addr{};
+    const char *sock_str = env->GetStringUTFChars(path, nullptr);
 
     if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
         LOGE("socket() failed: %s (socket fd = %d)\n", strerror(errno), fd);
@@ -108,8 +83,6 @@ static JNINativeMethod method_table[] = {
                 (void *) Java_com_github_shadowsocks_system_jniclose},
         {"sendfd",   "(ILjava/lang/String;)I",
                 (void *) Java_com_github_shadowsocks_system_sendfd},
-        {"exec",     "(Ljava/lang/String;)I",
-                (void *) Java_com_github_shadowsocks_system_exec},
         {"getABI",   "()Ljava/lang/String;",
                 (void *) Java_com_github_shadowsocks_system_getabi}
 };
@@ -123,7 +96,7 @@ static int registerNativeMethods(JNIEnv *env, const char *className,
     jclass clazz;
 
     clazz = env->FindClass(className);
-    if (clazz == NULL) {
+    if (clazz == nullptr) {
         LOGE("Native registration unable to find class '%s'", className);
         return JNI_FALSE;
     }
@@ -160,25 +133,21 @@ typedef union {
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {
     UnionJNIEnvToVoid uenv;
-    uenv.venv = NULL;
-    jint result = -1;
-    JNIEnv *env = NULL;
+    uenv.venv = nullptr;
+    JNIEnv *env = nullptr;
 
     LOGI("JNI_OnLoad");
 
     if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK) {
         LOGE("ERROR: GetEnv failed");
-        goto bail;
+        return -1;
     }
     env = uenv.env;
 
     if (registerNatives(env) != JNI_TRUE) {
         LOGE("ERROR: registerNatives failed");
-        goto bail;
+        return -1;
     }
 
-    result = JNI_VERSION_1_4;
-
-    bail:
-    return result;
+    return JNI_VERSION_1_4;
 }

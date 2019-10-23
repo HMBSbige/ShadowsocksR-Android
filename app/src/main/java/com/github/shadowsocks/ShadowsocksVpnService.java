@@ -609,7 +609,7 @@ public class ShadowsocksVpnService extends BaseVpnService {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                if (System.sendfd(fd, getApplicationInfo().dataDir + "/sock_path") != -1) {
+                if (System.INSTANCE.sendfd(fd, getApplicationInfo().dataDir + "/sock_path") != -1) {
                     return true;
                 }
                 tries += 1;
