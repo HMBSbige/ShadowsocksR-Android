@@ -139,9 +139,6 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <meta-data
-            android:name="com.google.android.backup.api_key"
-            android:value="AEdPqrEAAAAIkzP8AxqI-dOJMUjDp17HP0roW_qBXsHv70aORw" />
 
         <receiver
             android:name=".BootReceiver"
@@ -169,7 +166,7 @@
 
         <service
             android:name=".ShadowsocksRunnerService"
-            android:exported="false"></service> <!-- android-job components -->
+            android:exported="false" />
         <service
             android:name=".ShadowsocksVpnService"
             android:exported="false"
