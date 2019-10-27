@@ -66,11 +66,9 @@ import com.github.shadowsocks.preferences.PasswordEditTextPreference;
 import com.github.shadowsocks.preferences.SummaryEditTextPreference;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.IOUtils;
-import com.github.shadowsocks.utils.TcpFastOpen;
 import com.github.shadowsocks.utils.ToastUtils;
 import com.github.shadowsocks.utils.Utils;
 import com.github.shadowsocks.utils.VayLog;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -96,11 +94,10 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
 
     private static final String[] FEATURE_PREFS = {
             Constants.Key.route, Constants.Key.proxyApps,
-            Constants.Key.udpdns, Constants.Key.ipv6, Constants.Key.tfo};
+            Constants.Key.udpdns, Constants.Key.ipv6};
     public Profile profile;
     private Shadowsocks activity;
     private SwitchPreference isProxyApps;
-    private boolean enabled = true;
 
     /**
      * Helper functions
@@ -286,27 +283,6 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
         }
 
         switchPre.setChecked(BootReceiver.Companion.getEnabled());
-
-        SwitchPreference tfo = (SwitchPreference) findPreference(Constants.Key.tfo);
-        tfo.setOnPreferenceChangeListener((preference, v) -> {
-            ShadowsocksApplication.app.mThreadPool.execute(() -> {
-                boolean value = (boolean) v;
-                final String result = TcpFastOpen.INSTANCE.enabled(value).trim();
-                if (!TcpFastOpen.INSTANCE.getSendEnabled()) {
-                    if (TextUtils.isEmpty(result)) {
-                        activity.handler.post(() -> Snackbar.make(activity.findViewById(android.R.id.content), getText(R.string.tcp_fastopen_summary_unsupported).toString(), Snackbar.LENGTH_LONG).show());
-                    } else {
-                        activity.handler.post(() -> Snackbar.make(activity.findViewById(android.R.id.content), result, Snackbar.LENGTH_LONG).show());
-                    }
-                }
-            });
-            return true;
-        });
-
-        if (!TcpFastOpen.INSTANCE.getSupported()) {
-            tfo.setEnabled(false);
-            tfo.setSummary(getString(R.string.tcp_fastopen_summary_unsupported, java.lang.System.getProperty("os.version")));
-        }
 
         findPreference("recovery").setOnPreferenceClickListener(preference -> {
             ShadowsocksApplication.app.track(TAG, "reset");
@@ -539,7 +515,6 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
     }
 
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
         List<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(PROXY_PREFS));
         list.addAll(Arrays.asList(FEATURE_PREFS));

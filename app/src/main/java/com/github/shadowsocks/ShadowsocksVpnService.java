@@ -47,7 +47,6 @@ import android.text.TextUtils;
 import com.github.shadowsocks.database.Profile;
 import com.github.shadowsocks.job.AclSyncJob;
 import com.github.shadowsocks.utils.Constants;
-import com.github.shadowsocks.utils.TcpFastOpen;
 import com.github.shadowsocks.utils.Utils;
 import com.github.shadowsocks.utils.VayLog;
 
@@ -328,10 +327,6 @@ public class ShadowsocksVpnService extends BaseVpnService {
         if (!Constants.Route.ALL.equals(getProfile().getRoute())) {
             cmds.add("--acl");
             cmds.add(getApplicationInfo().dataDir + '/' + getProfile().getRoute() + ".acl");
-        }
-
-        if (TcpFastOpen.INSTANCE.getSendEnabled()) {
-            cmds.add("--fast-open");
         }
 
         if (proxychains_enable) {

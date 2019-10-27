@@ -113,12 +113,6 @@
             android:summary="@string/auto_connect_summary"
             android:title="@string/auto_connect" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="tcp_fastopen"
-            android:summary="@string/tcp_fastopen_summary"
-            android:title="TCP Fast Open" />
-
         <Preference
             android:key="recovery"
             android:summary="@string/recovery_summary"

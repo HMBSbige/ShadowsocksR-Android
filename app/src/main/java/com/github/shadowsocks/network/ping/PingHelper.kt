@@ -174,11 +174,6 @@ private constructor()
 
 		val cmds = cmd.toMutableList()
 
-		if (TcpFastOpen.sendEnabled)
-		{
-			cmds.add("--fast-open")
-		}
-
 		if (ssTestProcess != null)
 		{
 			ssTestProcess!!.destroy()

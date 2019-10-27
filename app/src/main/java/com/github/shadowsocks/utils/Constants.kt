@@ -43,9 +43,7 @@ object Constants
 		const val isAutoConnect = "isAutoConnect"
 
 		const val proxyApps = "isProxyApps"
-		const val bypass = "isBypassApps"
 		const val udpdns = "isUdpDns"
-		const val auth = "isAuth"
 		const val ipv6 = "isIpv6"
 
 		const val host = "proxy"
@@ -63,9 +61,7 @@ object Constants
 		const val dns = "dns"
 		const val china_dns = "china_dns"
 
-		const val tfo = "tcp_fastopen"
 		const val currentVersionCode = "currentVersionCode"
-		const val logcat = "logcat"
 		const val frontproxy = "frontproxy"
 		const val ssrsub_autoupdate = "ssrsub_autoupdate"
 		const val group_name = "groupName"

@@ -23,7 +23,6 @@ import com.github.shadowsocks.database.SSRSubManager;
 import com.github.shadowsocks.job.DonaldTrump;
 import com.github.shadowsocks.utils.Constants;
 import com.github.shadowsocks.utils.IOUtils;
-import com.github.shadowsocks.utils.TcpFastOpen;
 import com.github.shadowsocks.utils.Utils;
 import com.github.shadowsocks.utils.VayLog;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -287,10 +286,6 @@ public class ShadowsocksApplication extends Application {
         };
         pending.setResultCallback(callback, 2, TimeUnit.SECONDS);
         JobManager.create(this).addJobCreator(new DonaldTrump());
-
-        if (settings.getBoolean(Constants.Key.tfo, false) && TcpFastOpen.INSTANCE.getSupported()) {
-            mThreadPool.execute(() -> TcpFastOpen.INSTANCE.enabled(settings.getBoolean(Constants.Key.tfo, false)));
-        }
     }
 
     /**
