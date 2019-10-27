@@ -18,12 +18,6 @@ android {
             // 增加java堆内存大小
             javaMaxHeapSize "4g"
         }
-        externalNativeBuild {
-            cmake {
-                cppFlags "-frtti -fexceptions"
-                abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
-            }
-        }
         multiDexEnabled true
         proguardFiles
         vectorDrawables.useSupportLibrary = true
@@ -32,11 +26,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
         }
     }
     sourceSets {
