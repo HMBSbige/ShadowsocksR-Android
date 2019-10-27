@@ -28,12 +28,12 @@ class ShadowsocksVpnService : BaseVpnService()
 	private var sstunnelProcess: GuardedProcess? = null
 	private var pdnsdProcess: GuardedProcess? = null
 	private var tun2socksProcess: GuardedProcess? = null
-	private var proxychains_enable = false
-	private var host_arg = ""
-	private var dns_address = ""
-	private var dns_port = 0
-	private var china_dns_address = ""
-	private var china_dns_port = 0
+	private var proxychainsEnable = false
+	private var hostArg = ""
+	private var dnsAddress = ""
+	private var dnsPort = 0
+	private var chinaDnsAddress = ""
+	private var chinaDnsPort = 0
 
 	override fun onBind(intent: Intent): IBinder?
 	{
@@ -141,7 +141,7 @@ class ShadowsocksVpnService : BaseVpnService()
 	{
 		super.connect()
 
-		proxychains_enable = File(applicationInfo.dataDir + "/proxychains.conf").exists()
+		proxychainsEnable = File("${applicationInfo.dataDir}/proxychains.conf").exists()
 
 		try
 		{
@@ -149,26 +149,25 @@ class ShadowsocksVpnService : BaseVpnService()
 				.toMutableList()
 			tempList.shuffle()
 			val dns = tempList[0]
-			dns_address = dns.split(":")[0]
-			dns_port = Integer.parseInt(dns.split(":")[1])
+			dnsAddress = dns.split(":")[0]
+			dnsPort = Integer.parseInt(dns.split(":")[1])
 			tempList.clear()
 
 			tempList = profile!!.china_dns.split(",")
 				.toMutableList()
 			tempList.shuffle()
 			val chinaDns = tempList[0]
-			china_dns_address = chinaDns.split(":")[0]
-			china_dns_port = Integer.parseInt(chinaDns.split(":")[1])
+			chinaDnsAddress = chinaDns.split(":")[0]
+			chinaDnsPort = Integer.parseInt(chinaDns.split(":")[1])
 		}
 		catch (e: Exception)
 		{
-			dns_address = "8.8.8.8"
-			dns_port = 53
+			dnsAddress = "8.8.8.8"
+			dnsPort = 53
 
-			china_dns_address = "223.5.5.5"
-			china_dns_port = 53
+			chinaDnsAddress = "223.5.5.5"
+			chinaDnsPort = 53
 		}
-
 
 		vpnThread = ShadowsocksVpnThread(this)
 		vpnThread!!.start()
@@ -177,7 +176,7 @@ class ShadowsocksVpnService : BaseVpnService()
 		killProcesses()
 
 		// Resolve the server address
-		host_arg = profile!!.host
+		hostArg = profile!!.host
 		if (!Utils.isNumeric(profile!!.host))
 		{
 			val addr = Utils.resolve(profile!!.host, profile!!.ipv6)
@@ -232,16 +231,16 @@ class ShadowsocksVpnService : BaseVpnService()
 		}
 	}
 
-	fun startShadowsocksUDPDaemon()
+	private fun startShadowsocksUDPDaemon()
 	{
 		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort, Constants.ConfigUtils.EscapedJson(profile!!.password), profile!!.method, 600, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.EscapedJson(profile!!.obfs_param), Constants.ConfigUtils.EscapedJson(profile!!.protocol_param))
 		Utils.printToFile(File(applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf"), conf)
 
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/libssr-local.so", "-V", "-U", "-b", "127.0.0.1", "--host", host_arg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf")
-		val cmds = LinkedList(Arrays.asList(*cmd))
-		if (proxychains_enable)
+		val cmd = arrayOf("${applicationInfo.nativeLibraryDir}/${Constants.Executable.SS_LOCAL}", "-V", "-U", "-b", "127.0.0.1", "--host", hostArg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf")
+		val cmds = LinkedList(cmd.toList())
+		if (proxychainsEnable)
 		{
-			cmds.addFirst("LD_PRELOAD=" + applicationInfo.dataDir + "/lib/libproxychains4.so")
+			cmds.addFirst("LD_PRELOAD=" + applicationInfo.dataDir + "/lib/${Constants.Executable.PROXYCHAINS4}")
 			cmds.addFirst("PROXYCHAINS_CONF_FILE=" + applicationInfo.dataDir + "/proxychains.conf")
 			cmds.addFirst("PROXYCHAINS_PROTECT_FD_PREFIX=" + applicationInfo.dataDir)
 			cmds.addFirst("env")
@@ -259,16 +258,16 @@ class ShadowsocksVpnService : BaseVpnService()
 		}
 	}
 
-	fun startShadowsocksDaemon()
+	private fun startShadowsocksDaemon()
 	{
 
 		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort, Constants.ConfigUtils.EscapedJson(profile!!.password), profile!!.method, 600, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.EscapedJson(profile!!.obfs_param), Constants.ConfigUtils.EscapedJson(profile!!.protocol_param))
 
 		Utils.printToFile(File(applicationInfo.dataDir + "/libssr-local.so-vpn.conf"), conf)
 
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/libssr-local.so", "-V", "-x", "-b", "127.0.0.1", "--host", host_arg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-vpn.conf")
+		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.SS_LOCAL}", "-V", "-x", "-b", "127.0.0.1", "--host", hostArg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-vpn.conf")
 
-		val cmds = LinkedList(Arrays.asList(*cmd))
+		val cmds = LinkedList(cmd.toList())
 
 		if (profile!!.udpdns)
 		{
@@ -281,9 +280,9 @@ class ShadowsocksVpnService : BaseVpnService()
 			cmds.add(applicationInfo.dataDir + '/'.toString() + profile!!.route + ".acl")
 		}
 
-		if (proxychains_enable)
+		if (proxychainsEnable)
 		{
-			cmds.addFirst("LD_PRELOAD=" + applicationInfo.dataDir + "/lib/libproxychains4.so")
+			cmds.addFirst("LD_PRELOAD=" + applicationInfo.dataDir + "/lib/${Constants.Executable.PROXYCHAINS4}")
 			cmds.addFirst("PROXYCHAINS_CONF_FILE=" + applicationInfo.dataDir + "/proxychains.conf")
 			cmds.addFirst("PROXYCHAINS_PROTECT_FD_PREFIX=" + applicationInfo.dataDir)
 			cmds.addFirst("env")
@@ -301,27 +300,27 @@ class ShadowsocksVpnService : BaseVpnService()
 		}
 	}
 
-	fun startDnsTunnel()
+	private fun startDnsTunnel()
 	{
 		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort + 63, Constants.ConfigUtils.EscapedJson(profile!!.password), profile!!.method, 60, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.EscapedJson(profile!!.obfs_param), Constants.ConfigUtils.EscapedJson(profile!!.protocol_param))
 		Utils.printToFile(File(applicationInfo.dataDir + "/ss-tunnel-vpn.conf"), conf)
 
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/libssr-local.so", "-V", "-u", "--host", host_arg, "-b", "127.0.0.1", "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/ss-tunnel-vpn.conf")
+		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.SS_LOCAL}", "-V", "-u", "--host", hostArg, "-b", "127.0.0.1", "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/ss-tunnel-vpn.conf")
 
-		val cmds = LinkedList(Arrays.asList(*cmd))
+		val cmds = LinkedList(cmd.toList())
 		cmds.add("-L")
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
-			cmds.add("$china_dns_address:$china_dns_port")
+			cmds.add("$chinaDnsAddress:$chinaDnsPort")
 		}
 		else
 		{
-			cmds.add("$dns_address:$dns_port")
+			cmds.add("$dnsAddress:$dnsPort")
 		}
 
-		if (proxychains_enable)
+		if (proxychainsEnable)
 		{
-			cmds.addFirst("LD_PRELOAD=" + applicationInfo.dataDir + "/lib/libproxychains4.so")
+			cmds.addFirst("LD_PRELOAD=" + applicationInfo.dataDir + "/lib/${Constants.Executable.PROXYCHAINS4}")
 			cmds.addFirst("PROXYCHAINS_CONF_FILE=" + applicationInfo.dataDir + "/proxychains.conf")
 			cmds.addFirst("PROXYCHAINS_PROTECT_FD_PREFIX=" + applicationInfo.dataDir)
 			cmds.addFirst("env")
@@ -342,7 +341,7 @@ class ShadowsocksVpnService : BaseVpnService()
 	private fun startDnsDaemon()
 	{
 		val reject = if (profile!!.ipv6) "224.0.0.0/3" else "224.0.0.0/3, ::/0"
-		val protect = "protect = \"${BaseVpnService.protectPath}\";"
+		val protect = "protect = \"$protectPath\";"
 
 		val chinaDnsSettings = StringBuilder()
 
@@ -398,7 +397,7 @@ class ShadowsocksVpnService : BaseVpnService()
 		}
 
 		Utils.printToFile(File(applicationInfo.dataDir + "/libpdnsd.so-vpn.conf"), conf)
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/libpdnsd.so", "-c", applicationInfo.dataDir + "/libpdnsd.so-vpn.conf")
+		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.PDNSD}", "-c", applicationInfo.dataDir + "/libpdnsd.so-vpn.conf")
 		val cmds = listOf(*cmd)
 
 		VayLog.d(TAG, Utils.makeString(cmds, " "))
@@ -423,11 +422,11 @@ class ShadowsocksVpnService : BaseVpnService()
 
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
-			builder.addDnsServer(china_dns_address)
+			builder.addDnsServer(chinaDnsAddress)
 		}
 		else
 		{
-			builder.addDnsServer(dns_address)
+			builder.addDnsServer(dnsAddress)
 		}
 
 		if (profile!!.ipv6)
@@ -480,11 +479,11 @@ class ShadowsocksVpnService : BaseVpnService()
 
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
-			builder.addRoute(china_dns_address, 32)
+			builder.addRoute(chinaDnsAddress, 32)
 		}
 		else
 		{
-			builder.addRoute(dns_address, 32)
+			builder.addRoute(dnsAddress, 32)
 		}
 
 		val conn = builder.establish() ?: throw NullConnectionException()
@@ -492,9 +491,9 @@ class ShadowsocksVpnService : BaseVpnService()
 
 		val fd = conn.fd
 
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/libtun2socks.so", "--netif-ipaddr", String.format(Locale.ENGLISH, PRIVATE_VLAN, "2"), "--netif-netmask", "255.255.255.0", "--socks-server-addr", "127.0.0.1:" + profile!!.localPort, "--tunfd", fd.toString(), "--tunmtu", VPN_MTU.toString(), "--sock-path", applicationInfo.dataDir + "/sock_path", "--loglevel", "3")
+		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.TUN2SOCKS}", "--netif-ipaddr", String.format(Locale.ENGLISH, PRIVATE_VLAN, "2"), "--netif-netmask", "255.255.255.0", "--socks-server-addr", "127.0.0.1:" + profile!!.localPort, "--tunfd", fd.toString(), "--tunmtu", VPN_MTU.toString(), "--sock-path", applicationInfo.dataDir + "/sock_path", "--loglevel", "3")
 
-		val cmds = ArrayList(Arrays.asList(*cmd))
+		val cmds = cmd.toMutableList()
 
 		if (profile!!.ipv6)
 		{

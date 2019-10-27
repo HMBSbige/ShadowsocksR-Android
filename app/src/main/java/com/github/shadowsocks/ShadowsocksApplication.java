@@ -80,11 +80,9 @@ public class ShadowsocksApplication extends Application {
     public ScheduledExecutorService mThreadPool;
     private String[] EXECUTABLES = {
             Constants.Executable.PDNSD,
-            Constants.Executable.REDSOCKS,
-            Constants.Executable.SS_TUNNEL,
+            Constants.Executable.PROXYCHAINS4,
             Constants.Executable.SS_LOCAL,
-            Constants.Executable.TUN2SOCKS,
-            Constants.Executable.KCPTUN};
+            Constants.Executable.TUN2SOCKS};
     private Tracker tracker;
 
     public boolean isNatEnabled() {
@@ -348,13 +346,12 @@ public class ShadowsocksApplication extends Application {
     }
 
     /**
-     * arash recovery
+     * Crash recovery
      */
     public void crashRecovery() {
         ArrayList<String> cmd = new ArrayList<>();
 
-        String[] paramsArray = {"libssr-local.so", "ss-tunnel", "libpdnsd.so", "libredsocks.so", "libtun2socks.so", "proxychains"};
-        for (String task : paramsArray) {
+        for (String task : EXECUTABLES) {
             cmd.add(String.format(Locale.ENGLISH, "killall %s", task));
             cmd.add(String.format(Locale.ENGLISH, "rm -f %1$s/%2$s-nat.conf %1$s/%2$s-vpn.conf", getApplicationInfo().dataDir, task));
         }
