@@ -399,7 +399,7 @@ public class ShadowsocksApplication extends Application {
     public void copyAssets() {
         // ensure executables are killed before writing to them
         crashRecovery();
-        copyAssets(System.INSTANCE.getABI());
+        copyAssets(Build.SUPPORTED_ABIS[0]);
         copyAssets("acl");
 
         // exec cmds

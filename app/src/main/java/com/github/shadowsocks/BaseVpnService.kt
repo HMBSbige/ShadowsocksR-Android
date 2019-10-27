@@ -419,7 +419,7 @@ abstract class BaseVpnService : VpnService()
 
 	inner class NameNotResolvedException : IOException()
 
-	inner class NullConnectionException : NullPointerException()
+	class NullConnectionException : NullPointerException()
 
 	companion object
 	{

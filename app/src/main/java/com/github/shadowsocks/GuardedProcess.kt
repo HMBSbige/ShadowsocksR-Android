@@ -15,7 +15,7 @@ class GuardedProcess(private val cmd: List<String>)
 
 	@Throws(InterruptedException::class)
 	@JvmOverloads
-	fun start(onRestartCallback: RestartCallback? = null): GuardedProcess
+	fun start(onRestartCallback: (() -> Boolean)? = null): GuardedProcess
 	{
 		val semaphore = Semaphore(1)
 		semaphore.acquire()
@@ -26,7 +26,7 @@ class GuardedProcess(private val cmd: List<String>)
 								 {
 									 try
 									 {
-										 var callback: RestartCallback? = null
+										 var callback: (() -> Boolean)? = null
 										 while (!isDestroyed)
 										 {
 											 VayLog.i(TAG, "start process: $cmd")
@@ -44,7 +44,7 @@ class GuardedProcess(private val cmd: List<String>)
 											 }
 											 else
 											 {
-												 callback.onRestart()
+												 callback()
 											 }
 
 											 semaphore.release()
@@ -100,11 +100,6 @@ class GuardedProcess(private val cmd: List<String>)
 		{
 			// Ignored
 		}
-	}
-
-	interface RestartCallback
-	{
-		fun onRestart()
 	}
 
 	inner class StreamLogger(private val inputStream: InputStream, private val tag: String) : Thread()
