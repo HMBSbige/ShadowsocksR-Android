@@ -100,6 +100,10 @@ object Parser
 						profile.obfs = ss.groupValues[6].toLowerCase(Locale.ENGLISH)
 						profile.password = Base64.decodeUrlSafe(ss.groupValues[7])
 
+						if (profile.obfs == "tls1.2_ticket_fastauth")
+						{
+							profile.obfs = "tls1.2_ticket_auth"
+						}
 						var param = Regex(decodedPattern_ssr_obfsparam_regex).find(uri)
 						if (param != null)
 						{
