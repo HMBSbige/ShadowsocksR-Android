@@ -85,6 +85,7 @@ public class ShadowsocksApplication extends Application {
             Constants.Executable.TUN2SOCKS};
     private Tracker tracker;
 
+    //TODO
     public boolean isNatEnabled() {
         return false;
     }
