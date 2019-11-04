@@ -6,7 +6,6 @@
     <application
         android:name=".ShadowsocksApplication"
         android:allowBackup="true"
-        android:backupAgent=".ShadowsocksBackupAgent"
         android:banner="@drawable/ic_start_connected"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
