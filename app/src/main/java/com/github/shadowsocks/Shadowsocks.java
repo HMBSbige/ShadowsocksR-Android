@@ -322,7 +322,7 @@ public class Shadowsocks extends AppCompatActivity {
             public void onClick(View v) {
                 if (serviceStarted) {
                     serviceStop();
-                } else if (mServiceBoundContext.bgService != null) {
+                } else if (mServiceBoundContext.getBgService() != null) {
                     prepareStartService();
                 } else {
                     changeSwitch(false);
@@ -459,9 +459,9 @@ public class Shadowsocks extends AppCompatActivity {
     }
 
     private void updateState(boolean resetConnectionTest) {
-        if (mServiceBoundContext.bgService != null) {
+        if (mServiceBoundContext.getBgService() != null) {
             try {
-                int state = mServiceBoundContext.bgService.getState();
+                int state = mServiceBoundContext.getBgService().getState();
                 switch (state) {
                     case Constants.State.CONNECTING:
                         fab.setBackgroundTintList(greyTint);
@@ -659,9 +659,9 @@ public class Shadowsocks extends AppCompatActivity {
     }
 
     private void serviceStop() {
-        if (mServiceBoundContext.bgService != null) {
+        if (mServiceBoundContext.getBgService() != null) {
             try {
-                mServiceBoundContext.bgService.use(-1);
+                mServiceBoundContext.getBgService().use(-1);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
@@ -673,7 +673,7 @@ public class Shadowsocks extends AppCompatActivity {
      */
     private void serviceLoad() {
         try {
-            mServiceBoundContext.bgService.use(ShadowsocksApplication.app.profileId());
+            mServiceBoundContext.getBgService().use(ShadowsocksApplication.app.profileId());
         } catch (RemoteException e) {
             e.printStackTrace();
         }

@@ -71,7 +71,10 @@ class ShadowsocksTileService : TileService()
 			{
 				try
 				{
-					callback.stateChanged(bgService.state, bgService.profileName, null)
+					if (bgService != null)
+					{
+						callback.stateChanged(bgService!!.state, bgService!!.profileName, null)
+					}
 				}
 				catch (e: RemoteException)
 				{
@@ -113,7 +116,7 @@ class ShadowsocksTileService : TileService()
 		{
 			try
 			{
-				when (mServiceBoundContext.bgService.state)
+				when (mServiceBoundContext.bgService!!.state)
 				{
 					Constants.State.STOPPED -> Utils.startSsService(this)
 					Constants.State.CONNECTED -> Utils.stopSsService(this)

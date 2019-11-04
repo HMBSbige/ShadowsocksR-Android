@@ -72,7 +72,7 @@ public class ShadowsocksRunnerActivity extends Activity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (bgService != null) {
+                        if (getBgService() != null) {
                             startBackgroundService();
                         }
                     }
@@ -84,7 +84,7 @@ public class ShadowsocksRunnerActivity extends Activity {
     private void startBackgroundService() {
         if (ShadowsocksApplication.app.isNatEnabled()) {
             try {
-                mServiceBoundContext.bgService.use(ShadowsocksApplication.app.profileId());
+                mServiceBoundContext.getBgService().use(ShadowsocksApplication.app.profileId());
                 finish();
             } catch (RemoteException e) {
                 e.printStackTrace();
@@ -135,9 +135,9 @@ public class ShadowsocksRunnerActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            if (mServiceBoundContext.bgService != null) {
+            if (mServiceBoundContext.getBgService() != null) {
                 try {
-                    mServiceBoundContext.bgService.use(ShadowsocksApplication.app.profileId());
+                    mServiceBoundContext.getBgService().use(ShadowsocksApplication.app.profileId());
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

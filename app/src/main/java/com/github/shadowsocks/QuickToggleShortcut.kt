@@ -22,7 +22,7 @@ class QuickToggleShortcut : Activity()
 			{
 				try
 				{
-					when (bgService.state)
+					when (bgService?.state)
 					{
 						Constants.State.STOPPED ->
 						{
