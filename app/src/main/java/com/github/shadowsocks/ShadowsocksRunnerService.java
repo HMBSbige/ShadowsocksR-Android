@@ -92,7 +92,7 @@ public class ShadowsocksRunnerService extends ServiceBoundService {
 
     @Override
     protected void onServiceConnected() {
-        if (bgService != null) {
+        if (getBgService() != null) {
             if (ShadowsocksApplication.app.isNatEnabled()) {
                 startBackgroundService();
             } else if (VpnService.prepare(ShadowsocksRunnerService.this) == null) {
@@ -110,7 +110,7 @@ public class ShadowsocksRunnerService extends ServiceBoundService {
 
     private void startBackgroundService() {
         try {
-            bgService.use(ShadowsocksApplication.app.profileId());
+            getBgService().use(ShadowsocksApplication.app.profileId());
         } catch (RemoteException e) {
             VayLog.INSTANCE.e(TAG, "startBackgroundService", e);
             ShadowsocksApplication.app.track(e);
