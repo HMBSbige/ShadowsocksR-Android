@@ -32,7 +32,7 @@ class SSRSubManager(private val dbHelper: DBHelper)
 
 		}
 
-	val allSSRSubs: List<SSRSub>?
+	val allSSRSubs: List<SSRSub>
 		get()
 		{
 			return try
@@ -43,9 +43,8 @@ class SSRSubManager(private val dbHelper: DBHelper)
 			{
 				VayLog.e(TAG, "getAllSSRSubs", e)
 				ShadowsocksApplication.app.track(e)
-				null
+				emptyList()
 			}
-
 		}
 
 	init

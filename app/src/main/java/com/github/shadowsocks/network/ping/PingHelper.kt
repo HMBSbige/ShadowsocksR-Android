@@ -3,14 +3,12 @@ package com.github.shadowsocks.network.ping
 
 import android.app.*
 import android.content.pm.*
-import com.github.shadowsocks.GuardedProcess
-import com.github.shadowsocks.R
+import com.github.shadowsocks.*
 import com.github.shadowsocks.database.*
 import com.github.shadowsocks.network.request.*
 import com.github.shadowsocks.utils.*
 import okhttp3.*
 import java.io.*
-import java.lang.System
 import java.net.*
 import java.util.*
 import java.util.concurrent.*
@@ -98,7 +96,7 @@ private constructor()
 	 */
 	private fun pingAllByProfiles(aty: Activity, profiles: List<Profile>?, position: Int, callback: PingCallback)
 	{
-		if (profiles == null || profiles.isEmpty())
+		if (profiles.isNullOrEmpty())
 		{
 			callback.resultMsg = "test all failed, profile list is empty"
 			callback.onFailed(null)

@@ -16,7 +16,7 @@ class SSRSubUpdateJob : Job()
 		{
 			val subs = ShadowsocksApplication.app.ssrsubManager.allSSRSubs
 			SubUpdateHelper.instance()
-				.updateSub(subs!!, object : SubUpdateCallback()
+				.updateSub(subs, object : SubUpdateCallback()
 				{
 					override fun onSuccess(subName: String)
 					{
@@ -31,10 +31,7 @@ class SSRSubUpdateJob : Job()
 				})
 			return Result.SUCCESS
 		}
-		else
-		{
-			return Result.RESCHEDULE
-		}
+		return Result.RESCHEDULE
 	}
 
 	companion object

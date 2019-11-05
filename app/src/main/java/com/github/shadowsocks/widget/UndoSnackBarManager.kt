@@ -5,7 +5,7 @@ import android.view.*
 import com.github.shadowsocks.*
 import com.google.android.material.snackbar.*
 
-class UndoSnackbarManager<T>(private val view: View, private val undo: OnUndoListener<T>?, private val commit: OnCommitListener<T>?)
+class UndoSnackBarManager<T>(private val view: View, private val undo: (Any) -> Unit, private val commit: (Any) -> Unit)
 {
 	private val recycleBin: SparseArray<T> = SparseArray()
 	private var last: Snackbar? = null
@@ -16,7 +16,7 @@ class UndoSnackbarManager<T>(private val view: View, private val undo: OnUndoLis
 		{
 			if (event == DISMISS_EVENT_SWIPE || event == DISMISS_EVENT_MANUAL || event == DISMISS_EVENT_TIMEOUT)
 			{
-				commit?.onCommit(recycleBin)
+				commit(recycleBin)
 				recycleBin.clear()
 			}
 			last = null
@@ -30,7 +30,7 @@ class UndoSnackbarManager<T>(private val view: View, private val undo: OnUndoLis
 		last = Snackbar.make(view, view.resources.getQuantityString(R.plurals.removed, count, count), Snackbar.LENGTH_LONG)
 			.addCallback(removedCallback)
 			.setAction(R.string.undo) {
-				undo?.onUndo(recycleBin)
+				undo(recycleBin)
 				recycleBin.clear()
 			}
 		last!!.show()
@@ -42,15 +42,5 @@ class UndoSnackbarManager<T>(private val view: View, private val undo: OnUndoLis
 		{
 			last!!.dismiss()
 		}
-	}
-
-	interface OnCommitListener<T>
-	{
-		fun onCommit(commit: SparseArray<T>)
-	}
-
-	interface OnUndoListener<T>
-	{
-		fun onUndo(undo: SparseArray<T>)
 	}
 }

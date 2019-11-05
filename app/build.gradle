@@ -55,7 +55,7 @@ dependencies {
     implementation "com.github.jorgecastilloprz:fabprogresscircle:1.01"
     implementation "com.google.android.gms:play-services-analytics:17.0.0"
     implementation "com.j256.ormlite:ormlite-android:5.1"
-    implementation 'com.mikepenz:iconics-core:4.0.1'
+    implementation 'com.mikepenz:iconics-core:4.0.2'
     implementation "com.mikepenz:materialdrawer:6.1.2"
     implementation "com.twofortyfouram:android-plugin-api-for-locale:1.0.4"
     implementation "dnsjava:dnsjava:2.1.9"

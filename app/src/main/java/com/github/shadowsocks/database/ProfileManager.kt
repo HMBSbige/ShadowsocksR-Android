@@ -58,7 +58,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 * @return get failed return null.
 	 */
 	// merge list
-	val allProfilesByElapsed: List<Profile>?
+	val allProfilesByElapsed: List<Profile>
 		get()
 		{
 			return try
@@ -74,12 +74,11 @@ class ProfileManager(private val dbHelper: DBHelper)
 			{
 				VayLog.e(TAG, "getAllProfilesByElapsed", e)
 				ShadowsocksApplication.app.track(e)
-				null
+				emptyList()
 			}
-
 		}
 
-	val groupNames: List<String>?
+	val groupNames: List<String>
 		get()
 		{
 			try
@@ -96,9 +95,8 @@ class ProfileManager(private val dbHelper: DBHelper)
 			{
 				VayLog.e(TAG, "getAllProfilesByGroup", e)
 				ShadowsocksApplication.app.track(e)
-				return null
+				return emptyList()
 			}
-
 		}
 
 	init
@@ -399,7 +397,6 @@ class ProfileManager(private val dbHelper: DBHelper)
 			ShadowsocksApplication.app.track(e)
 			false
 		}
-
 	}
 
 	/**
@@ -408,7 +405,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 	 * @param group group name
 	 * @return get failed return null.
 	 */
-	fun getAllProfilesByGroup(group: String): MutableList<Profile>?
+	fun getAllProfilesByGroup(group: String): List<Profile>
 	{
 		return try
 		{
@@ -418,12 +415,11 @@ class ProfileManager(private val dbHelper: DBHelper)
 		{
 			VayLog.e(TAG, "getAllProfilesByGroup", e)
 			ShadowsocksApplication.app.track(e)
-			null
+			emptyList()
 		}
-
 	}
 
-	fun getAllProfilesByGroupOrderbyElapse(groupname: String): List<Profile>?
+	fun getAllProfilesByGroupOrderByElapse(groupname: String): List<Profile>
 	{
 		try
 		{
@@ -440,9 +436,8 @@ class ProfileManager(private val dbHelper: DBHelper)
 		{
 			VayLog.e(TAG, "getAllProfilesByElapsed", e)
 			ShadowsocksApplication.app.track(e)
-			return null
+			return emptyList()
 		}
-
 	}
 
 

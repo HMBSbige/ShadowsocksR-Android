@@ -111,6 +111,7 @@ class SubUpdateHelper private constructor()
 	private fun handleResponse(sub: SSRSub, response: String, callback: SubUpdateCallback)
 	{
 		val deleteProfiles = ShadowsocksApplication.app.profileManager.getAllProfilesByGroup(sub.url_group)
+			.toMutableList()
 		val responseString = Base64.decodeUrlSafe(response)
 		val profiles = Parser.findAllSsr(responseString)
 		profiles.shuffle()
@@ -121,7 +122,7 @@ class SubUpdateHelper private constructor()
 			if (resultCode != 0)
 			{
 				val tempList = ArrayList<Profile>()
-				for (item in deleteProfiles!!)
+				for (item in deleteProfiles)
 				{
 					if (item.id != resultCode)
 					{
@@ -133,7 +134,7 @@ class SubUpdateHelper private constructor()
 			}
 		}
 
-		for (profile in deleteProfiles!!)
+		for (profile in deleteProfiles)
 		{
 			if (profile.id != ShadowsocksApplication.app.profileId())
 			{

@@ -62,7 +62,7 @@ object Utils
 			catch (e: Exception)
 			{
 				VayLog.e(TAG, "Failed to get interfaces' addresses.", e)
-				ShadowsocksApplication.app.track(e)
+				app.track(e)
 			}
 
 			return false
@@ -87,14 +87,7 @@ object Utils
 		return result
 	}
 
-	/**
-	 * use string divider list value
-	 *
-	 * @param list    list
-	 * @param divider divider string
-	 * @return list is empty, return null.
-	 */
-	fun makeString(list: Collection<String>?, divider: String): String
+	fun makeString(list: Collection<Any>, divider: String): String
 	{
 		if (list.isNullOrEmpty())
 		{
@@ -199,7 +192,7 @@ object Utils
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "getSignature", e)
-			ShadowsocksApplication.app.track(e)
+			app.track(e)
 		}
 
 		return null
@@ -315,7 +308,7 @@ object Utils
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "resolve", e)
-			ShadowsocksApplication.app.track(e)
+			app.track(e)
 		}
 
 		return null
@@ -331,7 +324,7 @@ object Utils
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "resolve", e)
-			ShadowsocksApplication.app.track(e)
+			app.track(e)
 		}
 
 		return null
@@ -373,7 +366,7 @@ object Utils
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "isNumeric", e)
-			ShadowsocksApplication.app.track(e)
+			app.track(e)
 		}
 
 		return false
