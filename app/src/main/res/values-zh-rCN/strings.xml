@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">ShadowsocksR</string>
     <string name="quick_toggle">开关</string>
 
@@ -23,7 +23,7 @@
     <string name="feature_cat">功能设置</string>
     <string name="route_list">路由</string>
     <string name="proxied_apps">分应用代理</string>
-    <string name="proxied_apps_summary">为应用程序分别设置代理，在 4.x 下需要启用 NAT 模式</string>
+    <string name="proxied_apps_summary">为应用程序分别设置代理，在 Android 4.x 下需要启用 NAT 模式</string>
     <string name="on">开</string>
     <string name="bypass_apps">绕行模式</string>
     <string name="auto_connect">自动连接</string>
@@ -34,22 +34,22 @@
     <string name="method_unsafe">警告：当前使用的加密算法不安全</string>
     <string name="stop">停止</string>
     <string name="quick_switch">切换</string>
-    <string name="stopping">正在关闭……</string>
+    <string name="stopping">正在关闭…</string>
     <string name="vpn_error">后台服务启动失败：%s</string>
     <string name="reboot_required">VPN 服务启动失败。你可能需要重启设备。</string>
     <string name="close">关闭</string>
     <string name="proxy_empty">代理服务器地址及密码不能为空</string>
     <string name="connect">连接</string>
-    <string name="recovering">重置中……</string>
-    <string name="loading">正在加载……</string>
+    <string name="recovering">重置中…</string>
+    <string name="loading">正在加载…</string>
 
     <string name="dr">去重添加</string>
 
     <string name="profiles">配置文件</string>
     <string name="recovery">重置</string>
     <string name="recovery_summary">重置所有后台服务</string>
-    <string name="ignore_battery_optimization">请求忽略电池优化</string>
-    <string name="ignore_battery_optimization_summary">点击来请求触发忽略电池优化，可避免息屏休眠导致的后台断流，会增加电池消耗，在部分设备上可能无法正常触发。</string>
+    <string name="ignore_battery_optimization">忽略电池优化</string>
+    <string name="ignore_battery_optimization_summary">请求忽略电池优化</string>
     <string name="about">关于</string>
     <string name="about_title">ShadowsocksR %s</string>
     <string name="share">分享</string>
@@ -71,20 +71,20 @@
     <string name="ipv6_summary">向远程服务器转发 IPv6 流量</string>
 
     <string name="stat">网络流量</string>
-    <string name="stat_summary">发送:\t%3$s\t↑\t%1$s/s\n接收:\t%4$s\t↓\t%2$s/s</string>
+    <string name="stat_summary">发送：\t%3$s\t↑\t%1$s/s\n接收：\t%4$s\t↓\t%2$s/s</string>
 
     <string name="connection_test_pending">检查网络连接</string>
-    <string name="connection_test_testing">测试中……</string>
-    <string name="connection_test_available">连接有效: 延时 %d 毫秒</string>
+    <string name="connection_test_testing">测试中…</string>
+    <string name="connection_test_available">连接有效：延时 %d 毫秒</string>
     <string name="connection_test_fail">无互联网连接</string>
     <string name="connection_test_error">失败：%s</string>
-    <string name="connection_test_error_status_code">状态码无效（#%d）</string>
+    <string name="connection_test_error_status_code">状态码无效：#%d</string>
 
     <!-- profile -->
     <string name="profile_manager_dialog">配置文件</string>
     <string name="profile_manager_dialog_content">&#8226; 点击选择配置文件；\n&#8226; 向左/右滑动或按左删除；\n&#8226;
     长按拖动改变顺序。</string>
-    <string name="gotcha">好的</string>
+    <string name="gotcha">好的！</string>
     <string name="copy_url">复制 URL</string>
     <string name="add_profile_dialog">为 ShadowsocksR 添加此配置文件？</string>
     <string name="add_profile_methods_scan_qr_code">扫描二维码</string>
@@ -93,37 +93,23 @@
     <string name="add_profile_nfc_hint">保持两台设备的屏幕亮起，在另外一台设备上，点击配置文件的分享按钮，将它们靠在一起（背靠背）。\n你也可以扫描 NFC 标签。</string>
     <string name="add_profile_scanner_permission_required">扫描二维码需要相机权限。</string>
 
-    <string-array name="route_entry">
-        <item>全局</item>
-        <item>绕过局域网地址</item>
-        <item>绕过中国大陆地址</item>
-        <item>绕过局域网及中国大陆地址</item>
-        <item>仅代理中国大陆无法访问的地址</item>
-        <item>仅代理中国大陆地址</item>
-        <item>自定义 ACL 文件</item>
-    </string-array>
-
     <string name="acl_file">ACL 文件 URL</string>
     <string name="aclupdate">ACL 文件更新</string>
-    <string name="aclupdate_summary">更新您本地的 ACL 文件</string>
+    <string name="aclupdate_summary">更新您的 ACL 文件</string>
     <string name="aclupdate_url_notset">很抱歉，因为您没有设置 ACL 地址，所以无法进行更新。请在路由中选择 \'自定义 ACL 文件\' 之后再进行升级尝试。</string>
 
-    <string name="aclupdate_downloading">文件更新中...</string>
-    <string name="aclupdate_successfully">文件更新成功！</string>
+    <string name="aclupdate_downloading">文件更新中…</string>
+    <string name="aclupdate_successfully">文件更新成功。</string>
     <string name="aclupdate_failed">文件更新失败！</string>
 
     <string name="action_apply_all">应用设置到所有配置文件</string>
     <string name="action_export">导出至剪贴板</string>
     <string name="action_import">从剪贴板导入</string>
-    <string name="action_export_msg">导出至剪贴板成功</string>
-    <string name="action_export_err">导出至剪贴板失败</string>
-    <string name="action_import_msg">导入成功</string>
-    <string name="action_import_err">导入失败</string>
+    <string name="action_export_msg">导出至剪贴板成功。</string>
+    <string name="action_export_err">导出至剪贴板失败！</string>
+    <string name="action_import_msg">导入成功。</string>
+    <string name="action_import_err">导入失败！</string>
 
-    <plurals name="removed">
-        <item quantity="one">已删除</item>
-        <item quantity="other">已删除 %d 项</item>
-    </plurals>
     <string name="undo">撤销</string>
     <string name="toggle_service_state">启动服务</string>
     <string name="start_service_default">连接到当前服务器</string>
@@ -131,7 +117,7 @@
     <string name="stop_service">切换到 %s</string>
     <string name="profile_default">使用当前配置</string>
 
-    <string name="tips_testing">测试中...</string>
+    <string name="tips_testing">测试中…</string>
     <string name="action_full_test">完整HTTP延时测试</string>
     <string name="action_sort">基于延时自动排序</string>
     <string name="ping">测试延时</string>
@@ -144,14 +130,14 @@
     <string name="frontproxy_type">类型</string>
     <string name="frontproxy_set">前置代理</string>
 
-    <string name="add_profile_methods_ssr_sub">添加/升级 SSR 订阅</string>
+    <string name="add_profile_methods_ssr_sub">添加/更新 SSR 订阅</string>
     <string name="ssrsub_autoupdate_enable">自动更新</string>
     <string name="ssrsub_add">添加订阅地址</string>
-    <string name="ssrsub_ok">确定并升级</string>
+    <string name="ssrsub_ok">确定并更新</string>
     <string name="ssrsub_list">订阅列表</string>
     <string name="ssrsub_error">地址不正确或网络不可用。</string>
-    <string name="ssrsub_progres">处理中</string>
-    <string name="ssrsub_progres_text">请稍候</string>
+    <string name="ssrsub_progres">处理中…</string>
+    <string name="ssrsub_progres_text">请稍候…</string>
     <string name="group_name">群组名</string>
     <string name="proxy_click">点击查看和编辑地址</string>
     <string name="ssrsub_remove_tip_title">删除</string>
@@ -161,9 +147,24 @@
 
 
     <!-- status -->
-    <string name="sent">发送:</string>
-    <string name="received">接收:</string>
+    <string name="sent">发送：</string>
+    <string name="received">接收：</string>
     <string name="allgroups">全部群组</string>
-    <string name="sub_autoupdate_success">%s:订阅更新成功</string>
+    <string name="sub_autoupdate_success">%s：订阅更新成功</string>
+
+    <plurals name="removed" tools:ignore="UnusedQuantity">
+        <item quantity="one">已删除</item>
+        <item quantity="other">已删除 %d 项</item>
+    </plurals>
+
+    <string-array name="route_entry" tools:ignore="InconsistentArrays">
+        <item>全局</item>
+        <item>绕过局域网地址</item>
+        <item>绕过中国大陆地址</item>
+        <item>绕过局域网及中国大陆地址</item>
+        <item>仅代理中国大陆无法访问的地址</item>
+        <item>仅代理中国大陆地址</item>
+        <item>自定义 ACL 文件</item>
+    </string-array>
 
 </resources>

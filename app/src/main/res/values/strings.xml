@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <plurals name="bytes" translatable="false">
-        <item quantity="one">Byte</item>
-        <item quantity="other">Bytes</item>
-    </plurals>
-    <plurals name="removed">
-        <item quantity="one">Removed</item>
-        <item quantity="other">%d items removed</item>
-    </plurals>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- global/misc category -->
     <string name="app_name">ShadowsocksR</string>
     <string name="quick_toggle">Toggle</string>
@@ -52,7 +42,7 @@
     <string name="aclupdate">ACL Update</string>
     <string name="aclupdate_summary">Update Your ACL file</string>
     <string name="aclupdate_url_notset">Sorry, an ACL file URL has to be set before you can update it. Please click on \'Customize ACL File\' in \'Route Setting\' and try again.</string>
-    <string name="aclupdate_downloading">Updating ACL file...</string>
+    <string name="aclupdate_downloading">Updating ACL file…</string>
     <string name="aclupdate_successfully">Successfully updated ACL file.</string>
     <string name="aclupdate_failed">Failed to update ACL file!</string>
     <string name="proxied_apps">Per-App Proxy</string>
@@ -92,8 +82,8 @@
     <string name="profiles">Profiles</string>
     <string name="recovery">Reset</string>
     <string name="recovery_summary">Reset all the background services</string>
-    <string name="ignore_battery_optimization">Request ignore battery optimizations</string>
-    <string name="ignore_battery_optimization_summary">Click to request trigger Ignore the battery optimization, to avoid background hiccups caused by hibernation when off screen, will increase the battery consumption, may not be triggered properly on some devices.</string>
+    <string name="ignore_battery_optimization">Ignore battery optimizations</string>
+    <string name="ignore_battery_optimization_summary">Request ignore the battery optimization</string>
     <string name="about">About</string>
     <string name="about_title">ShadowsocksR %s</string>
     <string name="share">Share</string>
@@ -122,7 +112,7 @@
     <string name="add_profile_scanner_permission_required">Camera permission is required for scanning QR code.</string>
     <string name="copy_url">Copy URL</string>
     <string name="undo">Undo</string>
-    <string name="tips_testing">Testing...</string>
+    <string name="tips_testing">Testing…</string>
 
     <string name="action_full_test">Full HTTP latency test</string>
     <string name="action_sort">Auto sort by latency</string>
@@ -143,8 +133,8 @@
     <string name="ssrsub_ok">Save and Update</string>
     <string name="ssrsub_list">Item List</string>
     <string name="ssrsub_error">Error: URL invaild or internet unavailable.</string>
-    <string name="ssrsub_progres">Processing...</string>
-    <string name="ssrsub_progres_text">Please wait...</string>
+    <string name="ssrsub_progres">Processing…</string>
+    <string name="ssrsub_progres_text">Please wait…</string>
     <string name="group_name">Group Name</string>
     <string name="proxy_click">Click on the group name to view its URL</string>
     <string name="ssrsub_remove_tip_title">Subscription removal</string>
@@ -160,14 +150,24 @@
     <string name="start_service">Connect to %s</string>
     <string name="stop_service">Switch to %s</string>
     <string name="profile_default">Use the current profile</string>
-    <string name="sent">Sent:</string>
 
     <!-- status -->
+    <string name="sent">Sent:</string>
     <string name="received">Received:</string>
-
     <string name="allgroups">All Groups</string>
-    <string name="sub_autoupdate_success">%s: autoupdate success</string>
-    <string-array name="route_entry">
+    <string name="sub_autoupdate_success">%s: Autoupdate success</string>
+
+    <plurals name="bytes" translatable="false">
+        <item quantity="one">Byte</item>
+        <item quantity="other">Bytes</item>
+    </plurals>
+
+    <plurals name="removed">
+        <item quantity="one">Removed</item>
+        <item quantity="other">%d items removed</item>
+    </plurals>
+
+    <string-array name="route_entry" tools:ignore="InconsistentArrays">
         <item>All</item>
         <item>Bypass LAN</item>
         <item>Bypass China</item>

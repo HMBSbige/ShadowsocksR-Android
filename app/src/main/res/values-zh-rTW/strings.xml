@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">ShadowsocksR</string>
     <string name="quick_toggle">開關</string>
@@ -17,14 +17,14 @@
     <string name="protocol">協定</string>
     <string name="protocol_param">協定參數</string>
     <string name="protocol_param_summary">您在伺服器裡輸入的協定參數（ShadowsocksR 特性）</string>
-    <string name="obfs">obfs</string>
-    <string name="obfs_param">obfs 參數</string>
-    <string name="obfs_param_summary">您在伺服器裡輸入的 obfs 參數（ShadowsocksR 特性）</string>
+    <string name="obfs">Obfs</string>
+    <string name="obfs_param">Obfs 參數</string>
+    <string name="obfs_param_summary">您在伺服器裡輸入的 Obfs 參數（ShadowsocksR 特性）</string>
     <string name="enc_method">加密方法</string>
     <string name="feature_cat">功能設定</string>
     <string name="route_list">路由</string>
     <string name="proxied_apps">個別應用程式的 Proxy</string>
-    <string name="proxied_apps_summary">為已選擇的應用程式設定 Proxy，在 Android 4.X 以下需要開啟 NAT 模式</string>
+    <string name="proxied_apps_summary">為已選擇的應用程式設定 Proxy，在 Android 4.x 以下需要開啟 NAT 模式</string>
     <string name="on">開</string>
     <string name="bypass_apps">略過模式</string>
     <string name="auto_connect">自動連線</string>
@@ -35,22 +35,22 @@
     <string name="method_unsafe">警告：目前使用的加密演算法不安全</string>
     <string name="stop">停止</string>
     <string name="quick_switch">切換</string>
-    <string name="stopping">關閉中……</string>
-    <string name="vpn_error">%s</string>
+    <string name="stopping">關閉中…</string>
+    <string name="vpn_error">ShadowsocksR 啟動失敗：%s</string>
     <string name="reboot_required">VPN 服務啟動失敗。您或許需要重新啟動您的裝置。</string>
     <string name="close">關閉</string>
     <string name="proxy_empty">Proxy 或密碼不可以空白</string>
     <string name="connect">連線</string>
-    <string name="recovering">重設中……</string>
-    <string name="loading">載入中……</string>
+    <string name="recovering">重設中…</string>
+    <string name="loading">載入中…</string>
 
     <string name="dr">移除重複新增</string>
 
     <string name="profiles">設定檔</string>
     <string name="recovery">重設</string>
     <string name="recovery_summary">重設一切背景服務</string>
-    <string name="ignore_battery_optimization">請求忽略電池優化</string>
-    <string name="ignore_battery_optimization_summary">點擊來請求觸發忽略電池優化，可避免息屏休眠導致的後台斷流，會增加電池消耗，在部分設備上可能無法正常觸發。</string>
+    <string name="ignore_battery_optimization">忽略電池優化</string>
+    <string name="ignore_battery_optimization_summary">請求忽略電池優化</string>
     <string name="about">關於</string>
     <string name="about_title">ShadowsocksR %s</string>
     <string name="share">分享</string>
@@ -72,14 +72,14 @@
     <string name="ipv6_summary">向遠端重新導向 IPv6 流量</string>
 
     <string name="stat">網路流量</string>
-    <string name="stat_summary">傳送: \t%3$s\t↑\t%1$s/s\n接收: \t%4$s\t↓\t%2$s/s</string>
+    <string name="stat_summary">傳送：\t%3$s\t↑\t%1$s/s\n接收：\t%4$s\t↓\t%2$s/s</string>
 
     <string name="connection_test_pending">檢查連線能力</string>
-    <string name="connection_test_testing">測試中……</string>
-    <string name="connection_test_available">成功: %d 毫秒延遲</string>
+    <string name="connection_test_testing">測試中…</string>
+    <string name="connection_test_available">成功：%d 毫秒延遲</string>
     <string name="connection_test_fail">無法使用網際網路</string>
-    <string name="connection_test_error">偵測出網際網路連線失敗: %s</string>
-    <string name="connection_test_error_status_code">錯誤碼: #%d</string>
+    <string name="connection_test_error">偵測出網際網路連線失敗：%s</string>
+    <string name="connection_test_error_status_code">錯誤碼：#%d</string>
 
     <!-- profile -->
     <string name="profile_manager_dialog">設定檔</string>
@@ -95,37 +95,23 @@
     保持開啟兩個裝置的螢幕，在另一個裝置上，按一下設定檔的分享按鈕，將它們放在一起（背靠背）。\n您也可以掃描 NFC 標籤。</string>
     <string name="add_profile_scanner_permission_required">掃描 QR 碼需要相機權限。</string>
 
-    <string-array name="route_entry">
-        <item>全部</item>
-        <item>略過區域網路</item>
-        <item>略過中國大陸</item>
-        <item>略過區域網路及中國大陸</item>
-        <item>GFW List</item>
-        <item>China List</item>
-        <item>自訂 ACL 檔案</item>
-    </string-array>
-
     <string name="acl_file">ACL 檔案網址</string>
     <string name="aclupdate">ACL 檔案升級</string>
     <string name="aclupdate_summary">升級您的 ACL 檔案</string>
     <string name="aclupdate_url_notset">很抱歉，因為您未設定 ACL 網址，所以無法進行升級。請在路由設定中選擇 \'自訂 ACL 檔案\' 並再試一次。</string>
 
-    <string name="aclupdate_downloading">檔案升級中...</string>
-    <string name="aclupdate_successfully">檔案升級成功！</string>
+    <string name="aclupdate_downloading">檔案升級中…</string>
+    <string name="aclupdate_successfully">檔案升級成功。</string>
     <string name="aclupdate_failed">檔案升級失敗！</string>
 
     <string name="action_apply_all">套用設定至所有設定檔</string>
     <string name="action_export">匯出至剪貼簿</string>
     <string name="action_import">從剪貼簿匯入</string>
-    <string name="action_export_msg">匯出至剪貼簿成功</string>
-    <string name="action_export_err">匯出至剪貼簿失敗</string>
-    <string name="action_import_msg">匯入成功</string>
-    <string name="action_import_err">匯入失敗</string>
+    <string name="action_export_msg">匯出至剪貼簿成功。</string>
+    <string name="action_export_err">匯出至剪貼簿失敗！</string>
+    <string name="action_import_msg">匯入成功。</string>
+    <string name="action_import_err">匯入失敗！</string>
 
-    <plurals name="removed">
-        <item quantity="one">已移除</item>
-        <item quantity="other">已移除 %d 項</item>
-    </plurals>
     <string name="undo">復原</string>
     <string name="toggle_service_state">啟動服務</string>
     <string name="start_service_default">連線至目前的伺服器</string>
@@ -133,7 +119,7 @@
     <string name="stop_service">切換至 %s</string>
     <string name="profile_default">使用目前的設定檔</string>
 
-    <string name="tips_testing">測試中...</string>
+    <string name="tips_testing">測試中…</string>
     <string name="action_full_test">完整HTTP延時測試</string>
     <string name="action_sort">基於延時自動排序</string>
     <string name="ping">測試延時</string>
@@ -146,14 +132,14 @@
     <string name="frontproxy_type">類型</string>
     <string name="frontproxy_set">前置代理</string>
 
-    <string name="add_profile_methods_ssr_sub">添加/升級 SSR 訂閱</string>
+    <string name="add_profile_methods_ssr_sub">添加/更新 SSR 訂閱</string>
     <string name="ssrsub_autoupdate_enable">自動更新</string>
     <string name="ssrsub_add">添加訂閱地址</string>
-    <string name="ssrsub_ok">確定併升級</string>
+    <string name="ssrsub_ok">確定併更新</string>
     <string name="ssrsub_list">訂閱列表</string>
     <string name="ssrsub_error">地址不正確或網絡不可用。</string>
-    <string name="ssrsub_progres">處理中</string>
-    <string name="ssrsub_progres_text">請稍候</string>
+    <string name="ssrsub_progres">處理中…</string>
+    <string name="ssrsub_progres_text">請稍候…</string>
     <string name="group_name">群組名</string>
     <string name="proxy_click">點擊查看和編輯地址</string>
     <string name="ssrsub_remove_tip_title">删除</string>
@@ -161,11 +147,24 @@
     <string name="ssrsub_remove_tip_direct">直接刪除</string>
     <string name="ssrsub_remove_tip_delete">與節點一起刪除</string>
 
-
     <!-- status -->
-    <string name="sent">傳送:</string>
-    <string name="received">接收:</string>
-    <string name="allgroups">All Groups</string>
-    <string name="sub_autoupdate_success">%s: autoupdate success</string>
+    <string name="sent">傳送：</string>
+    <string name="received">接收：</string>
+    <string name="allgroups">全部群組</string>
+    <string name="sub_autoupdate_success">%s：訂閱更新成功</string>
 
+    <plurals name="removed" tools:ignore="UnusedQuantity">
+        <item quantity="one">已移除</item>
+        <item quantity="other">已移除 %d 項</item>
+    </plurals>
+
+    <string-array name="route_entry" tools:ignore="InconsistentArrays">
+        <item>全部</item>
+        <item>略過區域網路</item>
+        <item>略過中國大陸</item>
+        <item>略過區域網路及中國大陸</item>
+        <item>GFW List</item>
+        <item>China List</item>
+        <item>自訂 ACL 檔案</item>
+    </string-array>
 </resources>
