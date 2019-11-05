@@ -1,42 +1,4 @@
 package com.github.shadowsocks;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2014 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -95,7 +57,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
     private static final String[] FEATURE_PREFS = {
             Constants.Key.route, Constants.Key.proxyApps,
             Constants.Key.udpdns, Constants.Key.ipv6};
-    public Profile profile;
+    public Profile currentProfile;
     private Shadowsocks activity;
     private SwitchPreference isProxyApps;
 
@@ -169,59 +131,59 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
         activity = (Shadowsocks) getActivity();
 
         findPreference(Constants.Key.group_name).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setUrl_group((String) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setUrl_group((String) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.name).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setName((String) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setName((String) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.host).setOnPreferenceClickListener(preference -> {
             LayoutInflater li = LayoutInflater.from(activity);
             final View myView = li.inflate(R.layout.layout_edittext, null);
             final EditText HostEditText = myView.findViewById(R.id.editTextInput);
-            HostEditText.setText(profile.getHost());
+            HostEditText.setText(currentProfile.getHost());
             new AlertDialog.Builder(activity)
                     .setView(myView)
                     .setTitle(getString(R.string.proxy))
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
-                        profile.setHost(HostEditText.getText().toString());
-                        ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+                        currentProfile.setHost(HostEditText.getText().toString());
+                        ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
                     })
-                    .setNegativeButton(android.R.string.no, (dialog, which) -> setProfile(profile)).create().show();
+                    .setNegativeButton(android.R.string.no, (dialog, which) -> setProfile(currentProfile)).create().show();
             return true;
         });
         findPreference(Constants.Key.remotePort).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setRemotePort((int) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setRemotePort((int) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.localPort).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setLocalPort((int) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setLocalPort((int) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.password).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setPassword((String) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setPassword((String) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.method).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setMethod((String) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setMethod((String) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.protocol).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setProtocol((String) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setProtocol((String) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.protocol_param).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setProtocol_param((String) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setProtocol_param((String) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.obfs).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setObfs((String) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setObfs((String) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
         findPreference(Constants.Key.obfs_param).setOnPreferenceChangeListener((preference, value) -> {
-            profile.setObfs_param((String) value);
-            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(profile);
+            currentProfile.setObfs_param((String) value);
+            return ShadowsocksApplication.Companion.getApp().getProfileManager().updateProfile(currentProfile);
         });
 
         findPreference(Constants.Key.route).setOnPreferenceChangeListener((preference, value) -> {
@@ -235,14 +197,14 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
                         .setTitle(getString(R.string.acl_file))
                         .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                             if (TextUtils.isEmpty(AclUrlEditText.getText().toString())) {
-                                setProfile(profile);
+                                setProfile(currentProfile);
                             } else {
                                 getPreferenceManager().getSharedPreferences().edit().putString(Constants.Key.aclurl, AclUrlEditText.getText().toString()).apply();
                                 downloadAcl(AclUrlEditText.getText().toString());
                                 ShadowsocksApplication.Companion.getApp().getProfileManager().updateAllProfileByString(Constants.Key.route, (String) value);
                             }
                         })
-                        .setNegativeButton(android.R.string.no, (dialog, which) -> setProfile(profile))
+                        .setNegativeButton(android.R.string.no, (dialog, which) -> setProfile(currentProfile))
                         .create().show();
             } else {
                 ShadowsocksApplication.Companion.getApp().getProfileManager().updateAllProfileByString(Constants.Key.route, (String) value);
@@ -488,20 +450,20 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
     public void refreshProfile() {
         Profile profile = ShadowsocksApplication.Companion.getApp().currentProfile();
         if (profile != null) {
-            this.profile = profile;
+            this.currentProfile = profile;
         } else {
             Profile first = ShadowsocksApplication.Companion.getApp().getProfileManager().getFirstProfile();
             if (first != null) {
                 ShadowsocksApplication.Companion.getApp().profileId(first.getId());
-                this.profile = first;
+                this.currentProfile = first;
             } else {
                 Profile defaultProfile = ShadowsocksApplication.Companion.getApp().getProfileManager().createDefault();
                 ShadowsocksApplication.Companion.getApp().profileId(defaultProfile.getId());
-                this.profile = defaultProfile;
+                this.currentProfile = defaultProfile;
             }
         }
 
-        isProxyApps.setChecked(this.profile.getProxyApps());
+        isProxyApps.setChecked(this.currentProfile.getProxyApps());
     }
 
     @Override
@@ -528,7 +490,7 @@ public class ShadowsocksSettings extends PreferenceFragment implements SharedPre
     }
 
     public void setProfile(Profile profile) {
-        this.profile = profile;
+        this.currentProfile = profile;
         List<String> list = new ArrayList<>();
         list.addAll(Arrays.asList(PROXY_PREFS));
         list.addAll(Arrays.asList(FEATURE_PREFS));

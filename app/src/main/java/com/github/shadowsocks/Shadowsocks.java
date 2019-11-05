@@ -1,42 +1,4 @@
 package com.github.shadowsocks;
-/*
- * Shadowsocks - A shadowsocks client for Android
- * Copyright (C) 2014 <max.c.lv@gmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- *
- *                            ___====-_  _-====___
- *                      _--^^^#####//      \\#####^^^--_
- *                   _-^##########// (    ) \\##########^-_
- *                  -############//  |\^^/|  \\############-
- *                _/############//   (@::@)   \\############\_
- *               /#############((     \\//     ))#############\
- *              -###############\\    (oo)    //###############-
- *             -#################\\  / VV \  //#################-
- *            -###################\\/      \//###################-
- *           _#/|##########/\######(   /\   )######/\##########|\#_
- *           |/ |#/\#/\#/\/  \#/\##\  |  |  /##/\#/  \/\#/\#/\#| \|
- *           `  |/  V  V  `   V  \#\| |  | |/#/  V   '  V  V  \|  '
- *              `   `  `      `   / | |  | | \   '      '  '   '
- *                               (  | |  | |  )
- *                              __\ | |  | | /__
- *                             (vvv(VVV)(VVV)vvv)
- *
- *                              HERE BE DRAGONS
- *
- */
 
 import android.app.ProgressDialog;
 import android.app.backup.BackupManager;
@@ -68,7 +30,6 @@ import androidx.core.content.ContextCompat;
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback;
 import com.github.shadowsocks.database.Profile;
-import com.github.shadowsocks.database.SSRSub;
 import com.github.shadowsocks.job.SSRSubUpdateJob;
 import com.github.shadowsocks.network.request.RequestCallback;
 import com.github.shadowsocks.network.request.RequestHelper;
@@ -94,7 +55,6 @@ public class Shadowsocks extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private int state = Constants.State.STOPPED;
     private ServiceBoundContext mServiceBoundContext;
-    private boolean isDestroyed;
     private boolean isTestConnect;
     private View stat;
     private TextView connectionTestText;
@@ -215,10 +175,6 @@ public class Shadowsocks extends AppCompatActivity {
         mServiceBoundContext.attachService(callback);
     }
 
-    public void detachService() {
-        mServiceBoundContext.detachService();
-    }
-
     private void changeSwitch(boolean checked) {
         serviceStarted = checked;
         int resId = checked ? R.drawable.ic_start_connected : R.drawable.ic_start_idle;
@@ -298,11 +254,6 @@ public class Shadowsocks extends AppCompatActivity {
 
         updateTraffic(0, 0, 0, 0);
 
-        // ssr sub handler
-        SSRSub first = ShadowsocksApplication.Companion.getApp().getSsrSubManager().getFirstSSRSub();
-//        if (first == null) {
-//            ShadowsocksApplication.app.ssrSubManager.createDefault();
-//        }
         SSRSubUpdateJob.Companion.schedule();
 
 
@@ -405,6 +356,7 @@ public class Shadowsocks extends AppCompatActivity {
                 int state = mServiceBoundContext.getBgService().getState();
                 switch (state) {
                     case Constants.State.CONNECTING:
+                    case Constants.State.STOPPING:
                         fab.setBackgroundTintList(greyTint);
                         serviceStarted = false;
                         fab.setImageResource(R.drawable.ic_start_busy);
@@ -424,14 +376,6 @@ public class Shadowsocks extends AppCompatActivity {
                             connectionTestText.setText(getString(R.string.connection_test_pending));
                         }
                         break;
-                    case Constants.State.STOPPING:
-                        fab.setBackgroundTintList(greyTint);
-                        serviceStarted = false;
-                        fab.setImageResource(R.drawable.ic_start_busy);
-                        preferences.setEnabled(false);
-                        fabProgressCircle.show();
-                        stat.setVisibility(View.GONE);
-                        break;
                     default:
                         fab.setBackgroundTintList(greyTint);
                         serviceStarted = false;
@@ -449,7 +393,7 @@ public class Shadowsocks extends AppCompatActivity {
 
     private boolean updateCurrentProfile() {
         // Check if current profile changed
-        if (preferences.profile == null || ShadowsocksApplication.Companion.getApp().profileId() != preferences.profile.getId()) {
+        if (preferences.currentProfile == null || ShadowsocksApplication.Companion.getApp().profileId() != preferences.currentProfile.getId()) {
             // updated
             Profile profile = ShadowsocksApplication.Companion.getApp().currentProfile();
             if (profile == null) {
@@ -504,17 +448,12 @@ public class Shadowsocks extends AppCompatActivity {
 
     @Override
     public boolean isDestroyed() {
-        if (Build.VERSION.SDK_INT >= 17) {
-            return super.isDestroyed();
-        } else {
-            return isDestroyed;
-        }
+        return super.isDestroyed();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        isDestroyed = true;
         mServiceBoundContext.detachService();
         new BackupManager(this).dataChanged();
         handler.removeCallbacksAndMessages(null);
