@@ -8,7 +8,7 @@ import android.widget.*
 import androidx.appcompat.app.*
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.*
-import com.github.shadowsocks.ShadowsocksApplication.*
+import com.github.shadowsocks.ShadowsocksApplication.Companion.app
 import com.github.shadowsocks.database.*
 import com.github.shadowsocks.utils.*
 

@@ -45,7 +45,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    //noinspection GradleCompatible
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
@@ -59,7 +59,6 @@ dependencies {
     implementation "com.mikepenz:materialdrawer:6.1.2"
     implementation "com.twofortyfouram:android-plugin-api-for-locale:1.0.4"
     implementation "dnsjava:dnsjava:2.1.9"
-    implementation "eu.chainfire:libsuperuser:1.1.0.201907261845"
     implementation "me.dm7.barcodescanner:zxing:1.9.13"
     implementation "net.glxn.qrgen:android:2.0"
     implementation 'com.squareup.okhttp3:okhttp:4.2.2'

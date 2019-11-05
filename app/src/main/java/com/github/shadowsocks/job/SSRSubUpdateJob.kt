@@ -14,7 +14,7 @@ class SSRSubUpdateJob : Job()
 	{
 		if (ShadowsocksApplication.app.settings.getInt(Constants.Key.ssrsub_autoupdate, 0) == 1)
 		{
-			val subs = ShadowsocksApplication.app.ssrsubManager.allSSRSubs
+			val subs = ShadowsocksApplication.app.ssrSubManager.allSSRSubs
 			SubUpdateHelper.instance()
 				.updateSub(subs, object : SubUpdateCallback()
 				{

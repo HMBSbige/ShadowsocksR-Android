@@ -4,7 +4,7 @@ import android.content.*
 import android.content.pm.*
 import android.os.*
 import androidx.core.content.*
-import com.github.shadowsocks.ShadowsocksApplication.*
+import com.github.shadowsocks.ShadowsocksApplication.Companion.app
 import com.github.shadowsocks.utils.*
 
 class BootReceiver : BroadcastReceiver()

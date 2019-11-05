@@ -191,7 +191,7 @@ public class ShadowsocksNotification {
                 service.getString(R.string.stop),
                 PendingIntent.getBroadcast(service, 0, new Intent(Constants.Action.CLOSE), 0));
 
-        List<Profile> profiles = ShadowsocksApplication.app.profileManager.getAllProfiles();
+        List<Profile> profiles = ShadowsocksApplication.Companion.getApp().getProfileManager().getAllProfiles();
         if (!profiles.isEmpty()) {
             builder.addAction(R.drawable.ic_action_settings, service.getString(R.string.quick_switch),
                     PendingIntent.getActivity(service, 0, new Intent(Constants.Action.QUICK_SWITCH), 0));

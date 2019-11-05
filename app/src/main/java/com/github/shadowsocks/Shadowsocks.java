@@ -80,7 +80,6 @@ import com.github.shadowsocks.utils.VayLog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.lang.System;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
@@ -112,87 +111,65 @@ public class Shadowsocks extends AppCompatActivity {
     private IShadowsocksServiceCallback.Stub callback = new IShadowsocksServiceCallback.Stub() {
         @Override
         public void stateChanged(final int s, String profileName, final String m) throws RemoteException {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    switch (s) {
-                        case Constants.State.CONNECTING:
-                            fab.setBackgroundTintList(greyTint);
-                            fab.setImageResource(R.drawable.ic_start_busy);
-                            fab.setEnabled(false);
+            handler.post(() -> {
+                switch (s) {
+                    case Constants.State.CONNECTING:
+                        fab.setBackgroundTintList(greyTint);
+                        fab.setImageResource(R.drawable.ic_start_busy);
+                        fab.setEnabled(false);
+                        fabProgressCircle.show();
+                        preferences.setEnabled(false);
+                        stat.setVisibility(View.GONE);
+                        break;
+                    case Constants.State.CONNECTED:
+                        fab.setBackgroundTintList(greenTint);
+                        if (state == Constants.State.CONNECTING) {
+                            fabProgressCircle.beginFinalAnimation();
+                        } else {
+                            fabProgressCircle.postDelayed(() -> hideCircle(), 1000);
+                        }
+                        fab.setEnabled(true);
+                        changeSwitch(true);
+                        preferences.setEnabled(false);
+                        stat.setVisibility(View.VISIBLE);
+                        connectionTestText.setVisibility(View.VISIBLE);
+                        connectionTestText.setText(getString(R.string.connection_test_pending));
+                        break;
+                    case Constants.State.STOPPED:
+                        fab.setBackgroundTintList(greyTint);
+                        fabProgressCircle.postDelayed(() -> hideCircle(), 1000);
+                        fab.setEnabled(true);
+                        changeSwitch(false);
+                        if (!TextUtils.isEmpty(m)) {
+                            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                                    String.format(Locale.ENGLISH, getString(R.string.vpn_error), m), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                            VayLog.INSTANCE.e(TAG, "Error to start VPN service: " + m);
+                        }
+                        preferences.setEnabled(true);
+                        stat.setVisibility(View.GONE);
+                        break;
+                    case Constants.State.STOPPING:
+                        fab.setBackgroundTintList(greyTint);
+                        fab.setImageResource(R.drawable.ic_start_busy);
+                        fab.setEnabled(false);
+                        if (state == Constants.State.CONNECTED) {
+                            // ignore for stopped
                             fabProgressCircle.show();
-                            preferences.setEnabled(false);
-                            stat.setVisibility(View.GONE);
-                            break;
-                        case Constants.State.CONNECTED:
-                            fab.setBackgroundTintList(greenTint);
-                            if (state == Constants.State.CONNECTING) {
-                                fabProgressCircle.beginFinalAnimation();
-                            } else {
-                                fabProgressCircle.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        hideCircle();
-                                    }
-                                }, 1000);
-                            }
-                            fab.setEnabled(true);
-                            changeSwitch(true);
-                            preferences.setEnabled(false);
-                            stat.setVisibility(View.VISIBLE);
-                            if (ShadowsocksApplication.app.isNatEnabled()) {
-                                connectionTestText.setVisibility(View.GONE);
-                            } else {
-                                connectionTestText.setVisibility(View.VISIBLE);
-                                connectionTestText.setText(getString(R.string.connection_test_pending));
-                            }
-                            break;
-                        case Constants.State.STOPPED:
-                            fab.setBackgroundTintList(greyTint);
-                            fabProgressCircle.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    hideCircle();
-                                }
-                            }, 1000);
-                            fab.setEnabled(true);
-                            changeSwitch(false);
-                            if (!TextUtils.isEmpty(m)) {
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                                        String.format(Locale.ENGLISH, getString(R.string.vpn_error), m), Snackbar.LENGTH_LONG);
-                                snackbar.show();
-                                VayLog.INSTANCE.e(TAG, "Error to start VPN service: " + m);
-                            }
-                            preferences.setEnabled(true);
-                            stat.setVisibility(View.GONE);
-                            break;
-                        case Constants.State.STOPPING:
-                            fab.setBackgroundTintList(greyTint);
-                            fab.setImageResource(R.drawable.ic_start_busy);
-                            fab.setEnabled(false);
-                            if (state == Constants.State.CONNECTED) {
-                                // ignore for stopped
-                                fabProgressCircle.show();
-                            }
-                            preferences.setEnabled(false);
-                            stat.setVisibility(View.GONE);
-                            break;
-                        default:
-                            break;
-                    }
-                    state = s;
+                        }
+                        preferences.setEnabled(false);
+                        stat.setVisibility(View.GONE);
+                        break;
+                    default:
+                        break;
                 }
+                state = s;
             });
         }
 
         @Override
         public void trafficUpdated(final long txRate, final long rxRate, final long txTotal, final long rxTotal) throws RemoteException {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    updateTraffic(txRate, rxRate, txTotal, rxTotal);
-                }
-            });
+            handler.post(() -> updateTraffic(txRate, rxRate, txTotal, rxTotal));
         }
     };
 
@@ -221,7 +198,7 @@ public class Shadowsocks extends AppCompatActivity {
             @Override
             public void binderDied() {
                 detachService();
-                ShadowsocksApplication.app.crashRecovery();
+                ShadowsocksApplication.Companion.getApp().crashRecovery();
                 attachService();
             }
         };
@@ -248,12 +225,7 @@ public class Shadowsocks extends AppCompatActivity {
         fab.setImageResource(resId);
         if (fab.isEnabled()) {
             fab.setEnabled(false);
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    fab.setEnabled(true);
-                }
-            }, 1000);
+            handler.postDelayed(() -> fab.setEnabled(true), 1000);
         }
     }
 
@@ -274,20 +246,11 @@ public class Shadowsocks extends AppCompatActivity {
     }
 
     private void prepareStartService() {
-        if (ShadowsocksApplication.app.isNatEnabled()) {
-            serviceLoad();
+        Intent intent = VpnService.prepare(mServiceBoundContext);
+        if (intent != null) {
+            startActivityForResult(intent, REQUEST_CONNECT);
         } else {
-            Intent intent = VpnService.prepare(mServiceBoundContext);
-            if (intent != null) {
-                startActivityForResult(intent, REQUEST_CONNECT);
-            } else {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        onActivityResult(REQUEST_CONNECT, RESULT_OK, null);
-                    }
-                });
-            }
+            handler.post(() -> onActivityResult(REQUEST_CONNECT, RESULT_OK, null));
         }
     }
 
@@ -308,48 +271,37 @@ public class Shadowsocks extends AppCompatActivity {
         txRateText = findViewById(R.id.txRate);
         rxText = findViewById(R.id.rx);
         rxRateText = findViewById(R.id.rxRate);
-        stat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testConnect();
-            }
-        });
+        stat.setOnClickListener(v -> testConnect());
 
         fab = findViewById(R.id.fab);
         fabProgressCircle = findViewById(R.id.fabProgressCircle);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (serviceStarted) {
-                    serviceStop();
-                } else if (mServiceBoundContext.getBgService() != null) {
-                    prepareStartService();
-                } else {
-                    changeSwitch(false);
-                }
+        fab.setOnClickListener(v -> {
+            if (serviceStarted) {
+                serviceStop();
+            } else if (mServiceBoundContext.getBgService() != null) {
+                prepareStartService();
+            } else {
+                changeSwitch(false);
             }
         });
-        fab.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                int strId = serviceStarted ? R.string.stop : R.string.connect;
-                Utils.INSTANCE.positionToast(
-                        Toast.makeText(Shadowsocks.this, strId, Toast.LENGTH_SHORT),
-                        fab,
-                        getWindow(),
-                        0,
-                        Utils.INSTANCE.dpToPx(Shadowsocks.this, 8))
-                        .show();
-                return true;
-            }
+        fab.setOnLongClickListener(v -> {
+            int strId = serviceStarted ? R.string.stop : R.string.connect;
+            Utils.INSTANCE.positionToast(
+                    Toast.makeText(Shadowsocks.this, strId, Toast.LENGTH_SHORT),
+                    fab,
+                    getWindow(),
+                    0,
+                    Utils.INSTANCE.dpToPx(Shadowsocks.this, 8))
+                    .show();
+            return true;
         });
 
         updateTraffic(0, 0, 0, 0);
 
         // ssr sub handler
-        SSRSub first = ShadowsocksApplication.app.ssrsubManager.getFirstSSRSub();
+        SSRSub first = ShadowsocksApplication.Companion.getApp().getSsrSubManager().getFirstSSRSub();
 //        if (first == null) {
-//            ShadowsocksApplication.app.ssrsubManager.createDefault();
+//            ShadowsocksApplication.app.ssrSubManager.createDefault();
 //        }
         SSRSubUpdateJob.Companion.schedule();
 
@@ -373,12 +325,7 @@ public class Shadowsocks extends AppCompatActivity {
             title.setFocusable(true);
             title.setGravity(0x10);
             title.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-            title.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(Shadowsocks.this, ProfileManagerActivity.class));
-                }
-            });
+            title.setOnClickListener(v -> startActivity(new Intent(Shadowsocks.this, ProfileManagerActivity.class)));
             TypedArray typedArray = obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
             title.setBackgroundResource(typedArray.getResourceId(0, 0));
             typedArray.recycle();
@@ -420,21 +367,15 @@ public class Shadowsocks extends AppCompatActivity {
             public void onSuccess(int code, String response) {
                 long elapsed = System.currentTimeMillis() - this.getStart();
                 String result = getString(R.string.connection_test_available, elapsed);
-
-                if (ShadowsocksApplication.app.isVpnEnabled()) {
-                    connectionTestText.setText(result);
-                }
+                connectionTestText.setText(result);
             }
 
             @Override
             public void onFailed(int code, String msg) {
                 String exceptionMsg = getString(R.string.connection_test_error_status_code, code);
                 String result = getString(R.string.connection_test_error, exceptionMsg);
-
-                if (ShadowsocksApplication.app.isVpnEnabled()) {
-                    connectionTestText.setText(R.string.connection_test_fail);
-                    Snackbar.make(findViewById(android.R.id.content), result, Snackbar.LENGTH_LONG).show();
-                }
+                connectionTestText.setText(R.string.connection_test_fail);
+                Snackbar.make(findViewById(android.R.id.content), result, Snackbar.LENGTH_LONG).show();
             }
 
             @Override
@@ -476,20 +417,11 @@ public class Shadowsocks extends AppCompatActivity {
                         serviceStarted = true;
                         fab.setImageResource(R.drawable.ic_start_connected);
                         preferences.setEnabled(false);
-                        fabProgressCircle.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideCircle();
-                            }
-                        }, 100);
+                        fabProgressCircle.postDelayed(() -> hideCircle(), 100);
                         stat.setVisibility(View.VISIBLE);
                         if (resetConnectionTest) {
-                            if (ShadowsocksApplication.app.isNatEnabled()) {
-                                connectionTestText.setVisibility(View.GONE);
-                            } else {
-                                connectionTestText.setVisibility(View.VISIBLE);
-                                connectionTestText.setText(getString(R.string.connection_test_pending));
-                            }
+                            connectionTestText.setVisibility(View.VISIBLE);
+                            connectionTestText.setText(getString(R.string.connection_test_pending));
                         }
                         break;
                     case Constants.State.STOPPING:
@@ -505,12 +437,7 @@ public class Shadowsocks extends AppCompatActivity {
                         serviceStarted = false;
                         fab.setImageResource(R.drawable.ic_start_idle);
                         preferences.setEnabled(true);
-                        fabProgressCircle.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                hideCircle();
-                            }
-                        }, 100);
+                        fabProgressCircle.postDelayed(() -> hideCircle(), 100);
                         stat.setVisibility(View.GONE);
                         break;
                 }
@@ -522,20 +449,20 @@ public class Shadowsocks extends AppCompatActivity {
 
     private boolean updateCurrentProfile() {
         // Check if current profile changed
-        if (preferences.profile == null || ShadowsocksApplication.app.profileId() != preferences.profile.getId()) {
+        if (preferences.profile == null || ShadowsocksApplication.Companion.getApp().profileId() != preferences.profile.getId()) {
             // updated
-            Profile profile = ShadowsocksApplication.app.currentProfile();
+            Profile profile = ShadowsocksApplication.Companion.getApp().currentProfile();
             if (profile == null) {
                 // removed
-                Profile first = ShadowsocksApplication.app.profileManager.getFirstProfile();
+                Profile first = ShadowsocksApplication.Companion.getApp().getProfileManager().getFirstProfile();
                 int id;
                 if (first != null) {
                     id = first.getId();
                 } else {
-                    id = ShadowsocksApplication.app.profileManager.createDefault().getId();
+                    id = ShadowsocksApplication.Companion.getApp().getProfileManager().createDefault().getId();
                 }
 
-                profile = ShadowsocksApplication.app.switchProfile(id);
+                profile = ShadowsocksApplication.Companion.getApp().switchProfile(id);
             }
 
             updatePreferenceScreen(profile);
@@ -553,7 +480,7 @@ public class Shadowsocks extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ShadowsocksApplication.app.refreshContainerHolder();
+        ShadowsocksApplication.Companion.getApp().refreshContainerHolder();
         updateState(updateCurrentProfile());
     }
 
@@ -598,7 +525,7 @@ public class Shadowsocks extends AppCompatActivity {
             serviceStop();
         }
         Handler h = showProgress(R.string.recovering);
-        ShadowsocksApplication.app.copyAssets();
+        ShadowsocksApplication.Companion.getApp().copyAssets();
         h.sendEmptyMessage(0);
     }
 
@@ -673,14 +600,11 @@ public class Shadowsocks extends AppCompatActivity {
      */
     private void serviceLoad() {
         try {
-            mServiceBoundContext.getBgService().use(ShadowsocksApplication.app.profileId());
+            mServiceBoundContext.getBgService().use(ShadowsocksApplication.Companion.getApp().profileId());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
-        if (ShadowsocksApplication.app.isVpnEnabled()) {
-            changeSwitch(false);
-        }
+        changeSwitch(false);
     }
 
     private void clearDialog() {

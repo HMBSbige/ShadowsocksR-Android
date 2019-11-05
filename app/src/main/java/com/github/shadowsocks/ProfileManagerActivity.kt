@@ -419,7 +419,7 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 		val subAutoUpdateEnable = view.findViewById<Switch>(R.id.sw_ssr_sub_autoupdate_enable)
 
 		// adding listener
-		ShadowsocksApplication.app.ssrsubManager.addSSRSubAddedListener(this)
+		ShadowsocksApplication.app.ssrSubManager.addSSRSubAddedListener(this)
 
 		val ssrSubsList = view.findViewById<RecyclerView>(R.id.ssrsubList)
 		val layoutManager = LinearLayoutManager(this)
@@ -464,7 +464,7 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 			.setNeutralButton(R.string.ssrsub_add) { _, _ -> showAddSSRSubDialog() }
 			.setOnCancelListener {
 				// remove listener
-				ShadowsocksApplication.app.ssrsubManager.removeSSRSubAddedListener(this@ProfileManagerActivity)
+				ShadowsocksApplication.app.ssrSubManager.removeSSRSubAddedListener(this@ProfileManagerActivity)
 			}
 			.setView(view)
 			.create()
@@ -478,7 +478,7 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 			.setTitle(getString(R.string.ssrsub_remove_tip_title))
 			.setPositiveButton(R.string.ssrsub_remove_tip_direct) { dialog, which ->
 				ssrSubAdapter.remove(index)
-				ShadowsocksApplication.app.ssrsubManager.delSSRSub((viewHolder as SSRSubViewHolder).item.id)
+				ShadowsocksApplication.app.ssrSubManager.delSSRSub((viewHolder as SSRSubViewHolder).item.id)
 			}
 			.setNegativeButton(android.R.string.no) { _, _ -> ssrSubAdapter.notifyDataSetChanged() }
 			.setNeutralButton(R.string.ssrsub_remove_tip_delete) { _, _ ->
@@ -495,7 +495,7 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 
 				val index1 = viewHolder.getAdapterPosition()
 				ssrSubAdapter.remove(index1)
-				ShadowsocksApplication.app.ssrsubManager.delSSRSub(viewHolder.item.id)
+				ShadowsocksApplication.app.ssrSubManager.delSSRSub(viewHolder.item.id)
 
 				finish()
 				startActivity(Intent(intent))
@@ -511,7 +511,7 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 		testProgressDialog = ProgressDialog.show(this@ProfileManagerActivity, getString(R.string.ssrsub_progres), getString(R.string.ssrsub_progres_text), false, true)
 
 		// start update sub
-		val subs = ShadowsocksApplication.app.ssrsubManager.allSSRSubs
+		val subs = ShadowsocksApplication.app.ssrSubManager.allSSRSubs
 		SubUpdateHelper.instance()
 			.updateSub(subs, 0, object : SubUpdateCallback()
 			{
@@ -567,7 +567,7 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 				override fun onSuccess(code: Int, response: String)
 				{
 					val ssrSub = SubUpdateHelper.parseSSRSub(subUrl, response)
-					ShadowsocksApplication.app.ssrsubManager.createSSRSub(ssrSub)
+					ShadowsocksApplication.app.ssrSubManager.createSSRSub(ssrSub)
 				}
 
 				override fun onFailed(code: Int, msg: String)
@@ -1245,7 +1245,7 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 
 	private inner class SSRSubAdapter : RecyclerView.Adapter<SSRSubViewHolder>()
 	{
-		private var profiles = ShadowsocksApplication.app.ssrsubManager.allSSRSubs.toMutableList()
+		private var profiles = ShadowsocksApplication.app.ssrSubManager.allSSRSubs.toMutableList()
 
 		override fun getItemCount(): Int
 		{
