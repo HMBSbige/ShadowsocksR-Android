@@ -43,19 +43,6 @@ class ShadowsocksNotification @JvmOverloads constructor(private val service: Ser
 	private val style: NotificationCompat.BigTextStyle
 	private var isVisible = true
 
-	init
-	{
-		// init notification builder
-		initNotificationBuilder()
-		style = NotificationCompat.BigTextStyle(builder)
-
-		// init with update action
-		initWithUpdateAction()
-
-		// register lock receiver
-		registerLockReceiver(service, visible)
-	}
-
 	private var lockReceiver: BroadcastReceiver? = object : BroadcastReceiver()
 	{
 		override fun onReceive(context: Context, intent: Intent)
@@ -78,6 +65,19 @@ class ShadowsocksNotification @JvmOverloads constructor(private val service: Ser
 			}
 			return state
 		}
+
+	init
+	{
+		// init notification builder
+		initNotificationBuilder()
+		style = NotificationCompat.BigTextStyle(builder)
+
+		// init with update action
+		initWithUpdateAction()
+
+		// register lock receiver
+		registerLockReceiver(service, visible)
+	}
 
 	private fun update(action: String?, forceShow: Boolean = false)
 	{
