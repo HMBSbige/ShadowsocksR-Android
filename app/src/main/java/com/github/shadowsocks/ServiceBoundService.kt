@@ -71,7 +71,6 @@ abstract class ServiceBoundService : Service(), IBinder.DeathRecipient
 	{
 	}
 
-	@JvmOverloads
 	fun attachService(callback: IShadowsocksServiceCallback.Stub? = null)
 	{
 		this.callback = callback

@@ -9,7 +9,7 @@ import com.github.shadowsocks.aidl.*
 import com.github.shadowsocks.utils.*
 import java.util.*
 
-class ShadowsocksNotification @JvmOverloads constructor(private val service: Service, private val profileName: String, private val visible: Boolean = false)
+class ShadowsocksNotification constructor(private val service: Service, private val profileName: String, private val visible: Boolean = false)
 {
 	private val callback by lazy {
 		object : IShadowsocksServiceCallback.Stub()

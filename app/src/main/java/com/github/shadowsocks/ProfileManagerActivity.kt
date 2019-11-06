@@ -962,7 +962,6 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 			}
 		}
 
-		@JvmOverloads
 		fun updateText(txTotal: Long = 0, rxTotal: Long = 0, elapsedInput: Long = -1)
 		{
 			val builder = SpannableStringBuilder()
@@ -1189,7 +1188,6 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 			itemView.setOnLongClickListener(this)
 		}
 
-		@JvmOverloads
 		fun updateText(isShowUrl: Boolean = false)
 		{
 			val builder = SpannableStringBuilder()

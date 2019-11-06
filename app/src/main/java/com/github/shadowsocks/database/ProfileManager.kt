@@ -107,7 +107,6 @@ class ProfileManager(private val dbHelper: DBHelper)
 	/**
 	 * create profile
 	 */
-	@JvmOverloads
 	fun createProfile(p: Profile? = null): Profile
 	{
 		val profile: Profile = p ?: Profile()

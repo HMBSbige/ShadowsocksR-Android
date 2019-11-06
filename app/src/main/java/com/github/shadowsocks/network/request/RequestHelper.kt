@@ -271,7 +271,6 @@ private constructor(builder: OkHttpClient.Builder? = null)
 		 *
 		 * @param builder client builder object
 		 */
-		@JvmOverloads
 		fun init(builder: OkHttpClient.Builder? = null)
 		{
 			if (sInstance == null)

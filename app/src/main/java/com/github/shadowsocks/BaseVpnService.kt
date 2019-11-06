@@ -385,7 +385,6 @@ abstract class BaseVpnService : VpnService()
 		return Service.START_NOT_STICKY
 	}
 
-	@JvmOverloads
 	protected fun changeState(s: Int, msg: String? = null)
 	{
 		val handler = Handler(Looper.getMainLooper())

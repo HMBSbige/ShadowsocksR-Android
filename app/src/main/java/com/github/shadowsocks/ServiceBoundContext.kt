@@ -70,7 +70,6 @@ open class ServiceBoundContext(base: Context) : ContextWrapper(base), IBinder.De
 	{
 	}
 
-	@JvmOverloads
 	fun attachService(callback: IShadowsocksServiceCallback.Stub? = null)
 	{
 		this.callback = callback

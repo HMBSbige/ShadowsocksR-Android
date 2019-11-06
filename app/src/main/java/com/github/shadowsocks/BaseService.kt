@@ -262,7 +262,6 @@ abstract class BaseService : Service()
 
 	}
 
-	@JvmOverloads
 	fun stopRunner(stopService: Boolean, msg: String? = null)
 	{
 		// clean up recevier
@@ -353,7 +352,6 @@ abstract class BaseService : Service()
 		return START_NOT_STICKY
 	}
 
-	@JvmOverloads
 	protected fun changeState(s: Int, msg: String? = null)
 	{
 		val handler = Handler(Looper.getMainLooper())
