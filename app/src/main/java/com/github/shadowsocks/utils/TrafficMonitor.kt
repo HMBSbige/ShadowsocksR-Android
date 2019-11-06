@@ -35,7 +35,7 @@ object TrafficMonitor
 		}
 		return if (i < 0)
 		{
-			"$size ${ShadowsocksApplication.app.getResources().getQuantityString(R.plurals.bytes, size.toInt())}"
+			"$size ${ShadowsocksApplication.app.resources.getQuantityString(R.plurals.bytes, size.toInt())}"
 		}
 		else
 		{
