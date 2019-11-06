@@ -5,7 +5,6 @@ import com.github.shadowsocks.database.*
 import java.net.*
 import java.util.*
 
-@ExperimentalUnsignedTypes
 object Parser
 {
 	const val TAG = "Parser"

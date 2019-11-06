@@ -3,7 +3,6 @@ package com.github.shadowsocks.job
 import com.evernote.android.job.*
 import com.github.shadowsocks.utils.*
 
-@ExperimentalUnsignedTypes
 class DonaldTrump : JobCreator
 {
 

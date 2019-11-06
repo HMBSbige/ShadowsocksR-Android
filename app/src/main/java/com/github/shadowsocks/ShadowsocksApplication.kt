@@ -19,7 +19,6 @@ import java.io.*
 import java.util.*
 import java.util.concurrent.*
 
-@ExperimentalUnsignedTypes
 class ShadowsocksApplication : Application()
 {
 	companion object

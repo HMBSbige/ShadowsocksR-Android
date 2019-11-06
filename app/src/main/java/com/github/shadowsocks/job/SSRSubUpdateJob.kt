@@ -7,7 +7,6 @@ import com.github.shadowsocks.network.ssrsub.*
 import com.github.shadowsocks.utils.*
 import java.util.concurrent.*
 
-@ExperimentalUnsignedTypes
 class SSRSubUpdateJob : Job()
 {
 	override fun onRunJob(params: Params): Result

@@ -2,6 +2,7 @@ package com.github.shadowsocks.utils
 
 import android.animation.*
 import android.annotation.*
+import android.app.*
 import android.app.admin.*
 import android.content.*
 import android.content.pm.*
@@ -21,7 +22,6 @@ import java.security.*
 import java.util.*
 import kotlin.math.*
 
-@ExperimentalUnsignedTypes
 object Utils
 {
 	private const val TAG = "Shadowsocks"

@@ -10,7 +10,6 @@ import com.github.shadowsocks.utils.Base64
 import java.util.*
 import java.util.concurrent.*
 
-@ExperimentalUnsignedTypes
 class SubUpdateHelper private constructor()
 {
 	private val mThreadPool: ScheduledThreadPoolExecutor

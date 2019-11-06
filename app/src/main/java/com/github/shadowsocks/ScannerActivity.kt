@@ -13,7 +13,6 @@ import com.github.shadowsocks.utils.*
 import com.google.zxing.*
 import me.dm7.barcodescanner.zxing.*
 
-@ExperimentalUnsignedTypes
 class ScannerActivity : AppCompatActivity(), ZXingScannerView.ResultHandler
 {
 	private lateinit var scannerView: ZXingScannerView

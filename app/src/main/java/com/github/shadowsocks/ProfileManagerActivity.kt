@@ -33,7 +33,6 @@ import net.glxn.qrgen.android.*
 import java.nio.charset.*
 import java.util.*
 
-@ExperimentalUnsignedTypes
 class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener, NfcAdapter.CreateNdefMessageCallback, ProfileManager.ProfileAddedListener, SSRSubManager.SSRSubAddedListener
 {
 	companion object
