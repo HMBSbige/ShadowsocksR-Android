@@ -149,7 +149,6 @@ abstract class BaseService : Service()
 		}
 	}
 
-	@Throws(NameNotResolvedException::class, NullConnectionException::class)
 	fun connect()
 	{
 		if (profile == null) return
@@ -163,7 +162,6 @@ abstract class BaseService : Service()
 			val client = OkHttpClient.Builder()
 				.dns(object : Dns
 					 {
-						 @Throws(UnknownHostException::class)
 						 override fun lookup(hostname: String): List<InetAddress>
 						 {
 							 val ip = Utils.resolve(hostname, false)

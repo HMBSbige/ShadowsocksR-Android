@@ -23,7 +23,6 @@ class ShadowsocksTileService : TileService()
 		{
 		}
 
-		@Throws(RemoteException::class)
 		override fun stateChanged(state: Int, profileName: String?, msg: String?)
 		{
 			val tile = qsTile

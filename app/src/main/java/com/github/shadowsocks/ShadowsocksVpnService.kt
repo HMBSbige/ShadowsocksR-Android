@@ -136,7 +136,6 @@ class ShadowsocksVpnService : BaseVpnService()
 		super.startRunner(profile)
 	}
 
-	@Throws(NameNotResolvedException::class)
 	override fun connect()
 	{
 		super.connect()
@@ -209,7 +208,6 @@ class ShadowsocksVpnService : BaseVpnService()
 	/**
 	 * Called when the activity is first created.
 	 */
-	@Throws(Exception::class)
 	fun handleConnection()
 	{
 		if (!sendFd(startVpn()))

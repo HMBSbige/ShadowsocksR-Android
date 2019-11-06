@@ -177,7 +177,6 @@ abstract class BaseVpnService : VpnService()
 		}
 	}
 
-	@Throws(NameNotResolvedException::class, NullConnectionException::class)
 	open fun connect()
 	{
 		if (profile == null) return
@@ -191,7 +190,6 @@ abstract class BaseVpnService : VpnService()
 			val client = OkHttpClient.Builder()
 				.dns(object : Dns
 					 {
-						 @Throws(UnknownHostException::class)
 						 override fun lookup(hostname: String): List<InetAddress>
 						 {
 							 val ip = Utils.resolve(hostname, false)

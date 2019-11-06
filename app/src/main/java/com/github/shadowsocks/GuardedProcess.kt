@@ -13,7 +13,6 @@ class GuardedProcess(private val cmd: List<String>)
 	private var process: Process? = null
 	private var isRestart = false
 
-	@Throws(InterruptedException::class)
 	@JvmOverloads
 	fun start(onRestartCallback: (() -> Boolean)? = null): GuardedProcess
 	{

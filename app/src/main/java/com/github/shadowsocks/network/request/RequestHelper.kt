@@ -82,10 +82,8 @@ private constructor(builder: OkHttpClient.Builder? = null)
 	 *
 	 * @param request request object
 	 * @return response object
-	 * @throws IOException request exception
 	 */
-	@Throws(IOException::class)
-	fun requestByThread(request: Request): Response
+	private fun requestByThread(request: Request): Response
 	{
 		return mClient!!.newCall(request)
 			.execute()

@@ -13,9 +13,7 @@ object IOUtils
 	 *
 	 * @param inputStream  input stream
 	 * @param out output stream
-	 * @throws IOException io write error
 	 */
-	@Throws(IOException::class) //TODO: Drop Java
 	fun copy(inputStream: InputStream, out: OutputStream)
 	{
 		val buffer = ByteArray(BUFFER_SIZE)
@@ -37,9 +35,7 @@ object IOUtils
 	 *
 	 * @param `inputStream` input stream
 	 * @return read failed return ""
-	 * @throws IOException io write error
 	 */
-	@Throws(IOException::class)
 	fun readString(inputStream: InputStream): String
 	{
 		val builder = StringBuilder()
