@@ -20,7 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.github.shadowsocks.System { *; }
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
 -keep class okio.** { *; }
@@ -29,5 +28,3 @@
 -dontwarn com.google.android.gms.internal.**
 -dontwarn com.j256.ormlite.**
 -dontwarn org.xbill.**
--dontwarn javax.annotation.Nullable
--dontwarn javax.annotation.ParametersAreNonnullByDefault

@@ -8,30 +8,6 @@ class SSRSubManager(private val dbHelper: DBHelper)
 {
 	private val mSSRSubAddedListeners: MutableList<SSRSubAddedListener>?
 
-	val firstSSRSub: SSRSub?
-		get()
-		{
-			try
-			{
-				val result = dbHelper.ssrsubDao.query(dbHelper.ssrsubDao.queryBuilder().limit(1L).prepare())
-				return if (result != null && result.isNotEmpty())
-				{
-					result[0]
-				}
-				else
-				{
-					null
-				}
-			}
-			catch (e: Exception)
-			{
-				VayLog.e(TAG, "getAllSSRSubs", e)
-				ShadowsocksApplication.app.track(e)
-				return null
-			}
-
-		}
-
 	val allSSRSubs: List<SSRSub>
 		get()
 		{
@@ -54,15 +30,7 @@ class SSRSubManager(private val dbHelper: DBHelper)
 
 	fun createSSRSub(p: SSRSub?): SSRSub
 	{
-		val ssrsub: SSRSub
-		if (p == null)
-		{
-			ssrsub = SSRSub()
-		}
-		else
-		{
-			ssrsub = p
-		}
+		val ssrsub: SSRSub = p ?: SSRSub()
 		ssrsub.id = 0
 
 		try
@@ -79,59 +47,19 @@ class SSRSubManager(private val dbHelper: DBHelper)
 		return ssrsub
 	}
 
-	fun updateSSRSub(ssrsub: SSRSub): Boolean
-	{
-		try
-		{
-			dbHelper.ssrsubDao.update(ssrsub)
-			return true
-		}
-		catch (e: Exception)
-		{
-			VayLog.e(TAG, "updateSSRSub", e)
-			ShadowsocksApplication.app.track(e)
-			return false
-		}
-
-	}
-
-	fun getSSRSub(id: Int): SSRSub?
-	{
-		try
-		{
-			return dbHelper.ssrsubDao.queryForId(id)
-		}
-		catch (e: Exception)
-		{
-			VayLog.e(TAG, "getSSRSub", e)
-			ShadowsocksApplication.app.track(e)
-			return null
-		}
-
-	}
-
 	fun delSSRSub(id: Int): Boolean
 	{
-		try
+		return try
 		{
 			dbHelper.ssrsubDao.deleteById(id)
-			return true
+			true
 		}
 		catch (e: Exception)
 		{
 			VayLog.e(TAG, "delSSRSub", e)
 			ShadowsocksApplication.app.track(e)
-			return false
+			false
 		}
-
-	}
-
-	fun createDefault(): SSRSub
-	{
-		val ssrSub = SSRSub()
-		ssrSub.url = "https://raw.githubusercontent.com/HMBSbige/Text_Translation/master/ShadowsocksR/freenodeplain.txt"
-		ssrSub.url_group = "ShadowsocksR"
-		return createSSRSub(ssrSub)
 	}
 
 	/**

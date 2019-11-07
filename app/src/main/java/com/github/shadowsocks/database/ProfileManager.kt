@@ -42,7 +42,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 		{
 			return try
 			{
-				dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("url_group", true).orderBy("name", true).prepare())
+				dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("userOrder", true).prepare())
 			}
 			catch (e: Exception)
 			{
@@ -101,7 +101,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 
 	init
 	{
-		this.mProfileAddedListeners = ArrayList(20)
+		mProfileAddedListeners = ArrayList(20)
 	}
 
 	/**
@@ -176,7 +176,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 				profile.userOrder = (Integer.parseInt(last[0]) + 1).toLong()
 			}
 
-			val last_exist = dbHelper.profileDao.queryBuilder()
+			val lastExist = dbHelper.profileDao.queryBuilder()
 				.where()
 				.eq("name", profile.name)
 				.and()
@@ -198,7 +198,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 				.and()
 				.eq("method", profile.method)
 				.queryForFirst()
-			if (last_exist == null)
+			if (lastExist == null)
 			{
 				dbHelper.profileDao.createOrUpdate(profile)
 				invokeProfileAdded(profile)
@@ -245,7 +245,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 				profile.userOrder = (Integer.parseInt(last[0]) + 1).toLong()
 			}
 
-			val last_exist = dbHelper.profileDao.queryBuilder()
+			val lastExist = dbHelper.profileDao.queryBuilder()
 				.where()
 				.eq("name", profile.name)
 				.and()
@@ -267,14 +267,14 @@ class ProfileManager(private val dbHelper: DBHelper)
 				.and()
 				.eq("method", profile.method)
 				.queryForFirst()
-			return if (last_exist == null)
+			return if (lastExist == null)
 			{
 				dbHelper.profileDao.createOrUpdate(profile)
 				0
 			}
 			else
 			{
-				last_exist.id
+				lastExist.id
 			}
 		}
 		catch (e: SQLException)
@@ -408,7 +408,7 @@ class ProfileManager(private val dbHelper: DBHelper)
 	{
 		return try
 		{
-			dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("name", true).where().like("url_group", "$group%").prepare())
+			dbHelper.profileDao.query(dbHelper.profileDao.queryBuilder().orderBy("userOrder", true).where().like("url_group", "$group%").prepare())
 		}
 		catch (e: Exception)
 		{
@@ -447,13 +447,13 @@ class ProfileManager(private val dbHelper: DBHelper)
 	{
 		val profile = Profile()
 		profile.name = "ShadowsocksR"
-		profile.host = "1.1.1.1"
-		profile.remotePort = 80
-		profile.password = "androidssr"
-		profile.protocol = "auth_chain_a"
-		profile.obfs = "http_simple"
-		profile.method = "none"
-		profile.url_group = "ShadowsocksR"
+		profile.host = Constants.DefaultHostName
+		profile.remotePort = 8388
+		profile.password = ""
+		profile.protocol =  "origin"
+		profile.obfs = "plain"
+		profile.method = "aes-256-cfb"
+		profile.url_group = "Default Group"
 		return createProfile(profile)
 	}
 

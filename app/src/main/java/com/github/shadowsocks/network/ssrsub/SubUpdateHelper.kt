@@ -113,7 +113,6 @@ class SubUpdateHelper private constructor()
 			.toMutableList()
 		val responseString = Base64.decodeUrlSafe(response)
 		val profiles = Parser.findAllSsr(responseString)
-		profiles.shuffle()
 
 		for (profile in profiles)
 		{

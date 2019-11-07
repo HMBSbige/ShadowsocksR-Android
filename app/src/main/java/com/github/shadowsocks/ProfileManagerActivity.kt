@@ -1122,8 +1122,17 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 			val first = profiles[from]
 			var previousOrder = profiles[from].userOrder
 			var i = from
-			while (i < to)
+			while (true)
 			{
+				if (step > 0 && i >= to)
+				{
+					break
+				}
+				else if (step < 0 && i <= to)
+				{
+					break
+				}
+
 				val next = profiles[i + step]
 				val order = next.userOrder
 				next.userOrder = previousOrder
@@ -1143,7 +1152,6 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 			val remove = profiles.removeAt(pos)
 			ShadowsocksApplication.app.profileManager.delProfile(remove.id)
 			notifyItemRemoved(pos)
-
 		}
 
 		fun undo(actions: SparseArray<Profile>)
