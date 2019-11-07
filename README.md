@@ -1,11 +1,25 @@
-# ShadowsocksRR
-A ShadowsocksRR client for Android, written in Java.
-
-
+# ShadowsocksR
+A ShadowsocksR client for Android, written in Kotlin.
 
 ### PREREQUISITES
 
 * JDK 1.8
-* AndroidStudio 3.4
-* Android Build Tools 29+
-* Android NDK 19+
+* Android Studio 3.5.2
+
+# LICENSE
+
+Copyright (C) 2016 by Max Lv <<max.c.lv@gmail.com>>  
+Copyright (C) 2016 by Mygod Studio <<mygodstudio@gmail.com>>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.

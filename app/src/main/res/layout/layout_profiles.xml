@@ -24,8 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:prompt="@string/group_choose_spinner" />
+                android:layout_marginRight="10dp" />
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -44,7 +43,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp"
             app:fab_colorRipple="@android:color/white"
-            app:layout_behavior="com.github.shadowsocks.widget.FloatingActionMenuBehavior"
+            app:layout_behavior="com.bige0.shadowsocksr.widget.FloatingActionMenuBehavior"
             app:menu_colorNormal="@color/material_accent_500"
             app:menu_colorPressed="@color/material_accent_700">
 

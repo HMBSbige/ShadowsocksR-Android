@@ -2,31 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_tcp_ping_full_test"
-        android:title="@string/action_tcp_ping_full_test"
-        android:alphabeticShortcut="f"
-        android:numericShortcut="1"
-        android:icon="@drawable/ic_click_white"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_full_test"
-        android:title="@string/action_full_test"
         android:alphabeticShortcut="f"
-        android:numericShortcut="1"
         android:icon="@drawable/ic_click_white"
+        android:numericShortcut="1"
+        android:title="@string/action_full_test"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_sort"
-        android:title="@string/action_sort"
         android:alphabeticShortcut="s"
-        android:numericShortcut="2"
         android:icon="@drawable/ic_down"
+        android:numericShortcut="2"
+        android:title="@string/action_sort"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_export"
-        android:title="@string/action_export"
         android:alphabeticShortcut="e"
-        android:numericShortcut="3"
         android:icon="@drawable/ic_content_copy"
+        android:numericShortcut="3"
+        android:title="@string/action_export"
         app:showAsAction="always" />
 </menu>

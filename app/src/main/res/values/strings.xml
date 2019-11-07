@@ -1,29 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <plurals name="bytes" translatable="false">
-        <item quantity="one">Byte</item>
-        <item quantity="other">Bytes</item>
-    </plurals>
-    <plurals name="removed">
-        <item quantity="one">Removed</item>
-        <item quantity="other">%d items removed</item>
-    </plurals>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- global/misc category -->
     <string name="app_name">ShadowsocksR</string>
     <string name="quick_toggle">Toggle</string>
     <string name="misc_cat">Misc</string>
-    <string name="profile">Profile</string>
-    <string name="profile_summary">Switch to another profile or add new profiles</string>
-    <string name="nat">NAT mode (deprecated)</string>
-    <string name="nat_summary">Use NAT mode instead of VPN mode. Requires ROOT permission.</string>
-    <string name="remote_dns">远程DNS</string>
-    <string name="remote_dns_summary">用于远程分析的DNS（默认名称服务器8.8.8.8）</string>
     <string name="stat">Network Traffic</string>
     <string name="stat_summary">Sent: \t\t\t\t\t%3$s\t↑\t%1$s/s\nReceived: \t%4$s\t↓\t%2$s/s</string>
-    <string name="stat_profiles">\n%1$s↑\t%2$s↓\n%3$sms - %4$sms</string>
-    <string name="traffic_summary">%1$s/s↑\t%2$s/s↓</string>
+    <string name="stat_profiles" translatable="false">\n%1$s↑\t%2$s↓\t%3$sms\n%4$s</string>
+    <string name="traffic_summary" translatable="false">%1$s/s↑\t%2$s/s↓</string>
     <string name="connection_test_pending">Check Connectivity</string>
     <string name="connection_test_testing">Testing…</string>
     <string name="connection_test_available">Success: %dms latency</string>
@@ -35,7 +19,6 @@
     <string name="proxy_cat">Server Settings</string>
     <string name="profile_name">Profile Name</string>
     <string name="proxy">Server</string>
-    <string name="proxy_summary">Hostname or IP of the remote server</string>
     <string name="remote_port">Remote Port</string>
     <string name="remote_port_summary">%d (port number of the remote server)</string>
     <string name="port">Local Port</string>
@@ -43,11 +26,9 @@
     <string name="sitekey">Password</string>
     <string name="sitekey_summary">Password of the remote server</string>
     <string name="protocol">Protocol</string>
-    <string name="protocol_summary">Protocol you set in your server</string>
     <string name="protocol_param">Protocol Param</string>
     <string name="protocol_param_summary">Protocol param you input in your server</string>
     <string name="obfs">Obfs</string>
-    <string name="obfs_summary">Obfs you selected in your server</string>
     <string name="obfs_param">Obfs Param</string>
     <string name="obfs_param_summary">Obfs param you put in your server</string>
 
@@ -56,32 +37,20 @@
     <string name="feature_cat">Feature Settings</string>
     <string name="ipv6">IPv6 Route</string>
     <string name="ipv6_summary">Redirect IPv6 traffic to remote</string>
-    <string name="onetime_auth">One-time Authentication</string>
-    <string name="onetime_auth_summary">Enable one-time authentication</string>
-    <string name="http_proxy">HTTP Proxy</string>
-    <string name="http_proxy_summary">Local HTTP Proxy</string>
-    <string name="dns_proxy">DNS Proxy</string>
-    <string name="dns_proxy_summary">Redirect DNS queries to remote</string>
-    <string name="auto_set_gfwlist">CHN Route</string>
-    <string name="auto_set_gfwlist_summary">Bypass all sites located in China
-  </string>
     <string name="route_list">Route</string>
     <string name="acl_file">ACL File URL</string>
     <string name="aclupdate">ACL Update</string>
     <string name="aclupdate_summary">Update Your ACL file</string>
     <string name="aclupdate_url_notset">Sorry, an ACL file URL has to be set before you can update it. Please click on \'Customize ACL File\' in \'Route Setting\' and try again.</string>
-    <string name="aclupdate_downloading">Updating ACL file...</string>
+    <string name="aclupdate_downloading">Updating ACL file…</string>
     <string name="aclupdate_successfully">Successfully updated ACL file.</string>
     <string name="aclupdate_failed">Failed to update ACL file!</string>
     <string name="proxied_apps">Per-App Proxy</string>
     <string name="proxied_apps_summary">Set proxy for selected apps, requires NAT mode under Android 4.x</string>
     <string name="on">On</string>
     <string name="bypass_apps">Bypass Mode</string>
-    <string name="bypass_apps_summary">Enable this option to bypass selected apps</string>
     <string name="auto_connect">Auto Connect</string>
     <string name="auto_connect_summary">Enable ShadowsocksR on startup</string>
-    <string name="tcp_fastopen_summary">Toggling requires ROOT permission</string>
-    <string name="tcp_fastopen_summary_unsupported">Unsupported kernel version: %s &lt; 3.7.1</string>
     <string name="udp_dns">UDP Forwarding</string>
     <string name="udp_dns_summary">Forward UDP packets to remote</string>
     <string name="dns">DNS</string>
@@ -94,9 +63,6 @@
     <string name="invalid_server">Invalid server name</string>
     <string name="service_failed">Failed to connect the remote server</string>
     <string name="method_unsafe">WARNING: The current encryption method is unsafe</string>
-    <string name="nat_deprecated">WARNING: NAT mode has been deprecated since Android 5.0</string>
-    <string name="nat_no_root">NAT mode requires ROOT permission</string>
-    <string name="switch_to_vpn">Switch to VPN mode</string>
     <string name="stop">Stop</string>
     <string name="stopping">Shutting down…</string>
     <string name="vpn_error">%s</string>
@@ -107,20 +73,17 @@
     <string name="close">Close</string>
     <string name="proxy_empty">\'Proxy\' and \'Password\' should not be empty</string>
     <string name="connect">Connect</string>
-    <string name="initializing">Initializing…</string>
     <string name="recovering">Resetting…</string>
     <string name="loading">Loading…</string>
-    <string name="remove_profile">Remove this profile "%s"?</string>
 
     <string name="dr">Duplicate Removal Add</string>
 
     <!-- menu category -->
     <string name="profiles">Profiles</string>
-    <string name="settings">Settings</string>
     <string name="recovery">Reset</string>
     <string name="recovery_summary">Reset all the background services</string>
-    <string name="ignore_battery_optimization">Request ignore battery optimizations</string>
-    <string name="ignore_battery_optimization_summary">Click to request trigger Ignore the battery optimization, to avoid background hiccups caused by hibernation when off screen, will increase the battery consumption, may not be triggered properly on some devices.</string>
+    <string name="ignore_battery_optimization">Ignore battery optimizations</string>
+    <string name="ignore_battery_optimization_summary">Request ignore the battery optimization</string>
     <string name="about">About</string>
     <string name="about_title">ShadowsocksR %s</string>
     <string name="share">Share</string>
@@ -128,12 +91,6 @@
     <string name="share_message_without_nfc">Scan QR code</string>
     <string name="share_message_nfc_disabled">Scan QR code\nAndroid Beam is disabled</string>
     <string name="turn_on_nfc">Turn on NFC &amp; Android Beam</string>
-    <string name="flush_dnscache">Flush DNS cache</string>
-    <string name="flush_dnscache_summary">Only useful in NAT mode</string>
-    <string name="flush_dnscache_summary_root">Only useful in NAT mode. Requires ROOT permission.</string>
-    <string name="flush_dnscache_no_root">Flush DNS cache cannot proceed without ROOT permission</string>
-    <string name="flushing">Flushing</string>
-    <string name="add_profile">Add Profile</string>
     <string name="action_apply_all">Apply Settings to All Profiles</string>
     <string name="action_export">Export to Clipboard</string>
     <string name="action_import">Import from Clipboard</string>
@@ -155,14 +112,11 @@
     <string name="add_profile_scanner_permission_required">Camera permission is required for scanning QR code.</string>
     <string name="copy_url">Copy URL</string>
     <string name="undo">Undo</string>
-    <string name="tips_testing">Testing...</string>
+    <string name="tips_testing">Testing…</string>
 
-    <string name="tips_sorting">Sorting...</string>
     <string name="action_full_test">Full HTTP latency test</string>
-    <string name="action_tcp_ping_full_test">Full TCP ping test</string>
     <string name="action_sort">Auto sort by latency</string>
     <string name="ping">Ping</string>
-    <string name="tcp_ping">TCP Ping</string>
     <string name="frontproxy_enable">Enable</string>
 
     <string name="frontproxy_addr">Address</string>
@@ -179,22 +133,16 @@
     <string name="ssrsub_ok">Save and Update</string>
     <string name="ssrsub_list">Item List</string>
     <string name="ssrsub_error">Error: URL invaild or internet unavailable.</string>
-    <string name="ssrsub_progres">Processing...</string>
-    <string name="ssrsub_progres_text">Please wait...</string>
-    <string name="ssrsub_toast_start">Updating subscriptions...</string>
-    <string name="ssrsub_toast_success">Successfully updated subscriptions.</string>
-    <string name="ssrsub_toast_fail">Failed to update subscriptions!</string>
+    <string name="ssrsub_progres">Processing…</string>
+    <string name="ssrsub_progres_text">Please wait…</string>
     <string name="group_name">Group Name</string>
     <string name="proxy_click">Click on the group name to view its URL</string>
     <string name="ssrsub_remove_tip_title">Subscription removal</string>
     <string name="ssrsub_remove_tip">Delete this subscription without removing its nodes (nodes that bear its group name)?</string>
     <string name="ssrsub_remove_tip_direct">Delete the URL only</string>
     <string name="ssrsub_remove_tip_delete">Delete the nodes too</string>
-    <string name="scan_qrcode_install_title">Scanner installation</string>
 
 
-    <string name="scan_qrcode_install_text">It seems that \'zxing scanner\' is not currently installed. You may click the \'ok\' button below to install it from Play Store, or \'Install Manually\' to manually download the apk and installed it.</string>
-    <string name="scan_qrcode_direct_download_text">Install Manually</string>
     <string name="toggle_service_state">Start the service</string>
 
     <!-- tasker -->
@@ -202,20 +150,24 @@
     <string name="start_service">Connect to %s</string>
     <string name="stop_service">Switch to %s</string>
     <string name="profile_default">Use the current profile</string>
-    <string name="sent">Sent:</string>
 
     <!-- status -->
+    <string name="sent">Sent:</string>
     <string name="received">Received:</string>
-    <string name="kcp_summary">启用KCP协议</string>
-
-    <!-- kcp -->
-    <string name="kcp_port">KCP端口</string>
-    <string name="kcp_port_summary">%d（远程KCPTUN服务器的端口号）</string>
-    <string name="kcpcli">KCP参数</string>
-    <string name="group_choose_spinner">Choose Group</string>
     <string name="allgroups">All Groups</string>
-    <string name="sub_autoupdate_success">%s: autoupdate success</string>
-    <string-array name="route_entry">
+    <string name="sub_autoupdate_success">%s: Autoupdate success</string>
+
+    <plurals name="bytes" translatable="false">
+        <item quantity="one">Byte</item>
+        <item quantity="other">Bytes</item>
+    </plurals>
+
+    <plurals name="removed">
+        <item quantity="one">Removed</item>
+        <item quantity="other">%d items removed</item>
+    </plurals>
+
+    <string-array name="route_entry" tools:ignore="InconsistentArrays">
         <item>All</item>
         <item>Bypass LAN</item>
         <item>Bypass China</item>
