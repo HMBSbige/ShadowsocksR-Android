@@ -308,7 +308,10 @@ class ProfileManagerActivity : AppCompatActivity(), View.OnClickListener, Toolba
 		}
 		catch (e: Throwable)
 		{
-			menu.toggle(false)
+			if (::menu.isInitialized)
+			{
+				menu.toggle(false)
+			}
 			startActivity(Intent(this, ScannerActivity::class.java))
 		}
 	}

@@ -266,6 +266,7 @@ class ShadowsocksSettings : PreferenceFragment(), SharedPreferences.OnSharedPref
 		findPreference("about").setOnPreferenceClickListener {
 			ShadowsocksApplication.app.track(TAG, "about")
 			val web = WebView(activity)
+			web.isVerticalScrollBarEnabled = false
 			web.loadUrl("file:///android_asset/pages/about.html")
 			web.webViewClient = object : WebViewClient()
 			{
