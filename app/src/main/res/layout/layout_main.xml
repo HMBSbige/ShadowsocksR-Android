@@ -158,7 +158,7 @@
 
     <fragment
         android:id="@android:id/content"
-        android:name="com.github.shadowsocks.ShadowsocksSettings"
+        android:name="com.bige0.shadowsocksr.ShadowsocksSettings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/title_bar" />
