@@ -418,6 +418,11 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 	private fun startVpn(): FileDescriptor
 	{
 		val builder = Builder()
+		if (Build.VERSION.SDK_INT >= 29)
+		{
+			builder.setMetered(false)
+		}
+
 		builder.setSession(profile!!.name)
 			.setMtu(VPN_MTU)
 			.addAddress(String.format(Locale.ENGLISH, PRIVATE_VLAN, "1"), 24)
