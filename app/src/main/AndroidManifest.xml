@@ -193,11 +193,6 @@
         <service
             android:name="com.evernote.android.job.v14.PlatformAlarmService"
             android:process=":bg" />
-        <service
-            android:name="com.evernote.android.job.gcm.PlatformGcmService"
-            android:enabled="true"
-            android:process=":bg"
-            tools:replace="android:enabled" />
     </application>
 
     <uses-feature
