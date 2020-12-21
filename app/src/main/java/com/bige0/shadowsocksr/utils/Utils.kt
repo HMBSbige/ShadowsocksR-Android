@@ -198,8 +198,8 @@ object Utils
 		val metrics = DisplayMetrics()
 		window.windowManager.defaultDisplay.getMetrics(metrics)
 		val toastView = toast.view
-		toastView.measure(View.MeasureSpec.makeMeasureSpec(metrics.widthPixels, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(metrics.heightPixels, View.MeasureSpec.UNSPECIFIED))
-		toast.setGravity(Gravity.START or Gravity.TOP, viewLocation[0] - rect.left + (view.width - toast.view.measuredWidth) / 2 + offsetX, viewLocation[1] - rect.top + view.height + offsetY)
+		toastView!!.measure(View.MeasureSpec.makeMeasureSpec(metrics.widthPixels, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(metrics.heightPixels, View.MeasureSpec.UNSPECIFIED))
+		toast.setGravity(Gravity.START or Gravity.TOP, viewLocation[0] - rect.left + (view.width - toast.view!!.measuredWidth) / 2 + offsetX, viewLocation[1] - rect.top + view.height + offsetY)
 		return toast
 	}
 
