@@ -4,7 +4,7 @@ A ShadowsocksR client for Android, written in Kotlin.
 ### PREREQUISITES
 
 * JDK 1.8
-* Android Studio 3.5.2
+* Android Studio 4.1.1
 
 # LICENSE
 
