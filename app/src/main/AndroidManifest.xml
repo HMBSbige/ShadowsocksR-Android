@@ -17,6 +17,7 @@
 
         <activity
             android:name="com.bige0.shadowsocksr.Shadowsocks"
+            android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTask">
             <intent-filter>
@@ -43,6 +44,7 @@
         <activity
             android:name="com.bige0.shadowsocksr.ProfileManagerActivity"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/profiles"
             android:launchMode="singleTask"
             android:parentActivityName="com.bige0.shadowsocksr.Shadowsocks">
@@ -105,6 +107,7 @@
             android:parentActivityName="com.bige0.shadowsocksr.Shadowsocks" />
         <activity
             android:name="com.bige0.shadowsocksr.TaskerActivity"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
@@ -113,6 +116,7 @@
         <activity
             android:name="com.bige0.shadowsocksr.ShadowsocksQuickSwitchActivity"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/quick_switch"
             android:launchMode="singleInstance"
             android:taskAffinity=""
@@ -126,6 +130,7 @@
         <activity
             android:name="com.bige0.shadowsocksr.QuickToggleShortcut"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:label="@string/quick_toggle"
             android:launchMode="singleTask"
             android:taskAffinity=""
@@ -142,7 +147,8 @@
         <receiver
             android:name="com.bige0.shadowsocksr.BootReceiver"
             android:directBootAware="true"
-            android:enabled="false">
+            android:enabled="false"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
@@ -150,6 +156,7 @@
         </receiver>
         <receiver
             android:name="com.bige0.shadowsocksr.TaskerReceiver"
+            android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
@@ -178,6 +185,7 @@
         </service>
         <service
             android:name="com.bige0.shadowsocksr.ShadowsocksTileService"
+            android:exported="true"
             android:icon="@drawable/ic_start_connected"
             android:label="@string/quick_toggle"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
@@ -218,5 +226,7 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
 </manifest>

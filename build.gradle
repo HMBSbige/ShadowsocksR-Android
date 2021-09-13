@@ -5,10 +5,10 @@ buildscript {
         javaVersion = JavaVersion.VERSION_1_8
         kotlinVersion = '1.5.30'
         minSdkVersion = 21
-        sdkVersion = 30
-        compileSdkVersion = 30
-        versionCode = 2
-        versionName = '3.7.0'
+        sdkVersion = 31
+        compileSdkVersion = 31
+        versionCode = 3
+        versionName = '3.8.0'
     }
     repositories {
         google()
