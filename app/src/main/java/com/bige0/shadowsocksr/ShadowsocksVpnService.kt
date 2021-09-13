@@ -41,8 +41,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (SERVICE_INTERFACE == action)
 		{
 			return super.onBind(intent)
-		}
-		else if (Constants.Action.SERVICE == action)
+		} else if (Constants.Action.SERVICE == action)
 		{
 			return binder
 		}
@@ -88,8 +87,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 				conn!!.close()
 				conn = null
 			}
-		}
-		catch (e: IOException)
+		} catch (e: IOException)
 		{
 			e.printStackTrace()
 		}
@@ -158,8 +156,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 			val chinaDns = tempList[0]
 			chinaDnsAddress = chinaDns.split(":")[0]
 			chinaDnsPort = Integer.parseInt(chinaDns.split(":")[1])
-		}
-		catch (e: Exception)
+		} catch (e: Exception)
 		{
 			dnsAddress = "8.8.8.8"
 			dnsPort = 53
@@ -189,8 +186,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		try
 		{
 			handleConnection()
-		}
-		catch (e: Exception)
+		} catch (e: Exception)
 		{
 			e.printStackTrace()
 		}
@@ -231,10 +227,35 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 
 	private fun startShadowsocksUDPDaemon()
 	{
-		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 600, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
+		val conf = String.format(
+			Locale.ENGLISH,
+			Constants.ConfigUtils.SHADOWSOCKS,
+			profile!!.host,
+			profile!!.remotePort,
+			profile!!.localPort,
+			Constants.ConfigUtils.escapedJson(profile!!.password),
+			profile!!.method,
+			600,
+			profile!!.protocol,
+			profile!!.obfs,
+			Constants.ConfigUtils.escapedJson(profile!!.obfs_param),
+			Constants.ConfigUtils.escapedJson(profile!!.protocol_param)
+		)
 		Utils.printToFile(File(applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf"), conf)
 
-		val cmd = arrayOf("${applicationInfo.nativeLibraryDir}/${Constants.Executable.SS_LOCAL}", "-V", "-U", "-b", "127.0.0.1", "--host", hostArg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf")
+		val cmd = arrayOf(
+			"${applicationInfo.nativeLibraryDir}/${Constants.Executable.SS_LOCAL}",
+			"-V",
+			"-U",
+			"-b",
+			"127.0.0.1",
+			"--host",
+			hostArg,
+			"-P",
+			applicationInfo.dataDir,
+			"-c",
+			applicationInfo.dataDir + "/libssr-local.so-udp-vpn.conf"
+		)
 		val cmds = LinkedList(cmd.toList())
 		if (proxychainsEnable)
 		{
@@ -250,8 +271,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			sstunnelProcess = GuardedProcess(cmds)
 				.start()
-		}
-		catch (e: InterruptedException)
+		} catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -260,11 +280,36 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 	private fun startShadowsocksDaemon()
 	{
 
-		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 600, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
+		val conf = String.format(
+			Locale.ENGLISH,
+			Constants.ConfigUtils.SHADOWSOCKS,
+			profile!!.host,
+			profile!!.remotePort,
+			profile!!.localPort,
+			Constants.ConfigUtils.escapedJson(profile!!.password),
+			profile!!.method,
+			600,
+			profile!!.protocol,
+			profile!!.obfs,
+			Constants.ConfigUtils.escapedJson(profile!!.obfs_param),
+			Constants.ConfigUtils.escapedJson(profile!!.protocol_param)
+		)
 
 		Utils.printToFile(File(applicationInfo.dataDir + "/libssr-local.so-vpn.conf"), conf)
 
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.SS_LOCAL}", "-V", "-x", "-b", "127.0.0.1", "--host", hostArg, "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/libssr-local.so-vpn.conf")
+		val cmd = arrayOf(
+			applicationInfo.nativeLibraryDir + "/${Constants.Executable.SS_LOCAL}",
+			"-V",
+			"-x",
+			"-b",
+			"127.0.0.1",
+			"--host",
+			hostArg,
+			"-P",
+			applicationInfo.dataDir,
+			"-c",
+			applicationInfo.dataDir + "/libssr-local.so-vpn.conf"
+		)
 
 		val cmds = LinkedList(cmd.toList())
 
@@ -293,8 +338,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			sslocalProcess = GuardedProcess(cmds)
 				.start()
-		}
-		catch (e: InterruptedException)
+		} catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -302,18 +346,42 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 
 	private fun startDnsTunnel()
 	{
-		val conf = String.format(Locale.ENGLISH, Constants.ConfigUtils.SHADOWSOCKS, profile!!.host, profile!!.remotePort, profile!!.localPort + 63, Constants.ConfigUtils.escapedJson(profile!!.password), profile!!.method, 60, profile!!.protocol, profile!!.obfs, Constants.ConfigUtils.escapedJson(profile!!.obfs_param), Constants.ConfigUtils.escapedJson(profile!!.protocol_param))
+		val conf = String.format(
+			Locale.ENGLISH,
+			Constants.ConfigUtils.SHADOWSOCKS,
+			profile!!.host,
+			profile!!.remotePort,
+			profile!!.localPort + 63,
+			Constants.ConfigUtils.escapedJson(profile!!.password),
+			profile!!.method,
+			60,
+			profile!!.protocol,
+			profile!!.obfs,
+			Constants.ConfigUtils.escapedJson(profile!!.obfs_param),
+			Constants.ConfigUtils.escapedJson(profile!!.protocol_param)
+		)
 		Utils.printToFile(File(applicationInfo.dataDir + "/ss-tunnel-vpn.conf"), conf)
 
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.SS_LOCAL}", "-V", "-u", "--host", hostArg, "-b", "127.0.0.1", "-P", applicationInfo.dataDir, "-c", applicationInfo.dataDir + "/ss-tunnel-vpn.conf")
+		val cmd = arrayOf(
+			applicationInfo.nativeLibraryDir + "/${Constants.Executable.SS_LOCAL}",
+			"-V",
+			"-u",
+			"--host",
+			hostArg,
+			"-b",
+			"127.0.0.1",
+			"-P",
+			applicationInfo.dataDir,
+			"-c",
+			applicationInfo.dataDir + "/ss-tunnel-vpn.conf"
+		)
 
 		val cmds = LinkedList(cmd.toList())
 		cmds.add("-L")
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
 			cmds.add("$chinaDnsAddress:$chinaDnsPort")
-		}
-		else
+		} else
 		{
 			cmds.add("$dnsAddress:$dnsPort")
 		}
@@ -332,8 +400,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			sstunnelProcess = GuardedProcess(cmds)
 				.start()
-		}
-		catch (e: InterruptedException)
+		} catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -351,7 +418,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (Constants.Route.ACL == profile!!.route)
 		{
 			//decide acl route
-			val totalLines = Utils.getLinesByFile(File("${applicationInfo.dataDir}/${profile!!.route}.acl"))
+			val totalLines =
+				Utils.getLinesByFile(File("${applicationInfo.dataDir}/${profile!!.route}.acl"))
 			for (line in totalLines)
 			{
 				if ("[remote_dns]" == line)
@@ -370,35 +438,93 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 
 		for (china_dns in profile!!.china_dns.split(","))
 		{
-			chinaDnsSettings.append(String.format(Locale.ENGLISH, Constants.ConfigUtils.REMOTE_SERVER, china_dns.split(":")[0], Integer.parseInt(china_dns.split(":")[1]), blackList1, reject))
+			chinaDnsSettings.append(
+				String.format(
+					Locale.ENGLISH,
+					Constants.ConfigUtils.REMOTE_SERVER,
+					china_dns.split(":")[0],
+					Integer.parseInt(china_dns.split(":")[1]),
+					blackList1,
+					reject
+				)
+			)
 		}
 
-		val conf = if (Constants.Route.BYPASS_CHN == profile!!.route || Constants.Route.BYPASS_LAN_CHN == profile!!.route || Constants.Route.GFWLIST == profile!!.route)
-		{
-			String.format(Locale.ENGLISH, Constants.ConfigUtils.PDNSD_DIRECT, protect, applicationInfo.dataDir, "0.0.0.0", profile!!.localPort + 53, chinaDnsSettings, profile!!.localPort + 63, reject)
-		}
-		else if (Constants.Route.CHINALIST == profile!!.route)
-		{
-			String.format(Locale.ENGLISH, Constants.ConfigUtils.PDNSD_DIRECT, protect, applicationInfo.dataDir, "0.0.0.0", profile!!.localPort + 53, chinaDnsSettings, profile!!.localPort + 63, reject)
-		}
-		else if (Constants.Route.ACL == profile!!.route)
-		{
-			if (!remoteDns)
+		val conf =
+			if (Constants.Route.BYPASS_CHN == profile!!.route || Constants.Route.BYPASS_LAN_CHN == profile!!.route || Constants.Route.GFWLIST == profile!!.route)
 			{
-				String.format(Locale.ENGLISH, Constants.ConfigUtils.PDNSD_DIRECT, protect, applicationInfo.dataDir, "0.0.0.0", profile!!.localPort + 53, chinaDnsSettings, profile!!.localPort + 63, reject)
-			}
-			else
+				String.format(
+					Locale.ENGLISH,
+					Constants.ConfigUtils.PDNSD_DIRECT,
+					protect,
+					applicationInfo.dataDir,
+					"0.0.0.0",
+					profile!!.localPort + 53,
+					chinaDnsSettings,
+					profile!!.localPort + 63,
+					reject
+				)
+			} else if (Constants.Route.CHINALIST == profile!!.route)
 			{
-				String.format(Locale.ENGLISH, Constants.ConfigUtils.PDNSD_LOCAL, protect, applicationInfo.dataDir, "0.0.0.0", profile!!.localPort + 53, profile!!.localPort + 63, reject)
+				String.format(
+					Locale.ENGLISH,
+					Constants.ConfigUtils.PDNSD_DIRECT,
+					protect,
+					applicationInfo.dataDir,
+					"0.0.0.0",
+					profile!!.localPort + 53,
+					chinaDnsSettings,
+					profile!!.localPort + 63,
+					reject
+				)
+			} else if (Constants.Route.ACL == profile!!.route)
+			{
+				if (!remoteDns)
+				{
+					String.format(
+						Locale.ENGLISH,
+						Constants.ConfigUtils.PDNSD_DIRECT,
+						protect,
+						applicationInfo.dataDir,
+						"0.0.0.0",
+						profile!!.localPort + 53,
+						chinaDnsSettings,
+						profile!!.localPort + 63,
+						reject
+					)
+				} else
+				{
+					String.format(
+						Locale.ENGLISH,
+						Constants.ConfigUtils.PDNSD_LOCAL,
+						protect,
+						applicationInfo.dataDir,
+						"0.0.0.0",
+						profile!!.localPort + 53,
+						profile!!.localPort + 63,
+						reject
+					)
+				}
+			} else
+			{
+				String.format(
+					Locale.ENGLISH,
+					Constants.ConfigUtils.PDNSD_LOCAL,
+					protect,
+					applicationInfo.dataDir,
+					"0.0.0.0",
+					profile!!.localPort + 53,
+					profile!!.localPort + 63,
+					reject
+				)
 			}
-		}
-		else
-		{
-			String.format(Locale.ENGLISH, Constants.ConfigUtils.PDNSD_LOCAL, protect, applicationInfo.dataDir, "0.0.0.0", profile!!.localPort + 53, profile!!.localPort + 63, reject)
-		}
 
 		Utils.printToFile(File(applicationInfo.dataDir + "/libpdnsd.so-vpn.conf"), conf)
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.PDNSD}", "-c", applicationInfo.dataDir + "/libpdnsd.so-vpn.conf")
+		val cmd = arrayOf(
+			applicationInfo.nativeLibraryDir + "/${Constants.Executable.PDNSD}",
+			"-c",
+			applicationInfo.dataDir + "/libpdnsd.so-vpn.conf"
+		)
 		val cmds = listOf(*cmd)
 
 		VayLog.d(TAG, Utils.makeString(cmds, " "))
@@ -407,8 +533,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			pdnsdProcess = GuardedProcess(cmds)
 				.start()
-		}
-		catch (e: InterruptedException)
+		} catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -418,7 +543,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 	private fun startVpn(): FileDescriptor
 	{
 		val builder = Builder()
-		if (Build.VERSION.SDK_INT >= 29)
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
 		{
 			builder.setMetered(false)
 		}
@@ -430,8 +555,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
 			builder.addDnsServer(chinaDnsAddress)
-		}
-		else
+		} else
 		{
 			builder.addDnsServer(dnsAddress)
 		}
@@ -453,13 +577,11 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 						if (!profile!!.bypass)
 						{
 							builder.addAllowedApplication(pkg)
-						}
-						else
+						} else
 						{
 							builder.addDisallowedApplication(pkg)
 						}
-					}
-					catch (e: PackageManager.NameNotFoundException)
+					} catch (e: PackageManager.NameNotFoundException)
 					{
 						VayLog.e(TAG, "Invalid package name", e)
 					}
@@ -471,8 +593,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (Constants.Route.ALL == profile!!.route || Constants.Route.BYPASS_CHN == profile!!.route)
 		{
 			builder.addRoute("0.0.0.0", 0)
-		}
-		else
+		} else
 		{
 			val privateList = resources.getStringArray(R.array.bypass_private_route)
 			for (cidr in privateList)
@@ -487,8 +608,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
 			builder.addRoute(chinaDnsAddress, 32)
-		}
-		else
+		} else
 		{
 			builder.addRoute(dnsAddress, 32)
 		}
@@ -496,9 +616,15 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		val conn = builder.establish() ?: throw NullConnectionException()
 		this.conn = conn
 
-		val fd = conn.fd
-
-		val cmd = arrayOf(applicationInfo.nativeLibraryDir + "/${Constants.Executable.TUN2SOCKS}", "--netif-ipaddr", String.format(Locale.ENGLISH, PRIVATE_VLAN, "2"), "--netif-netmask", "255.255.255.0", "--socks-server-addr", "127.0.0.1:" + profile!!.localPort, "--tunfd", fd.toString(), "--tunmtu", VPN_MTU.toString(), "--sock-path", applicationInfo.dataDir + "/sock_path", "--loglevel", "3")
+		val cmd = arrayOf(
+			applicationInfo.nativeLibraryDir + "/${Constants.Executable.TUN2SOCKS}",
+			"--netif-ipaddr", String.format(Locale.ENGLISH, PRIVATE_VLAN, "2"),
+			"--netif-netmask", "255.255.255.0",
+			"--socks-server-addr", "127.0.0.1:" + profile!!.localPort,
+			"--tunmtu", VPN_MTU.toString(),
+			"--sock-path", applicationInfo.dataDir + "/sock_path",
+			"--loglevel", "none"
+		)
 
 		val cmds = cmd.toMutableList()
 
@@ -511,11 +637,17 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (profile!!.udpdns)
 		{
 			cmds.add("--enable-udprelay")
-		}
-		else
+		} else
 		{
 			cmds.add("--dnsgw")
-			cmds.add(String.format(Locale.ENGLISH, "%s:%d", String.format(Locale.ENGLISH, PRIVATE_VLAN, "1"), profile!!.localPort + 53))
+			cmds.add(
+				String.format(
+					Locale.ENGLISH,
+					"%s:%d",
+					String.format(Locale.ENGLISH, PRIVATE_VLAN, "1"),
+					profile!!.localPort + 53
+				)
+			)
 		}
 
 		VayLog.d(TAG, Utils.makeString(cmds, " "))
@@ -524,8 +656,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			tun2socksProcess = GuardedProcess(cmds)
 				.start { sendFd(conn.fileDescriptor) }
-		}
-		catch (e: InterruptedException)
+		} catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -543,13 +674,17 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 			{
 				Thread.sleep(50L shl tries)
 				LocalSocket().use { localSocket ->
-					localSocket.connect(LocalSocketAddress(path, LocalSocketAddress.Namespace.FILESYSTEM))
+					localSocket.connect(
+						LocalSocketAddress(
+							path,
+							LocalSocketAddress.Namespace.FILESYSTEM
+						)
+					)
 					localSocket.setFileDescriptorsForSend(arrayOf(fd))
 					localSocket.outputStream.write(42)
 				}
 				return true
-			}
-			catch (e: IOException)
+			} catch (e: IOException)
 			{
 				if (tries > 5)
 				{
