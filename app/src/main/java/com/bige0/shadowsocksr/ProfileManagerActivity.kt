@@ -28,7 +28,7 @@ import com.bige0.shadowsocksr.network.ssrsub.*
 import com.bige0.shadowsocksr.utils.*
 import com.bige0.shadowsocksr.widget.*
 import com.github.clans.fab.*
-import com.google.android.material.snackbar.*
+import com.google.android.material.snackbar.Snackbar
 import net.glxn.qrgen.android.*
 import java.nio.charset.*
 import java.util.*

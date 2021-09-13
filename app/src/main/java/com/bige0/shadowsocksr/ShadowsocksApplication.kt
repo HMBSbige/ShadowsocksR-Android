@@ -15,6 +15,7 @@ import com.google.android.gms.analytics.*
 import com.google.android.gms.common.api.*
 import com.google.android.gms.tagmanager.*
 import com.j256.ormlite.logger.*
+import com.j256.ormlite.logger.Logger
 import java.io.*
 import java.util.*
 import java.util.concurrent.*
@@ -204,7 +205,7 @@ class ShadowsocksApplication : Application()
 
 		if (!BuildConfig.DEBUG)
 		{
-			System.setProperty(LocalLog.LOCAL_LOG_LEVEL_PROPERTY, "ERROR")
+			System.setProperty(LocalLogBackend.LOCAL_LOG_LEVEL_PROPERTY, "ERROR")
 		}
 		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 		checkChineseLocale(resources.configuration)
