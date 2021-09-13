@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -10,14 +9,6 @@ android {
         targetSdkVersion rootProject.sdkVersion
         versionCode rootProject.versionCode
         versionName rootProject.versionName
-        dexOptions {
-            // 让它不要对Lib做preDexing
-            preDexLibraries = false
-            // 开启incremental dexing,优化编译效率，这个功能android studio默认是关闭的
-            // incremental true
-            // 增加java堆内存大小
-            javaMaxHeapSize "4g"
-        }
         multiDexEnabled true
         proguardFiles
         vectorDrawables.useSupportLibrary = true
