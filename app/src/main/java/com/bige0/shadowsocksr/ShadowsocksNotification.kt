@@ -1,6 +1,7 @@
 package com.bige0.shadowsocksr
 
 import android.app.*
+import android.app.PendingIntent.*
 import android.content.*
 import android.os.*
 import androidx.core.app.*
@@ -190,17 +191,17 @@ class ShadowsocksNotification constructor(private val service: Service, private 
 			.setTicker(service.getString(R.string.forward_success))
 			.setContentTitle(profileName)
 			.setContentIntent(PendingIntent.getActivity(service, 0, Intent(service, Shadowsocks::class.java)
-				.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT), 0))
+				.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT), FLAG_IMMUTABLE))
 			.setSmallIcon(R.drawable.ic_stat_shadowsocks)
 		builder.addAction(R.drawable.ic_navigation_close,
 						  service.getString(R.string.stop),
-						  PendingIntent.getBroadcast(service, 0, Intent(Constants.Action.CLOSE), 0))
+						  PendingIntent.getBroadcast(service, 0, Intent(Constants.Action.CLOSE), FLAG_IMMUTABLE))
 
 		val profiles = ShadowsocksApplication.app.profileManager.allProfiles
 		if (profiles.isNotEmpty())
 		{
 			builder.addAction(R.drawable.ic_action_settings, service.getString(R.string.quick_switch),
-							  PendingIntent.getActivity(service, 0, Intent(Constants.Action.QUICK_SWITCH), 0))
+							  PendingIntent.getActivity(service, 0, Intent(Constants.Action.QUICK_SWITCH), FLAG_IMMUTABLE))
 		}
 	}
 
