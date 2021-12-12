@@ -5,7 +5,7 @@ import android.content.pm.*
 import android.net.*
 import android.os.*
 import com.bige0.shadowsocksr.database.*
-import com.bige0.shadowsocksr.job.*
+import com.bige0.shadowsocksr.worker.*
 import com.bige0.shadowsocksr.utils.*
 import java.io.*
 import java.util.*
@@ -63,6 +63,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (vpnThread != null)
 		{
 			vpnThread!!.stopThread()
+			vpnThread!!.join()
 			vpnThread = null
 		}
 
@@ -71,7 +72,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 			notification!!.destroy()
 		}
 
-		// channge the state
+		// change the state
 		changeState(Constants.State.STOPPING)
 
 		ShadowsocksApplication.app.track(TAG, "stop")
@@ -195,7 +196,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 
 		if (Constants.Route.ALL != profile!!.route)
 		{
-			AclSyncJob.schedule(profile!!.route)
+			AclSyncWorker.schedule(profile!!.route, applicationContext)
 		}
 
 		notification = ShadowsocksNotification(this, profile!!.name)

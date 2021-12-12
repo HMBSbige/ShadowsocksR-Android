@@ -14,7 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.*
 import com.bige0.shadowsocksr.aidl.*
 import com.bige0.shadowsocksr.database.*
-import com.bige0.shadowsocksr.job.*
+import com.bige0.shadowsocksr.worker.*
 import com.bige0.shadowsocksr.network.request.*
 import com.bige0.shadowsocksr.utils.*
 import com.github.jorgecastilloprz.*
@@ -265,7 +265,7 @@ class Shadowsocks : AppCompatActivity()
 
 		updateTraffic(0, 0, 0, 0)
 
-		SSRSubUpdateJob.schedule()
+		SubscriptionUpdateWorker.schedule(applicationContext)
 
 
 		// attach service

@@ -8,7 +8,7 @@ buildscript {
         sdkVersion = 31
         compileSdkVersion = 31
         versionCode = 3
-        versionName = '3.8.0'
+        versionName = '3.8.1'
     }
     repositories {
         google()

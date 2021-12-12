@@ -8,14 +8,12 @@ import android.os.*
 import android.preference.*
 import androidx.appcompat.app.*
 import com.bige0.shadowsocksr.database.*
-import com.bige0.shadowsocksr.job.*
+import com.bige0.shadowsocksr.worker.*
 import com.bige0.shadowsocksr.utils.*
-import com.evernote.android.job.*
 import com.google.android.gms.analytics.*
 import com.google.android.gms.common.api.*
 import com.google.android.gms.tagmanager.*
 import com.j256.ormlite.logger.*
-import com.j256.ormlite.logger.Logger
 import java.io.*
 import java.util.*
 import java.util.concurrent.*
@@ -230,8 +228,6 @@ class ShadowsocksApplication : Application()
 			}
 		}
 		pending.setResultCallback(callback, 2, TimeUnit.SECONDS)
-		JobManager.create(this)
-			.addJobCreator(DonaldTrump())
 	}
 
 	fun refreshContainerHolder()
