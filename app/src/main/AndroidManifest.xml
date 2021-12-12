@@ -162,13 +162,6 @@
                 <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="com.evernote.android.job.v14.PlatformAlarmReceiver"
-            android:process=":bg" />
-
-        <receiver
-            android:name="com.evernote.android.job.JobBootReceiver"
-            android:process=":bg" />
 
         <service
             android:name="com.bige0.shadowsocksr.ShadowsocksRunnerService"
@@ -194,13 +187,18 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
-        <service
-            android:name="com.evernote.android.job.v21.PlatformJobService"
-            android:process=":bg" />
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
 
-        <service
-            android:name="com.evernote.android.job.v14.PlatformAlarmService"
-            android:process=":bg" />
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+
+        </provider>
     </application>
 
     <uses-feature

@@ -4,9 +4,11 @@ import android.annotation.*
 import android.app.*
 import android.content.*
 import android.content.res.*
+import android.content.res.Configuration
 import android.os.*
 import android.preference.*
 import androidx.appcompat.app.*
+import androidx.work.*
 import com.bige0.shadowsocksr.database.*
 import com.bige0.shadowsocksr.worker.*
 import com.bige0.shadowsocksr.utils.*
@@ -228,6 +230,7 @@ class ShadowsocksApplication : Application()
 			}
 		}
 		pending.setResultCallback(callback, 2, TimeUnit.SECONDS)
+		WorkManager.initialize(applicationContext, androidx.work.Configuration.Builder().build())
 	}
 
 	fun refreshContainerHolder()
