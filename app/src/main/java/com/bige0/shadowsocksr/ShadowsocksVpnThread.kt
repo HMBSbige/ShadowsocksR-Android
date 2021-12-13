@@ -37,7 +37,8 @@ class ShadowsocksVpnThread(private val vpnService: ShadowsocksVpnService) : Thre
 		{
 			try
 			{
-				serverSocket!!.close()
+				//serverSocket!!.close()
+				Os.shutdown(serverSocket!!.fileDescriptor, OsConstants.SHUT_RDWR)
 			}
 			catch (e: Exception)
 			{
@@ -73,10 +74,12 @@ class ShadowsocksVpnThread(private val vpnService: ShadowsocksVpnService) : Thre
 			}
 			catch (e: IOException)
 			{
-				VayLog.e(TAG, "Error when accept socket", e)
-				ShadowsocksApplication.app.track(e)
+				if (isRunning){
+					VayLog.e(TAG, "Error when accept socket", e)
+					ShadowsocksApplication.app.track(e)
 
-				initServerSocket()
+					initServerSocket()
+				}
 			}
 		}
 	}

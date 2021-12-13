@@ -2,6 +2,7 @@ package com.bige0.shadowsocksr.utils
 
 import android.content.*
 import android.net.*
+import android.system.*
 import com.bige0.shadowsocksr.*
 import java.io.*
 import java.nio.*
@@ -29,7 +30,8 @@ class TrafficMonitorThread(context: Context) : Thread()
 		{
 			try
 			{
-				serverSocket!!.close()
+				//serverSocket!!.close()
+				Os.shutdown(serverSocket!!.fileDescriptor, OsConstants.SHUT_RDWR)
 			}
 			catch (e: Exception)
 			{
@@ -64,8 +66,12 @@ class TrafficMonitorThread(context: Context) : Thread()
 				// handle socket
 				handleLocalSocket(socket)
 			}
+
 			catch (e: Exception)
 			{
+				if (!isRunning && e is IOException)
+					return
+				
 				VayLog.e(TAG, "Error when accept socket", e)
 				ShadowsocksApplication.app.track(e)
 
