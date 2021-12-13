@@ -20,7 +20,7 @@ import java.io.*
 import java.util.*
 import java.util.concurrent.*
 
-class ShadowsocksApplication : Application()
+class ShadowsocksApplication : Application(), androidx.work.Configuration.Provider
 {
 	companion object
 	{
@@ -230,7 +230,6 @@ class ShadowsocksApplication : Application()
 			}
 		}
 		pending.setResultCallback(callback, 2, TimeUnit.SECONDS)
-		WorkManager.initialize(applicationContext, androidx.work.Configuration.Builder().build())
 	}
 
 	fun refreshContainerHolder()
@@ -334,4 +333,9 @@ class ShadowsocksApplication : Application()
 			copyAssets()
 		}
 	}
+
+	override fun getWorkManagerConfiguration() =
+		androidx.work.Configuration.Builder()
+			.setDefaultProcessName("com.bige0.shadowsocksr")
+			.build()
 }

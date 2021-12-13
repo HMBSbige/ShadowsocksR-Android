@@ -41,6 +41,7 @@ dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'androidx.work:work-multiprocess:2.7.1'
     implementation "com.github.clans:fab:1.6.4"
     implementation "com.github.jorgecastilloprz:fabprogresscircle:1.01"
     implementation "com.google.android.gms:play-services-analytics:17.0.1"

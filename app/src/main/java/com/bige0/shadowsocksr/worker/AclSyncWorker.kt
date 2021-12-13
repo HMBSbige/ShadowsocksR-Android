@@ -2,6 +2,7 @@ package com.bige0.shadowsocksr.worker
 
 import android.content.*
 import androidx.work.*
+import androidx.work.multiprocess.*
 import com.bige0.shadowsocksr.*
 import com.bige0.shadowsocksr.utils.*
 import java.io.*
@@ -75,9 +76,9 @@ class AclSyncWorker(context: Context, params: WorkerParameters)
 				.build()
 
 			//Cancel pending updates with same route
-			WorkManager.getInstance(appContext).cancelAllWorkByTag("${TAG}:$route")
+			RemoteWorkManager.getInstance(appContext).cancelAllWorkByTag("${TAG}:$route")
 
-			WorkManager.getInstance(appContext).enqueue(request)
+			RemoteWorkManager.getInstance(appContext).enqueue(request)
 		}
 	}
 }

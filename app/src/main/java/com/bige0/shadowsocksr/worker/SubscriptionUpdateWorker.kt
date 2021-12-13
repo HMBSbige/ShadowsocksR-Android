@@ -2,6 +2,7 @@ package com.bige0.shadowsocksr.worker
 
 import android.content.*
 import androidx.work.*
+import androidx.work.multiprocess.*
 import com.bige0.shadowsocksr.*
 import com.bige0.shadowsocksr.R
 import com.bige0.shadowsocksr.network.ssrsub.*
@@ -44,8 +45,8 @@ class SubscriptionUpdateWorker(context: Context, params: WorkerParameters) : Wor
 				.setConstraints(constraints)
 				.build()
 
-			WorkManager.getInstance(appContext).cancelAllWorkByTag(TAG)
-			WorkManager.getInstance(appContext).enqueue(request)
+			RemoteWorkManager.getInstance(appContext).cancelAllWorkByTag(TAG)
+			RemoteWorkManager.getInstance(appContext).enqueue(request)
 		}
 	}
 }
