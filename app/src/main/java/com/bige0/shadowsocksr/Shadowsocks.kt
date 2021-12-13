@@ -253,13 +253,16 @@ class Shadowsocks : AppCompatActivity()
 		}
 		fab.setOnLongClickListener {
 			val strId = if (serviceStarted) R.string.stop else R.string.connect
-			Utils.positionToast(
-				Toast.makeText(this@Shadowsocks, strId, Toast.LENGTH_SHORT),
-				fab,
-				window,
-				0,
-				Utils.dpToPx(this@Shadowsocks, 8))
-				.show()
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R)
+				Utils.positionToast(
+					Toast.makeText(this@Shadowsocks, strId, Toast.LENGTH_SHORT),
+					fab,
+					window,
+					0,
+					Utils.dpToPx(this@Shadowsocks, 8))
+					.show()
+			else
+				Toast.makeText(this@Shadowsocks, strId, Toast.LENGTH_SHORT).show()
 			true
 		}
 
