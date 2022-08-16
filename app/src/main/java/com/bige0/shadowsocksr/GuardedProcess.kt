@@ -61,15 +61,26 @@ class GuardedProcess(private val cmd: List<String>)
 													 }
 												 }
 											 }
-
 										 }
 									 }
 									 catch (ignored: Exception)
 									 {
 										 VayLog.i(TAG, "thread interrupt, destroy process: $cmd")
-										 if (process != null)
+
+										 if (process == null)
 										 {
-											 process!!.destroy()
+											 return
+										 }
+
+										 if (process!!.javaClass.name.equals("java.lang.UNIXProcess"))
+										 {
+											 val fPid = process!!.javaClass.getDeclaredField("pid").apply { isAccessible = true }
+											 val pid = fPid.getInt(process)
+											 android.os.Process.killProcess(pid)
+										 }
+										 else
+										 {
+											 process!!.destroy() // wtf??? not work >= android S
 										 }
 									 }
 									 finally

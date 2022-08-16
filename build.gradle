@@ -3,7 +3,7 @@
 buildscript {
     ext {
         javaVersion = JavaVersion.VERSION_1_8
-        kotlinVersion = '1.6.10'
+        kotlinVersion = '1.7.10'
         minSdkVersion = 21
         sdkVersion = 31
         compileSdkVersion = 31
@@ -13,10 +13,9 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven  { url 'https://maven.aliyun.com/repository/public' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -28,7 +27,8 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven  { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://jitpack.io' }
     }
 }
 

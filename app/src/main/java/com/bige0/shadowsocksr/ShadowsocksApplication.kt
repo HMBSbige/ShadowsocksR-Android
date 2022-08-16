@@ -15,7 +15,6 @@ import com.google.android.gms.analytics.*
 import com.google.android.gms.common.api.*
 import com.google.android.gms.tagmanager.*
 import com.j256.ormlite.logger.*
-import com.j256.ormlite.logger.Logger
 import java.io.*
 import java.util.*
 import java.util.concurrent.*
@@ -85,7 +84,7 @@ class ShadowsocksApplication : Application()
 	fun track(t: Throwable)
 	{
 		val builders = HitBuilders.ExceptionBuilder()
-			.setDescription(StandardExceptionParser(this, null).getDescription(Thread.currentThread().name, t))
+			.setDescription(StandardExceptionParser(this, emptyList()).getDescription(Thread.currentThread().name, t))
 			.setFatal(false)
 			.build()
 		tracker.send(builders)
@@ -221,11 +220,11 @@ class ShadowsocksApplication : Application()
 			container.registerFunctionCallMacroCallback(SIG_FUNC) { functionName, _ ->
 				if (SIG_FUNC == functionName)
 				{
-					Utils.getSignature(applicationContext)
+					Utils.getSignature(applicationContext) ?: ""
 				}
 				else
 				{
-					null
+					""
 				}
 			}
 		}
