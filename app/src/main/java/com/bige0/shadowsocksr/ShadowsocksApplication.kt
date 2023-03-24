@@ -314,7 +314,6 @@ class ShadowsocksApplication : Application()
 	{
 		// ensure executables are killed before writing to them
 		crashRecovery()
-		copyAssets(Build.SUPPORTED_ABIS[0])
 		copyAssets("acl")
 
 		for (exe in EXECUTABLES)

@@ -41,7 +41,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (SERVICE_INTERFACE == action)
 		{
 			return super.onBind(intent)
-		} else if (Constants.Action.SERVICE == action)
+		}
+		else if (Constants.Action.SERVICE == action)
 		{
 			return binder
 		}
@@ -87,7 +88,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 				conn!!.close()
 				conn = null
 			}
-		} catch (e: IOException)
+		}
+		catch (e: IOException)
 		{
 			e.printStackTrace()
 		}
@@ -156,7 +158,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 			val chinaDns = tempList[0]
 			chinaDnsAddress = chinaDns.split(":")[0]
 			chinaDnsPort = Integer.parseInt(chinaDns.split(":")[1])
-		} catch (e: Exception)
+		}
+		catch (e: Exception)
 		{
 			dnsAddress = "8.8.8.8"
 			dnsPort = 53
@@ -186,7 +189,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		try
 		{
 			handleConnection()
-		} catch (e: Exception)
+		}
+		catch (e: Exception)
 		{
 			e.printStackTrace()
 		}
@@ -217,8 +221,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			startShadowsocksUDPDaemon()
 		}
-
-		if (!profile!!.udpdns)
+		else
 		{
 			startDnsDaemon()
 			startDnsTunnel()
@@ -271,7 +274,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			sstunnelProcess = GuardedProcess(cmds)
 				.start()
-		} catch (e: InterruptedException)
+		}
+		catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -338,7 +342,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			sslocalProcess = GuardedProcess(cmds)
 				.start()
-		} catch (e: InterruptedException)
+		}
+		catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -381,7 +386,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
 			cmds.add("$chinaDnsAddress:$chinaDnsPort")
-		} else
+		}
+		else
 		{
 			cmds.add("$dnsAddress:$dnsPort")
 		}
@@ -400,7 +406,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			sstunnelProcess = GuardedProcess(cmds)
 				.start()
-		} catch (e: InterruptedException)
+		}
+		catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -464,7 +471,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 					profile!!.localPort + 63,
 					reject
 				)
-			} else if (Constants.Route.CHINALIST == profile!!.route)
+			}
+			else if (Constants.Route.CHINALIST == profile!!.route)
 			{
 				String.format(
 					Locale.ENGLISH,
@@ -477,7 +485,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 					profile!!.localPort + 63,
 					reject
 				)
-			} else if (Constants.Route.ACL == profile!!.route)
+			}
+			else if (Constants.Route.ACL == profile!!.route)
 			{
 				if (!remoteDns)
 				{
@@ -492,7 +501,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 						profile!!.localPort + 63,
 						reject
 					)
-				} else
+				}
+				else
 				{
 					String.format(
 						Locale.ENGLISH,
@@ -505,7 +515,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 						reject
 					)
 				}
-			} else
+			}
+			else
 			{
 				String.format(
 					Locale.ENGLISH,
@@ -525,7 +536,7 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 			"-c",
 			applicationInfo.dataDir + "/libpdnsd.so-vpn.conf"
 		)
-		val cmds = listOf(*cmd)
+		val cmds = cmd.toList()
 
 		VayLog.d(TAG, Utils.makeString(cmds, " "))
 
@@ -533,7 +544,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			pdnsdProcess = GuardedProcess(cmds)
 				.start()
-		} catch (e: InterruptedException)
+		}
+		catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -555,7 +567,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
 			builder.addDnsServer(chinaDnsAddress)
-		} else
+		}
+		else
 		{
 			builder.addDnsServer(dnsAddress)
 		}
@@ -577,11 +590,13 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 						if (!profile!!.bypass)
 						{
 							builder.addAllowedApplication(pkg)
-						} else
+						}
+						else
 						{
 							builder.addDisallowedApplication(pkg)
 						}
-					} catch (e: PackageManager.NameNotFoundException)
+					}
+					catch (e: PackageManager.NameNotFoundException)
 					{
 						VayLog.e(TAG, "Invalid package name", e)
 					}
@@ -593,7 +608,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (Constants.Route.ALL == profile!!.route || Constants.Route.BYPASS_CHN == profile!!.route)
 		{
 			builder.addRoute("0.0.0.0", 0)
-		} else
+		}
+		else
 		{
 			val privateList = resources.getStringArray(R.array.bypass_private_route)
 			for (cidr in privateList)
@@ -608,7 +624,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (Constants.Route.CHINALIST == profile!!.route)
 		{
 			builder.addRoute(chinaDnsAddress, 32)
-		} else
+		}
+		else
 		{
 			builder.addRoute(dnsAddress, 32)
 		}
@@ -637,7 +654,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		if (profile!!.udpdns)
 		{
 			cmds.add("--enable-udprelay")
-		} else
+		}
+		else
 		{
 			cmds.add("--dnsgw")
 			cmds.add(
@@ -656,7 +674,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 		{
 			tun2socksProcess = GuardedProcess(cmds)
 				.start { sendFd(conn.fileDescriptor) }
-		} catch (e: InterruptedException)
+		}
+		catch (e: InterruptedException)
 		{
 			e.printStackTrace()
 		}
@@ -684,7 +703,8 @@ class ShadowsocksVpnService : com.bige0.shadowsocksr.BaseVpnService()
 					localSocket.outputStream.write(42)
 				}
 				return true
-			} catch (e: IOException)
+			}
+			catch (e: IOException)
 			{
 				if (tries > 5)
 				{

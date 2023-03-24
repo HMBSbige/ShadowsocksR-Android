@@ -38,6 +38,7 @@ android {
             excludes += ['**/*.kotlin_*']
         }
     }
+    namespace 'com.bige0.shadowsocksr'
 
 }
 
@@ -56,10 +57,10 @@ dependencies {
     implementation 'com.mikepenz:iconics-core:5.3.0'
     implementation 'com.mikepenz:materialdrawer:8.4.3'
     implementation "com.twofortyfouram:android-plugin-api-for-locale:1.0.4"
-    implementation 'dnsjava:dnsjava:3.4.1'
+    implementation 'dnsjava:dnsjava:3.5.2'
     implementation "me.dm7.barcodescanner:zxing:1.9.13"
     implementation "net.glxn.qrgen:android:2.0"
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     implementation "com.google.code.findbugs:jsr305:3.0.2"
     implementation 'com.google.android.material:material:1.4.0'
 }

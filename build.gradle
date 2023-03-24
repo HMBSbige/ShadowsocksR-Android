@@ -5,8 +5,8 @@ buildscript {
         javaVersion = JavaVersion.VERSION_1_8
         kotlinVersion = '1.7.10'
         minSdkVersion = 21
-        sdkVersion = 31
-        compileSdkVersion = 31
+        sdkVersion = 33
+        compileSdkVersion = 33
         versionCode = 5
         versionName = '3.8.2'
     }
@@ -15,7 +15,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:7.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
