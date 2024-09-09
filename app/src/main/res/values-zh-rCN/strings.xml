@@ -151,6 +151,8 @@
     <string name="received">接收：</string>
     <string name="allgroups">全部群组</string>
     <string name="sub_autoupdate_success">%s：订阅更新成功</string>
+    <string name="proxy_is_on">代理已开启</string>
+    <string name="proxy_is_off">代理已关闭</string>
 
     <plurals name="removed" tools:ignore="UnusedQuantity">
         <item quantity="one">已删除</item>
