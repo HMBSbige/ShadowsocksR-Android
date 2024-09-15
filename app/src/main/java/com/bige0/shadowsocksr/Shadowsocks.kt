@@ -12,10 +12,12 @@ import android.widget.*
 import androidx.appcompat.app.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.*
+import androidx.core.content.pm.*
 import com.bige0.shadowsocksr.aidl.*
 import com.bige0.shadowsocksr.database.*
 import com.bige0.shadowsocksr.job.*
 import com.bige0.shadowsocksr.network.request.*
+import com.bige0.shadowsocksr.shortcuts.*
 import com.bige0.shadowsocksr.utils.*
 import com.github.jorgecastilloprz.*
 import com.google.android.material.floatingactionbutton.*
@@ -267,6 +269,7 @@ class Shadowsocks : AppCompatActivity()
 
 		SSRSubUpdateJob.schedule()
 
+		updateDynamicShortcuts()
 
 		// attach service
 		attachService()
@@ -444,6 +447,12 @@ class Shadowsocks : AppCompatActivity()
 		}
 		preferences.refreshProfile()
 		return false
+	}
+
+	private fun updateDynamicShortcuts()
+	{
+		val disconnectedShortcut = makeToggleShortcut(context = this, isConnected = false)
+		ShortcutManagerCompat.pushDynamicShortcut(this, disconnectedShortcut)
 	}
 
 	override fun onResume()

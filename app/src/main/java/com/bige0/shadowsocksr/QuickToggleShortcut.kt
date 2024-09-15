@@ -6,7 +6,7 @@ import android.content.pm.*
 import android.os.*
 import androidx.core.content.*
 import androidx.core.content.pm.*
-import androidx.core.graphics.drawable.*
+import com.bige0.shadowsocksr.shortcuts.*
 import com.bige0.shadowsocksr.utils.*
 
 class QuickToggleShortcut : Activity()
@@ -28,8 +28,17 @@ class QuickToggleShortcut : Activity()
 						{
 							ToastUtils.showShort(R.string.loading)
 							Utils.startSsService(this)
+							val connectedShortcut = makeToggleShortcut(context = this, isConnected = true)
+							ShortcutManagerCompat.pushDynamicShortcut(this, connectedShortcut)
 						}
-						Constants.State.CONNECTED -> Utils.stopSsService(this)
+
+						Constants.State.CONNECTED ->
+						{
+							Utils.stopSsService(this)
+							val disconnectedShortcut = makeToggleShortcut(context = this, isConnected = false)
+							ShortcutManagerCompat.pushDynamicShortcut(this, disconnectedShortcut)
+						}
+
 						else ->
 						{
 						}
@@ -49,20 +58,12 @@ class QuickToggleShortcut : Activity()
 	{
 		super.onCreate(savedInstanceState)
 
-		when (intent.action)
+		if (intent.action == Intent.ACTION_MAIN)
 		{
-			Intent.ACTION_CREATE_SHORTCUT ->
+			mServiceBoundContext.attachService()
+			if (Build.VERSION.SDK_INT >= 25)
 			{
-				setResult(RESULT_OK, ShortcutManagerCompat.createShortcutResultIntent(this, ShortcutInfoCompat.Builder(this, "toggle").setIntent(Intent(this, QuickToggleShortcut::class.java).setAction(Intent.ACTION_MAIN)).setIcon(IconCompat.createWithResource(this, R.drawable.ic_qu_shadowsocks_launcher)).setShortLabel(getString(R.string.quick_toggle)).build()))
-				finish()
-			}
-			else ->
-			{
-				mServiceBoundContext.attachService()
-				if (Build.VERSION.SDK_INT >= 25)
-				{
-					getSystemService<ShortcutManager>()!!.reportShortcutUsed("toggle")
-				}
+				getSystemService<ShortcutManager>()!!.reportShortcutUsed("toggle")
 			}
 		}
 	}

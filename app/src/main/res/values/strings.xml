@@ -156,6 +156,8 @@
     <string name="received">Received:</string>
     <string name="allgroups">All Groups</string>
     <string name="sub_autoupdate_success">%s: Autoupdate success</string>
+    <string name="proxy_is_on">Proxy is ON</string>
+    <string name="proxy_is_off">Proxy is OFF</string>
 
     <plurals name="bytes" translatable="false">
         <item quantity="one">Byte</item>

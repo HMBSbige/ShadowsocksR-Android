@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <path
+        android:strokeColor="@color/material_blue_grey_700"
+        android:strokeWidth="1"
+        android:fillColor="#2E2C2A"
+        android:pathData="M24,24m-22,0a22,22 0,1 1,44 0a22,22 0,1 1,-44 0Z" />
+
+    <path
+        android:pathData="M25.5,28.9L22.9,29.8L25.5,33.4L25.5,28.9L25.5,28.9Z"
+        android:fillColor="@color/material_blue_grey_300"/>
+    <path
+        android:pathData="M13.1,34.6L34.2,13.4L13.1,34.6Z"
+        android:strokeWidth="2"
+        android:fillColor="@color/material_blue_grey_300"
+        android:strokeColor="@color/material_blue_grey_300"/>
+    <path
+        android:pathData="M24.5,18.9L13.7,13.6L16.7,26.7L18.4,25L17.3,20.3L20,23.5L21.4,22L18.4,18.4L22,21.4L24.5,18.9Z"
+        android:fillColor="@color/material_blue_grey_300"/>
+    <path
+        android:pathData="M17.2,29L17.4,29.8L25.7,27.1L22.7,23.5L21.3,25L22.3,26.2L19.1,27.2L17.2,29Z"
+        android:fillColor="@color/material_blue_grey_300"/>
+    <path
+        android:pathData="M23.5,22.8L28.1,26.7L34.9,24.1L26.3,19.9L23.5,22.8ZM25,21.4L30,23.9L28.6,24.4L25,21.4Z"
+        android:fillColor="@color/material_blue_grey_300"/>
+
+</vector>

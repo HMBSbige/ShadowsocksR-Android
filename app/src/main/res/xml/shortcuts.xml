@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:shortcutId="toggle"
-        android:icon="@drawable/ic_qu_shadowsocks_launcher"
-        android:shortcutShortLabel="@string/quick_toggle"
-        android:shortcutLongLabel="@string/quick_toggle">
-        <intent
-            android:action="android.intent.action.MAIN"
-            android:targetPackage="com.bige0.shadowsocksr"
-            android:targetClass="com.bige0.shadowsocksr.QuickToggleShortcut" />
-    </shortcut>
-    <shortcut
         android:shortcutId="switch"
         android:icon="@drawable/ic_qu_shadowsocks_launcher"
         android:shortcutShortLabel="@string/quick_switch"
